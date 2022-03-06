@@ -1,0 +1,8 @@
+Инициализация в современном C++
+https://habr.com/ru/company/jugru/blog/469465/
+
+алокаторы
+https://habr.com/ru/post/505632/
+
+vector self
+https://habr.com/ru/post/593803/
