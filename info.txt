@@ -6,3 +6,6 @@ https://habr.com/ru/post/505632/
 
 vector self
 https://habr.com/ru/post/593803/
+
+гайд
+https://github.com/BillyKlebitz/FT_Containers/wiki/5.-Iterators.-SFINAE
