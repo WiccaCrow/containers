@@ -2,9 +2,10 @@
 #define VECTOR_HPP
 
 #include <memory>
+#include <ft_iterator.hpp>
 
 // убрать
-#include <vector>
+// #include <vector>
 
 namespace ft {
 
@@ -15,12 +16,19 @@ template <
 class vector {
     public:
     typedef Allocator allocator_type;
-    typedef size_t    size_type; // typedef typename allocator_type::size_type       size_type;
+    typedef typename allocator_type::size_type       size_type;
+    typedef typename allocator_type::reference       reference;
+    typedef typename allocator_type::const_reference const_reference;
+    typedef typename allocator_type::difference_type difference_type;
+    typedef typename allocator_type::pointer         pointer;
+    typedef typename allocator_type::const_pointer   const_pointer;
 
     protected:
     typedef T value_type;
     // переделать std
-    typedef std::vector<T>::iterator<T*> iterator; // typedef implementation-defined    iterator;
+    // typedef typename std::vector<T>::iterator iterator; // typedef implementation-defined    iterator;
+    typedef ft::normal_iterator<pointer, vector> iterator;
+
 
     public:
     /* Constructs and destructs*/
@@ -34,9 +42,10 @@ class vector {
     // T &         operator[](int i);
     /* Set atributs */
     /* Get and show atributs */
-    size_t         size() const;
-    size_t         capacity() const;
-    allocator_type alloc() const;
+    size_t          size() const;
+    size_t          capacity() const;
+    allocator_type  alloc() const;
+    iterator        begin() const;
 
     /* other methods */
     void clear();
@@ -47,16 +56,16 @@ class vector {
     T*        _arr;
     size_t    _size;
     size_t    _capacity;
-    Allocator Allocator;
+    Allocator _allocator;
 };
 
 /******************************************************************************/
 /* Constructors */
 
 template <class T, class Allocator>
-vector<T, Allocator>::vector(const allocator_type& alloc) : Allocator(alloc),
-                                                            _size(0),
-                                                            _capacity(0) {
+vector<T, Allocator>::vector(const allocator_type& alloc) : _size(0),
+                                                            _capacity(0),
+                                                            _allocator(alloc) {
     std::cout << "test void\n";
     _arr = 0;
 }
@@ -64,11 +73,14 @@ vector<T, Allocator>::vector(const allocator_type& alloc) : Allocator(alloc),
 template <class T, class Allocator>
 vector<T, Allocator>::vector(size_type n, const value_type& val,
                              const allocator_type& alloc) : _size(n),
-                                                            _capacity(n) {
+                                                            _capacity(n),
+                                                            _allocator(alloc) {
     std::cout << "test 01\n";
-    _arr = Allocator.allocate(n);
+    _arr = _allocator.allocate(n);
+    for (size_type i = 0; i < n; ++i) {
+        _allocator.construct(_arr + (int)i, val);
+    }
     // std::cout << "test 3 i = " << i << "\n";
-
     std::cout << "test 02\n";
 }
 
@@ -80,13 +92,13 @@ vector<T, Allocator>& vector<T, Allocator>::operator=(const vector<T, Allocator>
     }
     clear();
     if (_capacity) {
-        Allocator.deallocate(_arr, _capacity);
+        _allocator.deallocate(_arr, _capacity);
     }
     _size = obj.size();
     _capacity = obj.capacity();
-    Allocator = obj.alloc();
+    _allocator = obj.alloc();
     for (int i = 0; i < _size; ++i) {
-        Allocator.construct(_arr[i], obj._arr[i]);
+        _allocator.construct(_arr[i], obj._arr[i]);
     }
     return (*this);
 }
@@ -104,8 +116,13 @@ size_t vector<T, Allocator>::capacity() const {
 }
 
 template <class T, class Allocator>
-allocator_type vector<T, Allocator>::alloc() const {
-    return (Allocator);
+typename vector<T, Allocator>::allocator_type vector<T, Allocator>::alloc() const {
+    return (_allocator);
+}
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::iterator vector<T, Allocator>::begin() const {
+    return (iterator(_arr));
 }
 
 /* other methods */
@@ -113,7 +130,7 @@ allocator_type vector<T, Allocator>::alloc() const {
 template <class T, class Allocator>
 void vector<T, Allocator>::clear() {
     for (int i = 0; i < _size; ++i) {
-        _arr.destroy(_arr[i]);
+        // _arr.destroy(_arr[i]);
     }
     _size = 0;
 }
@@ -138,7 +155,7 @@ void vector<T, Allocator>::memoryIncrease() {
     }
     std::cout << _size << std::endl;
     std::cout << "test 1\n";
-    _arr = Allocator.allocate(_capacity);
+    _arr = _allocator.allocate(_capacity);
     std::cout << "test 2\n";
     for (int i = 0; i < (int)_size; ++i) {
         std::cout << "test 3 i = " << i << "\n";
@@ -149,8 +166,8 @@ void vector<T, Allocator>::memoryIncrease() {
         _arr[i] = tmp[i];
     }
 
-    Allocator.clear();
-    Allocator.deallocate(tmp, _size);
+    _allocator.clear();
+    _allocator.deallocate(tmp, _size);
 }
 
 }; // namespace ft
@@ -162,14 +179,14 @@ void vector<T, Allocator>::memoryIncrease() {
 // public:
 //  +   typedef T                                        value_type;
 //  +   typedef Allocator                                allocator_type;
-//     typedef typename allocator_type::size_type       size_type;
+//  +   typedef typename allocator_type::size_type       size_type;
+//  +   typedef typename allocator_type::reference       reference;
+//  +   typedef typename allocator_type::const_reference const_reference;
+//  +   typedef typename allocator_type::difference_type difference_type;
+//  +   typedef typename allocator_type::pointer         pointer;
+//  +   typedef typename allocator_type::const_pointer   const_pointer;
 //     typedef implementation-defined                   iterator;
-//     typedef typename allocator_type::reference       reference;
-//     typedef typename allocator_type::const_reference const_reference;
 //     typedef implementation-defined                   const_iterator;
-//     typedef typename allocator_type::difference_type difference_type;
-//     typedef typename allocator_type::pointer         pointer;
-//     typedef typename allocator_type::const_pointer   const_pointer;
 //     typedef std::reverse_iterator<iterator>          reverse_iterator;
 //     typedef std::reverse_iterator<const_iterator>    const_reverse_iterator;
 //

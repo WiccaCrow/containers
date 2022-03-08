@@ -9,7 +9,7 @@
 // #else
 	// #include <map.hpp>
 	// #include <stack.hpp>
-	#include <vector.hpp>
+	#include <ft_vector.hpp>
 // #endif
 
 #include <stdlib.h>
@@ -73,7 +73,7 @@ std::cout << "test main 2\n";
 	ft::vector<std::string> vector_str(1);
     // std::cout << "test\n";
 
-	vector_str.push_back("hello");
+	// vector_str.push_back("hello");
 
 	// ft::vector<std::string>::iterator it = vector_str.begin();
 	// vector_str.insert(it, "hello");

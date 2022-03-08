@@ -7,5 +7,9 @@ https://habr.com/ru/post/505632/
 vector self
 https://habr.com/ru/post/593803/
 
+iterator_traits
+https://it.wikireading.ru/28432
+
 гайд
 https://github.com/BillyKlebitz/FT_Containers/wiki/5.-Iterators.-SFINAE
+
