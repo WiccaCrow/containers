@@ -1,8 +1,8 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include <memory>
 #include <ft_iterator.hpp>
+#include <memory>
 
 // убрать
 // #include <vector>
@@ -15,20 +15,19 @@ template <
 
 class vector {
     public:
-    typedef Allocator allocator_type;
+    typedef Allocator                                allocator_type;
     typedef typename allocator_type::size_type       size_type;
     typedef typename allocator_type::reference       reference;
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::difference_type difference_type;
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
-
-    protected:
-    typedef T value_type;
     // переделать std
     // typedef typename std::vector<T>::iterator iterator; // typedef implementation-defined    iterator;
     typedef ft::normal_iterator<pointer, vector> iterator;
 
+    protected:
+    typedef T value_type;
 
     public:
     /* Constructs and destructs*/
@@ -42,10 +41,10 @@ class vector {
     // T &         operator[](int i);
     /* Set atributs */
     /* Get and show atributs */
-    size_t          size() const;
-    size_t          capacity() const;
-    allocator_type  alloc() const;
-    iterator        begin() const;
+    size_t         size() const;
+    size_t         capacity() const;
+    allocator_type alloc() const;
+    iterator       begin() const;
 
     /* other methods */
     void clear();
