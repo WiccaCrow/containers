@@ -24,7 +24,8 @@ class vector {
     typedef typename allocator_type::const_pointer   const_pointer;
     // переделать std
     // typedef typename std::vector<T>::iterator iterator; // typedef implementation-defined    iterator;
-    typedef ft::normal_iterator<pointer, vector> iterator;
+    // typedef ft::normal_iterator<pointer, vector> iterator;
+    typedef ft::iterator<random_access_iterator_tag, vector> iterator;
 
     protected:
     typedef T value_type;

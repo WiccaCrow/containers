@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 
     // vector_str.push_back("hello");
 
-    ft::vector<std::string>::iterator it = vector_str.begin();
+    // ft::vector<std::string>::iterator it = vector_str.begin();
     // vector_str.insert(it, "hello");
     // it = vector_str.begin();
     // vector_str.insert(it, "hello");
@@ -89,10 +89,10 @@ int main(int argc, char** argv) {
     std::cout << "ft::vector<std::string> vector_str capacity: " << vector_str.capacity() << std::endl;
 
     // vector: check forward iterator
-    for (int i = 0; i < 5; ++i) {
-        std::cout << *it;
-        it++;
-    }
+    // for (int i = 0; i < 5; ++i) {
+    //     std::cout << *it;
+    //     it++;
+    // }
 
     std::vector<std::string> vector_str_real(0);
     vector_str_real.push_back("hello");
