@@ -25,7 +25,7 @@ class vector {
     // переделать std
     // typedef typename std::vector<T>::iterator iterator; // typedef implementation-defined    iterator;
     // typedef ft::normal_iterator<pointer, vector> iterator;
-    typedef ft::iterator<random_access_iterator_tag, vector> iterator;
+    typedef ft::normal_iterator<random_access_iterator_tag, T> iterator;
 
     protected:
     typedef T value_type;
@@ -46,6 +46,7 @@ class vector {
     size_t         capacity() const;
     allocator_type alloc() const;
     iterator       begin() const;
+    iterator       end() const;
 
     /* other methods */
     void clear();
@@ -80,7 +81,10 @@ vector<T, Allocator>::vector(size_type n, const value_type& val,
     for (size_type i = 0; i < n; ++i) {
         _allocator.construct(_arr + (int)i, val);
     }
-    // std::cout << "test 3 i = " << i << "\n";
+
+    // for (size_type i = 0; i < n; ++i) {
+    //     std::cout << "_arr i = " << _arr[i] << "\n";
+    // }
     std::cout << "test 02\n";
 }
 
@@ -123,6 +127,11 @@ typename vector<T, Allocator>::allocator_type vector<T, Allocator>::alloc() cons
 template <class T, class Allocator>
 typename vector<T, Allocator>::iterator vector<T, Allocator>::begin() const {
     return (iterator(_arr));
+}
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::iterator vector<T, Allocator>::end() const {
+    return (iterator(&_arr[_size]));
 }
 
 /* other methods */
@@ -185,7 +194,7 @@ void vector<T, Allocator>::memoryIncrease() {
 //  +   typedef typename allocator_type::difference_type difference_type;
 //  +   typedef typename allocator_type::pointer         pointer;
 //  +   typedef typename allocator_type::const_pointer   const_pointer;
-//     typedef implementation-defined                   iterator;
+//  +   typedef implementation-defined                   iterator;
 //     typedef implementation-defined                   const_iterator;
 //     typedef std::reverse_iterator<iterator>          reverse_iterator;
 //     typedef std::reverse_iterator<const_iterator>    const_reverse_iterator;
