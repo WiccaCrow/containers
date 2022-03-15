@@ -1,8 +1,8 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include <ft_iterator.hpp>
 #include <memory>
+#include <ft_iterator.hpp>
 
 // убрать
 // #include <vector>
@@ -11,7 +11,7 @@ namespace ft {
 
 template <
     class T,
-    class Allocator = std::allocator<T> >
+    class Allocator = ::std::allocator<T> >
 
 class vector {
     public:
@@ -25,7 +25,7 @@ class vector {
     // переделать std
     // typedef typename std::vector<T>::iterator iterator; // typedef implementation-defined    iterator;
     // typedef ft::normal_iterator<pointer, vector> iterator;
-    typedef ft::normal_iterator<random_access_iterator_tag, T> iterator;
+    typedef normal_iterator<random_access_iterator_tag, T> iterator;
 
     protected:
     typedef T value_type;
@@ -67,7 +67,7 @@ template <class T, class Allocator>
 vector<T, Allocator>::vector(const allocator_type& alloc) : _size(0),
                                                             _capacity(0),
                                                             _allocator(alloc) {
-    std::cout << "test void\n";
+    // std::cout << "test void\n";
     _arr = 0;
 }
 
@@ -76,7 +76,7 @@ vector<T, Allocator>::vector(size_type n, const value_type& val,
                              const allocator_type& alloc) : _size(n),
                                                             _capacity(n),
                                                             _allocator(alloc) {
-    std::cout << "test 01\n";
+    // std::cout << "test 01\n";
     _arr = _allocator.allocate(n);
     for (size_type i = 0; i < n; ++i) {
         _allocator.construct(_arr + (int)i, val);
@@ -85,7 +85,7 @@ vector<T, Allocator>::vector(size_type n, const value_type& val,
     // for (size_type i = 0; i < n; ++i) {
     //     std::cout << "_arr i = " << _arr[i] << "\n";
     // }
-    std::cout << "test 02\n";
+    // std::cout << "test 02\n";
 }
 
 /* operators */
@@ -146,7 +146,7 @@ void vector<T, Allocator>::clear() {
 
 template <class T, class Allocator>
 void vector<T, Allocator>::push_back(const T& x) {
-    std::cout << "test push_back _size = " << _size << ", _capacity = " << _capacity << "\n";
+    // std::cout << "test push_back _size = " << _size << ", _capacity = " << _capacity << "\n";
     if (_size == _capacity) {
         memoryIncrease();
     }
@@ -162,16 +162,16 @@ void vector<T, Allocator>::memoryIncrease() {
     } else {
         ++_capacity;
     }
-    std::cout << _size << std::endl;
-    std::cout << "test 1\n";
+    // std::cout << _size << std::endl;
+    // std::cout << "test 1\n";
     _arr = _allocator.allocate(_capacity);
-    std::cout << "test 2\n";
+    // std::cout << "test 2\n";
     for (int i = 0; i < (int)_size; ++i) {
-        std::cout << "test 3 i = " << i << "\n";
-        std::cout << "test 3 tmp[i] = " << tmp[i] << "\n";
-        std::cout << "test 3 _arr[i].capacity() = " << _arr[i].capacity() << "\n";
-        std::cout << "test 3 _arr[i] befor "
-                  << "\n";
+    //     std::cout << "test 3 i = " << i << "\n";
+    //     std::cout << "test 3 tmp[i] = " << tmp[i] << "\n";
+    //     std::cout << "test 3 _arr[i].capacity() = " << _arr[i].capacity() << "\n";
+    //     std::cout << "test 3 _arr[i] befor "
+    //               << "\n";
         _arr[i] = tmp[i];
     }
 

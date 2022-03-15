@@ -6,6 +6,8 @@
 #include <ft_iterator_base.hpp>
 #include <ft_iterator_traits.hpp>
 #include <ft_iterator_ptr_normal.hpp>
+#include <ft_iterator_ptr_reverse.hpp>
+#include <ft_iterator_ptr_reverse_non_class.hpp>
 
 namespace ft {
 
