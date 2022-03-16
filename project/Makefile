@@ -1,18 +1,45 @@
-NAME        =   mySTL
+NAME			=   mySTL
 
-CPP         =   clang++
-FLAGS       =   -Wall -Wextra -Werror -g -std=c++98
-# FLAGS       =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
+CPP         	=   clang++
+FLAGS       	=   -Wall -Wextra -Werror -g
+# FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
 
-SRC_CPP     =	main.cpp 
+ifeq ($(MAKE_ITERATOR),0)
+SRC_CPP     	=	test_iterator.cpp
+endif
 
+ifeq ($(MAKE_ENABLE_IF),0)
+SRC_CPP     	=	test_enable_if.cpp
+FLAGS 			+=	-std=c++11
+else
+FLAGS 			+=	-std=c++98
+endif
 
-SRC_FOLDER  =   src/
-OBJ_FOLDER  =   .obj/
-HEAD_FOLDER =   include/
+ifeq ($(MAKE_VECTOR),0)
+SRC_CPP     	=	main.cpp
+endif
 
-SRC         =   $(addprefix $(SRC_FOLDER), $(SRC_CPP))
-OBJ         =   $(addprefix $(OBJ_FOLDER), $(SRC_CPP:.cpp=.o))
+SRC_FOLDER  	=   src/
+OBJ_FOLDER  	=   .obj/
+HEAD_FOLDER 	=   include/
+
+SRC         	=   $(addprefix $(SRC_FOLDER), $(SRC_CPP))
+OBJ         	=   $(addprefix $(OBJ_FOLDER), $(SRC_CPP:.cpp=.o))
+
+iterator: ; $(MAKE) MAKE_ITERATOR=0 all
+clean_iterator: ; $(MAKE) MAKE_ITERATOR=0 clean
+fclean_iterator: ; $(MAKE) MAKE_ITERATOR=0 clean ; rm -rf $(NAME)
+re_iterator: ; $(MAKE) MAKE_ITERATOR=0 fclean iterator
+
+enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 all
+clean_enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 clean
+fclean_enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 clean ; rm -rf $(NAME)
+re_enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 fclean iterator
+
+vector: ; $(MAKE) MAKE_VECTOR=0 all
+clean_vector: ; $(MAKE) MAKE_VECTOR=0 clean
+fclean_vector: ; $(MAKE) MAKE_VECTOR=0 clean ; rm -rf $(NAME)
+re_vector: ; $(MAKE) MAKE_VECTOR=0 fclean iterator
 
 all: objdir $(NAME)
 
