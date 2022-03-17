@@ -1,6 +1,7 @@
 NAME			=   mySTL
 
-CPP         	=   clang++
+# CPP         	=   clang++
+CPP         	=   g++
 FLAGS       	=   -Wall -Wextra -Werror -g
 # FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
 
@@ -10,7 +11,7 @@ endif
 
 ifeq ($(MAKE_ENABLE_IF),0)
 SRC_CPP     	=	test_enable_if.cpp
-FLAGS 			+=	-std=c++11
+FLAGS 			+=	-std=c++17
 else
 FLAGS 			+=	-std=c++98
 endif
