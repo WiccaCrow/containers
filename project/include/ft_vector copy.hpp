@@ -10,7 +10,7 @@
 namespace ft {
 
 template<typename _Tp, typename _Alloc>
-class _Vector_base {
+struct _Vector_base {
     protected:
     typedef typename _Alloc::template
 	rebind<_Tp>::other _Tp_alloc_type;
@@ -23,11 +23,16 @@ template <
     class Allocator = ::std::allocator<T> >
 
 class vector : public _Vector_base<T, Allocator> {
+    private:
+    size_t    _size;
+    size_t    _capacity;
+    T*        _arr;
+    Allocator _allocator;
+
     public:
 
     typedef T value_type;
-    typedef typename ::ft::_Vector_base<T, Allocator>::_Tp_alloc_type    allocator_type;
-    // typedef Allocator                                   allocator_type;
+    typedef Allocator                                   allocator_type;
     typedef typename ::std::size_t                      size_type;
     typedef typename ::std::ptrdiff_t                   difference_type;
     typedef value_type&                                 reference;
@@ -40,24 +45,12 @@ class vector : public _Vector_base<T, Allocator> {
     typedef ft::reverse_iterator<iterator>                           reverse_iterator;
     typedef ft::reverse_iterator<const_iterator>                     const_reverse_iterator;
 
-    private:
-    size_t    _size;
-    size_t    _capacity;
-    pointer        _arr;
-    pointer        _arr_end;
-    // Allocator _allocator;
-
     public:
     /* Constructs and destructs*/
     explicit vector();
     explicit vector(const allocator_type& alloc);
-    explicit vector(size_type count, const value_type& val = value_type(),
+    explicit vector(size_type n, const value_type& val = value_type(),
                     const allocator_type& alloc = allocator_type());
-    template <class InputIt>
-        vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()) :
-                            ::ft::_Vector_base<T, Allocator>::_Vector_base() {
-
-        }
     ~vector(void) {}
 
     /* operators */
@@ -82,70 +75,56 @@ class vector : public _Vector_base<T, Allocator> {
 
 template <class T, class Allocator>
 vector<T, Allocator>::vector() : 
-                                ::ft::_Vector_base<T, Allocator>::_Vector_base(),
                                 _size(0),
                                 _capacity(0),
                                 _arr(NULL),
-                                _arr_end(NULL)
-                                // ,
-                                // _allocator(allocator_type()) 
-                                {
+                                _allocator(allocator_type()) {
 }
 
 template <class T, class Allocator>
-vector<T, Allocator>::vector(const allocator_type& alloc) : 
-                                ::ft::_Vector_base<T, Allocator>::_Vector_base(alloc),
+vector<T, Allocator>::vector(const Allocator& alloc) : 
                                 _size(0),
                                 _capacity(0),
                                 _arr(NULL),
-                                _arr_end(NULL)
-                                // ,
-                                // _allocator(alloc) {
-{
+                                _allocator(alloc) {
+
 }
 
 template <class T, class Allocator>
-vector<T, Allocator>::vector(size_type count, const value_type& val,
-                             const allocator_type& alloc) :
-                                ::ft::_Vector_base<T, Allocator>::_Vector_base(alloc),
-                                _size(count),
-                                _capacity(count),
-                                _arr(::ft::_Vector_base<T, Allocator>::_alloc.allocate(count)),
-                                _arr_end(_arr + count)
-                                // ,
-                                // _allocator(alloc) {
-                                    {
-    size_type i = 0;
-    try {
-        for (; i < count; ++i) {
-            ::ft::_Vector_base<T, Allocator>::_alloc.construct(_arr + (int)i, val);
-        }
-    } catch (...) {
-        for (size_type start = 0; start < i; ++start) {
-            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(_arr);
-        }
-        throw;
+vector<T, Allocator>::vector(size_type n, const value_type& val,
+                             const allocator_type& alloc) : _size(n),
+                                                            _capacity(n),
+                                                            _allocator(alloc) {
+    // std::cout << "test 01\n";
+    _arr = _allocator.allocate(n);
+    for (size_type i = 0; i < n; ++i) {
+        _allocator.construct(_arr + (int)i, val);
     }
+
+    // for (size_type i = 0; i < n; ++i) {
+    //     std::cout << "_arr i = " << _arr[i] << "\n";
+    // }
+    // std::cout << "test 02\n";
 }
 
 /* operators */
-// template <class T, class Allocator>
-// vector<T, Allocator>& vector<T, Allocator>::operator=(const vector<T, Allocator>& obj) {
-//     if (this == &obj) {
-//         return (*this);
-//     }
-//     clear();
-//     if (_capacity) {
-//         _allocator.deallocate(_arr, _capacity);
-//     }
-//     _size = obj.size();
-//     _capacity = obj.capacity();
-//     _allocator = obj.alloc();
-//     for (int i = 0; i < _size; ++i) {
-//         _allocator.construct(_arr[i], obj._arr[i]);
-//     }
-//     return (*this);
-// }
+template <class T, class Allocator>
+vector<T, Allocator>& vector<T, Allocator>::operator=(const vector<T, Allocator>& obj) {
+    if (this == &obj) {
+        return (*this);
+    }
+    clear();
+    if (_capacity) {
+        _allocator.deallocate(_arr, _capacity);
+    }
+    _size = obj.size();
+    _capacity = obj.capacity();
+    _allocator = obj.alloc();
+    for (int i = 0; i < _size; ++i) {
+        _allocator.construct(_arr[i], obj._arr[i]);
+    }
+    return (*this);
+}
 
 template <class T, class Allocator>
 T &         vector<T, Allocator>::operator[](int i) {
@@ -164,10 +143,10 @@ size_t vector<T, Allocator>::capacity() const {
     return (_capacity);
 }
 
-// template <class T, class Allocator>
-// typename vector<T, Allocator>::allocator_type vector<T, Allocator>::alloc() const {
-//     return (_allocator);
-// }
+template <class T, class Allocator>
+typename vector<T, Allocator>::allocator_type vector<T, Allocator>::alloc() const {
+    return (_allocator);
+}
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::iterator vector<T, Allocator>::begin() const {
@@ -189,40 +168,40 @@ void vector<T, Allocator>::clear() {
     _size = 0;
 }
 
-// template <class T, class Allocator>
-// void vector<T, Allocator>::push_back(const T& x) {
-//     // std::cout << "test push_back _size = " << _size << ", _capacity = " << _capacity << "\n";
-//     if (_size == _capacity) {
-//         memoryIncrease();
-//     }
-//     _arr[_size++] = x;
-//     // std::cout << "test _arr[_size - 1] = " << _arr[_size - 1] << std::endl;
-// }
+template <class T, class Allocator>
+void vector<T, Allocator>::push_back(const T& x) {
+    // std::cout << "test push_back _size = " << _size << ", _capacity = " << _capacity << "\n";
+    if (_size == _capacity) {
+        memoryIncrease();
+    }
+    _arr[_size++] = x;
+    // std::cout << "test _arr[_size - 1] = " << _arr[_size - 1] << std::endl;
+}
 
-// template <class T, class Allocator>
-// void vector<T, Allocator>::memoryIncrease() {
-//     T* tmp = _arr;
-//     if (_capacity) {
-//         _capacity *= 2;
-//     } else {
-//         ++_capacity;
-//     }
-//     // std::cout << _size << std::endl;
-//     // std::cout << "test 1\n";
-//     _arr = _allocator.allocate(_capacity);
-//     // std::cout << "test 2\n";
-//     for (int i = 0; i < (int)_size; ++i) {
-//     //     std::cout << "test 3 i = " << i << "\n";
-//     //     std::cout << "test 3 tmp[i] = " << tmp[i] << "\n";
-//     //     std::cout << "test 3 _arr[i].capacity() = " << _arr[i].capacity() << "\n";
-//     //     std::cout << "test 3 _arr[i] befor "
-//     //               << "\n";
-//         _arr[i] = tmp[i];
-//     }
+template <class T, class Allocator>
+void vector<T, Allocator>::memoryIncrease() {
+    T* tmp = _arr;
+    if (_capacity) {
+        _capacity *= 2;
+    } else {
+        ++_capacity;
+    }
+    // std::cout << _size << std::endl;
+    // std::cout << "test 1\n";
+    _arr = _allocator.allocate(_capacity);
+    // std::cout << "test 2\n";
+    for (int i = 0; i < (int)_size; ++i) {
+    //     std::cout << "test 3 i = " << i << "\n";
+    //     std::cout << "test 3 tmp[i] = " << tmp[i] << "\n";
+    //     std::cout << "test 3 _arr[i].capacity() = " << _arr[i].capacity() << "\n";
+    //     std::cout << "test 3 _arr[i] befor "
+    //               << "\n";
+        _arr[i] = tmp[i];
+    }
 
-//     _allocator.clear();
-//     _allocator.deallocate(tmp, _size);
-// }
+    _allocator.clear();
+    _allocator.deallocate(tmp, _size);
+}
 
 }; // namespace ft
 

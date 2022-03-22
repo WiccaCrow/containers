@@ -17,7 +17,7 @@ FLAGS 			+=	-std=c++98
 endif
 
 ifeq ($(MAKE_VECTOR),0)
-SRC_CPP     	=	main.cpp
+SRC_CPP     	=	test_vector.cpp
 endif
 
 SRC_FOLDER  	=   src/
