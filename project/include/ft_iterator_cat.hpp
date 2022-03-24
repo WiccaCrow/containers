@@ -28,9 +28,65 @@ _iterTag    Iter_cat(const iterator_base<_iterTag, _T, _Dist, _Pt, _Rt> &) {
     return (obj);
 }
 
-template < class T>
-int_iterator_tag    Iter_cat(T t, typename enable_if< ::std::numeric_limits<T>::is_specialized, T>::type) {
-    std::cout << "int Iter_cat\n";
+
+// template < class T>
+// int_iterator_tag    Iter_cat(T t, typename enable_if< ::std::numeric_limits<T>::is_specialized, T>::type) {
+//     std::cout << "int Iter_cat\n";
+//     int_iterator_tag obj;
+//     return (obj);
+// }
+
+int_iterator_tag    Iter_cat(bool) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(char) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(signed char) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(unsigned char) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(wchar_t) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(short) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(unsigned short) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(int) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(unsigned int) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(long) {
+    int_iterator_tag obj;
+    return (obj);
+}
+
+int_iterator_tag    Iter_cat(unsigned long) {
     int_iterator_tag obj;
     return (obj);
 }
