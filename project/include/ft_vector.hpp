@@ -46,7 +46,10 @@ class vector : public _Vector_base<T, Allocator> {
     size_t    _capacity;
     pointer        _arr;
     pointer        _arr_end;
-    // Allocator _allocator;
+
+    void    insert_too_small_capacity(iterator & pos, size_type & count, const T& value);
+    void    insert_count_more_than_end_to_pos(iterator & pos, size_type & count, const T& value);
+    pointer copy(iterator first, iterator last, pointer copy_to);
 
     public:
     /* Constructs and destructs*/
@@ -108,7 +111,6 @@ class vector : public _Vector_base<T, Allocator> {
     void    push_back(const T& x);
     void    memoryIncrease();
     void    insert( iterator pos, size_type count, const T& value );
-    pointer copy(iterator first, iterator last, pointer copy_to);
     template <class InputIt>
         void    insert(iterator pos, InputIt first, InputIt last) {
             insert(pos, first, last, Iter_cat(first));
@@ -232,52 +234,92 @@ void
     }
     // T   T_value = value;
     // size_type count_capacity = capacity();
-    size_type maxSize = max_size();
-    if (maxSize - _size < count) {
-        throw std::length_error("length_error: Oops...exception. vector is too long\n");
+    // size_type maxSize = max_size();
+    if (max_size() - _size < count) {
+        throw std::length_error("length_error: Oops...exception. vector is too long.\n");
+    } else if (_capacity - _size < count) {
+        insert_too_small_capacity(pos, count, value);
+    } else if ((size_type)(end() - pos) < count) {
+        insert_count_more_than_end_to_pos();
+    } else {
+        
     }
-    else if (_capacity - _size < count) {
-        size_type count_capacity = _capacity;
-        if (_capacity * 2 < maxSize) {
-            _capacity *= 2;
-        } else {
-            _capacity = maxSize;
-        }
-        pointer tmp_capacity = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(_capacity);
-        pointer tmp_current;
+}
+
+template <class T, class Allocator>
+void 
+    vector<T, Allocator>::insert_too_small_capacity(iterator & pos, size_type & count, const T& value) {
+    size_type count_capacity = _capacity;
+    if (_capacity * 2 < max_size()) {
+        _capacity *= 2;
+    } else {
+        _capacity = max_size();
+    }
+    pointer tmp_capacity = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(_capacity);
+    pointer tmp_current;
+    try {
+        // copy part befor insert/pasting
+        tmp_current = copy(_arr, pos, tmp_capacity);
+        // copy pasted part
+        int i = 0; 
         try {
-            // copy part befor insert/pasting
-            tmp_current = copy(_arr, pos, tmp_capacity);
-            // copy pasted part
-            int i = 0; 
-            try {
-                for (; i < count; ++i) {
-                    ::ft::_Vector_base<T, Allocator>::_alloc.construct(tmp_current + i, value);
-                }
-            } catch (...) {
-                for (; i--;) {
-                    ::ft::_Vector_base<T, Allocator>::_alloc.destroy(tmp_current++);
-                    }
-                throw;
+            for (; i < count; ++i) {
+                ::ft::_Vector_base<T, Allocator>::_alloc.construct(tmp_current + i, value);
             }
-            // copy part after insert/pasting
-            copy(pos, end(), tmp_capacity);
         } catch (...) {
-            for (; tmp_current-- != tmp_capacity;) {
-                ::ft::_Vector_base<T, Allocator>::_alloc.destroy(tmp_current);
-            }
-            ::ft::_Vector_base<T, Allocator>::_alloc.deallocate(tmp_capacity, _capacity);
+            for (; i--;) {
+                ::ft::_Vector_base<T, Allocator>::_alloc.destroy(tmp_current++);
+                }
             throw;
         }
-        if (_arr != 0) {
-            for (pointer start = begin(); start != end(); ++start) {
-                ::ft::_Vector_base<T, Allocator>::_alloc.destroy(start);
-            }
-            ::ft::_Vector_base<T, Allocator>::_alloc.deallocate(_arr, count_capacity);
+        // copy part after insert/pasting
+        copy(pos, end(), tmp_capacity);
+    } catch (...) {
+        for (; tmp_current-- != tmp_capacity;) {
+            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(tmp_current);
         }
-        _arr = tmp_capacity;
-        _size += count;
+        ::ft::_Vector_base<T, Allocator>::_alloc.deallocate(tmp_capacity, _capacity);
+        throw;
     }
+    // freeing the old array
+    if (_arr != 0) {
+        for (pointer start = begin(); start != end(); ++start) {
+            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(start);
+        }
+        ::ft::_Vector_base<T, Allocator>::_alloc.deallocate(_arr, count_capacity);
+    }
+    _arr = tmp_capacity;
+    _size += count;
+}
+
+template <class T, class Allocator>
+void 
+    vector<T, Allocator>::insert_count_more_than_end_to_pos(iterator & pos, size_type & count, const T& value) {
+    // 1) transfer values from pos to pos + count (not previously initialized)
+    copy(pos, end(), pos.base() + count);
+    // 2) insert value in a place where there was no construct before (only allocate)
+    size_type i = 0;
+    try {
+        pointer tmp_current = end();
+        try {
+            size_type to_construct = count - (end() - pos);
+            for (;i < to_construct; ++i) {
+                ::ft::_Vector_base<T, Allocator>::_alloc.construct(tmp_current + i, value);
+            }
+        } catch (...) {
+            for (; i--;) {
+                ::ft::_Vector_base<T, Allocator>::_alloc.destroy(tmp_current + i);
+            }            
+            throw;
+        }
+    } catch (...) {
+        for (i = 0; i < count; ++i) {
+            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(end() + i);
+        }
+        throw;
+    }
+    _size += count;
+    std::fill(pos, pos + count, value);
 }
 
 template <class T, class Allocator>
