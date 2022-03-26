@@ -389,6 +389,6 @@ normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
     return (!(*this > itSecond));
 }
 
-}; // namespace ft
+} // namespace ft
 
 #endif

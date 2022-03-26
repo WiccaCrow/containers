@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ft_iterator.hpp>
 
 void    check_iterators();
 void    check_iterators_normal();
@@ -51,6 +52,10 @@ void    check_iterators_normal() {
     it_v_ft = vector_str.begin();
     std::cout << it_v_ft.operator->() << " ";    
     std::cout << std::endl;
+
+    std::cout << "\033[32m" << "\ndist(begin, end)" << "\033[0m" << std::endl;
+    std::cout << ft::distance(vector_str.begin(), vector_str.end()) << std::endl << std::endl;
+    std::cout << ft::distance(vector_str.begin(), vector_str.begin() + 2) << std::endl << std::endl;
 
 }
 

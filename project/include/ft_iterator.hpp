@@ -9,6 +9,7 @@
 #include <ft_iterator_ptr_normal.hpp>
 #include <ft_iterator_ptr_reverse.hpp>
 #include <ft_iterator_ptr_reverse_non_class.hpp>
+#include <ft_iterator_distance.hpp>
 
 namespace ft {
 
@@ -32,10 +33,10 @@ template <typename _iterTag, typename _T, typename _Dist, typename _Pt, typename
 
 // iterator_traits
 template <class _Iterator>
-    struct iterators_traits;
+    struct iterator_traits;
 template <class _T>
-    struct iterators_traits<_T*>;
+    struct iterator_traits<_T*>;
 
-};
+}
 
 #endif

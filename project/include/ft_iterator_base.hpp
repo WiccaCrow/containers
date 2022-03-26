@@ -45,6 +45,6 @@ template <
     typename _Pt = _T*,
     typename _Rt = _T&>
 struct RandomIt : public iterator_base<random_access_iterator_tag, _T, _Dist, _Pt, _Rt> {};
-}; // namespace ft
+} // namespace ft
 
 #endif

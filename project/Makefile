@@ -3,6 +3,8 @@ NAME			=   mySTL
 # CPP         	=   clang++
 CPP         	=   g++
 FLAGS       	=   -Wall -Wextra -Werror -g
+# FLAGS       	=   -g
+FLAGS       	+=  -Wpedantic
 # FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
 
 ifeq ($(MAKE_ITERATOR),0)
@@ -17,6 +19,7 @@ FLAGS 			+=	-std=c++98
 endif
 
 ifeq ($(MAKE_VECTOR),0)
+FLAGS 			+=	-std=c++98
 SRC_CPP     	=	test_vector.cpp
 endif
 

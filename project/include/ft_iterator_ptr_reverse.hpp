@@ -11,17 +11,17 @@ namespace ft {
 template < 
     class Iter>
 class reverse_iterator : public iterator_base<
-                            typename iterators_traits<Iter>::iterator_category,
-                            typename iterators_traits<Iter>::value_type,
-                            typename iterators_traits<Iter>::difference_type,
-                            typename iterators_traits<Iter>::pointer,
-                            typename iterators_traits<Iter>::reference> {
+                            typename iterator_traits<Iter>::iterator_category,
+                            typename iterator_traits<Iter>::value_type,
+                            typename iterator_traits<Iter>::difference_type,
+                            typename iterator_traits<Iter>::pointer,
+                            typename iterator_traits<Iter>::reference> {
     public:
-    typedef typename ft::iterators_traits<Iter>::iterator_category iterator_category;
-    typedef typename ft::iterators_traits<Iter>::value_type value_type;
-    typedef typename ft::iterators_traits<Iter>::difference_type difference_type;
-    typedef typename ft::iterators_traits<Iter>::pointer pointer;
-    typedef typename ft::iterators_traits<Iter>::reference reference;
+    typedef typename ft::iterator_traits<Iter>::iterator_category iterator_category;
+    typedef typename ft::iterator_traits<Iter>::value_type value_type;
+    typedef typename ft::iterator_traits<Iter>::difference_type difference_type;
+    typedef typename ft::iterator_traits<Iter>::pointer pointer;
+    typedef typename ft::iterator_traits<Iter>::reference reference;
     
     protected:
     Iter _M_current;
@@ -294,6 +294,6 @@ reverse_iterator<Iter>::
 //     return (!(*this > itSecond));
 // }
 
-}; // namespace ft
+} // namespace ft
 
 #endif
