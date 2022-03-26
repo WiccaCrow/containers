@@ -7,7 +7,7 @@ void    check_insert();
 
 
 int main() {
-    // check_constructor();
+    check_constructor();
     check_insert();
 }
 
@@ -154,7 +154,32 @@ void    check_insert() {
         // std::cout << "capacity: " << vect_for_iter.capacity() << std::endl;
         // std::cout << "size:     " << vect_for_iter.size() << std::endl;
 
-        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.end().base() - 1);
+        // ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.end().base() - 1);
+        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
+        ft_iter = ft_vect.begin();
+        for (;ft_iter < ft_vect.end(); ++ft_iter) {
+            std::cout << *ft_iter;
+        }
+        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+        std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 4);
+        ft_iter = ft_vect.begin();
+        for (;ft_iter < ft_vect.end(); ++ft_iter) {
+            std::cout << *ft_iter;
+        }
+        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+        std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
+        ft_iter = ft_vect.begin();
+        for (;ft_iter < ft_vect.end(); ++ft_iter) {
+            std::cout << *ft_iter;
+        }
+        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+        std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
         ft_iter = ft_vect.begin();
         for (;ft_iter < ft_vect.end(); ++ft_iter) {
             std::cout << *ft_iter;
