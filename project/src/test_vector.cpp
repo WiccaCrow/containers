@@ -3,18 +3,21 @@
 #include <ft_vector.hpp>
 
 void    check_constructor();
+void    check_asisgn();
 void    check_insert();
 
 
 int main() {
-    check_constructor();
+    check_constructor(); // 1, 2, 3
     check_insert();
+    check_asisgn(); // 4, 21.3
 }
 
 void    check_constructor() {
     std::cout << std::endl << "\033[35m" << "CHECK CONSTRUCTORS " << "\033[0m" << std::endl;
     std::cout << "\t\033[35m" << "with capacity, size " << "\033[0m" << std::endl;
     {
+        std::cout << std::endl << "\033[33m" << "_____1.1_____" << "\033[0m" << std::endl;
         std::cout << "\033[34m" << "\t1) vector(); " << "\033[0m" << std::endl;
         std::vector<int> std_vec_int();
         ft::vector<int>  ft_vec_int();
@@ -27,6 +30,7 @@ void    check_constructor() {
         // std::cout << "size: " << ft_vec_int.size() << std::endl;
     }
     {
+        std::cout << std::endl << "\033[33m" << "_____1.2_____" << "\033[0m" << std::endl;
         std::cout << "\033[34m" << "\t2) explicit vector( const Allocator& alloc ); " << "\033[0m" << std::endl;
         std::allocator<int> alloc;
         std::vector<int> std_vec_int(alloc);
@@ -40,6 +44,7 @@ void    check_constructor() {
         // std::cout << std_vec_int[0] << "  |  " << ft_vec_int[0] << std::endl;
     }
     {
+        std::cout << std::endl << "\033[33m" << "_____1.3_____" << "\033[0m" << std::endl;
         std::cout << "\n\033[34m" << "\t3) explicit vector( size_type count,\n"
                  "\t\t\t    const T& value = T(),\n"
                  "\t\t\t    const Allocator& alloc = Allocator());" 
@@ -88,7 +93,8 @@ void    check_constructor() {
     }
 
     {
-        std::cout << "\n\033[34m" << "\t4) template< class InputIt >\n"
+        std::cout << std::endl << "\033[33m" << "_____1.5_____" << "\033[0m" << std::endl;
+        std::cout << "\n\033[34m" << "\t5) template< class InputIt >\n"
                                      "\t   vector( InputIt first, InputIt last,\n"
                                      "\t\t   const Allocator& alloc = Allocator() ); "
                                      << "\033[0m" << std::endl;
@@ -116,6 +122,9 @@ void    check_constructor() {
         std::cout << "size:     " << ft_vect.size() << std::endl;
     }
     {
+        std::cout << std::endl << "\033[33m" << "_____1.6_____      _____3_____" << "\033[0m" << std::endl;
+        std::cout << "\n\033[34m" << "\t6) vector( const vector& other );"
+                                     << "\033[0m" << std::endl;
         std::cout << "\n\033[34m" << "\toperator=\n"
                                   << "\033[0m" << std::endl;
         std::vector<std::string>    vect_for_iter;
@@ -230,4 +239,39 @@ void    check_insert() {
     {
 
     }
+}
+
+template < class T>
+void print_vector(ft::vector<T> & characters) {
+    for (typename ft::vector<T>::iterator iter = characters.begin();
+         iter != characters.end(); ++iter) {
+        std::cout << *iter << ' ';
+    }
+    std::cout << std::endl;  
+}
+
+void    check_asisgn() {
+    ft::vector<char> characters;
+
+    std::cout << std::endl << "\033[33m" << "_____4.1_____" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
+
+    characters.assign(5, 'a');
+        for (typename ft::vector<char>::iterator iter = characters.begin();
+         iter != characters.end(); ++iter) {
+        std::cout << *iter << ' ';
+    }
+    std::cout << std::endl; 
+
+    std::cout << std::endl << "\033[33m" << "_____4.2_____" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t4.2) template< class InputIt >\n"
+                               "\t     void assign( InputIt first, InputIt last );  " << "\033[0m" << std::endl;
+
+    const std::string extra(6, 'b');
+    characters.assign(extra.begin(), extra.end());
+        for (typename ft::vector<char>::iterator iter = characters.begin();
+         iter != characters.end(); ++iter) {
+        std::cout << *iter << ' ';
+    }
+    std::cout << std::endl;
 }

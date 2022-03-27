@@ -45,9 +45,13 @@ class vector : public _Vector_base<T, Allocator> {
     pointer        _arr;
     pointer        _arr_end;
 
-    void    insert_too_small_capacity(iterator & pos, size_type & count, iterator first);
-    void    insert_count_more_than_end_to_pos(iterator & pos, size_type & count, iterator first);
-    void    insert_count_less_than_end_to_pos(iterator & pos, size_type & count, iterator first);
+    void    increase_capacity(size_type & count);
+    void    insert_too_small_capacity(iterator & pos, size_type & count, const T& value);
+    void    insert_too_small_capacity(iterator & pos, size_type & count, const_iterator first);
+    void    insert_count_more_than_end_to_pos(iterator & pos, size_type & count, const T& value);
+    void    insert_count_more_than_end_to_pos(iterator & pos, size_type & count, const_iterator first);
+    void    insert_count_less_than_end_to_pos(iterator & pos, size_type & count, const T& value);
+    void    insert_count_less_than_end_to_pos(iterator & pos, size_type & count, const_iterator first);
     pointer copy(iterator first, iterator last, pointer copy_to);
 
     public:
@@ -64,6 +68,9 @@ class vector : public _Vector_base<T, Allocator> {
     vector( const vector& other );
     ~vector();
     vector<T, Allocator>& operator=(const vector<T, Allocator>& other);
+    void assign( size_type count, const T& value );
+    template< class InputIt >
+        void assign( InputIt first, InputIt last );
 
     // Element access
     T &     operator[](int i);
@@ -80,6 +87,7 @@ class vector : public _Vector_base<T, Allocator> {
     
     // Modifiers
     void    clear();
+    void insert( iterator pos, size_type count, const T& value );
     template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last );
     iterator erase( iterator first, iterator last );
@@ -172,7 +180,9 @@ vector<T, Allocator>::~vector() {
 }
 
 template <class T, class Allocator>
-vector<T, Allocator>& vector<T, Allocator>::operator=(const vector<T, Allocator>& other) {
+vector<T, Allocator>& 
+    vector<T, Allocator>::
+    operator=(const vector<T, Allocator>& other) {
     if (this == &other) {
         return (*this);
     }
@@ -191,16 +201,37 @@ vector<T, Allocator>& vector<T, Allocator>::operator=(const vector<T, Allocator>
     return (*this);
 }
 
+template <class T, class Allocator>
+void 
+    vector<T, Allocator>::
+    assign( size_type count, const T& value ) {
+        erase(begin(), end());
+        insert(begin(), count, value);
+    }
+
+
+template <class T, class Allocator>
+template< class InputIt >
+void
+    vector<T, Allocator>::
+    assign( InputIt first, InputIt last ) {
+        erase(begin(), end());
+        insert(begin(), first.base(), last.base());
+}
+
     // Element access
 
 template <class T, class Allocator>
-T &         vector<T, Allocator>::operator[](int i) {
+T &
+    vector<T, Allocator>::
+    operator[](int i) {
     return (_arr[i]);
 }
 
 template <class T, class Allocator>
 T* 
-    vector<T, Allocator>::data() {
+    vector<T, Allocator>::
+    data() {
         return (_arr);
     }
 
@@ -208,13 +239,15 @@ T*
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::iterator 
-    vector<T, Allocator>::begin() const {
+    vector<T, Allocator>::
+    begin() const {
     return (iterator(_arr));
 }
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::iterator 
-    vector<T, Allocator>::end() const {
+    vector<T, Allocator>::
+    end() const {
     return (iterator(_arr_end));
 }
 
@@ -222,32 +255,58 @@ typename vector<T, Allocator>::iterator
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::size_type
-vector<T, Allocator>::size() const {
+    vector<T, Allocator>::
+    size() const {
     return (_size);
 }
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::size_type
-    vector<T, Allocator>::max_size() const {
+    vector<T, Allocator>::
+    max_size() const {
         return (::ft::_Vector_base<T, Allocator>::_alloc.max_size());
     }
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::size_type
-    vector<T, Allocator>::capacity() const {
+    vector<T, Allocator>::
+    capacity() const {
     return (_capacity);
 }
 
     // Modifiers
 
 template <class T, class Allocator>
-void vector<T, Allocator>::clear() {
+void 
+    vector<T, Allocator>::
+    clear() {
     erase(begin(), end());
+}
+
+ template <class T, class Allocator>
+void 
+    vector<T, Allocator>::insert( iterator pos, 
+                                  size_type count, 
+                                  const T& value ) {
+    if (!count) {
+        return ;
+    }
+    if (max_size() - _size < count) {
+        throw std::length_error("length_error: Oops...exception. vector is too long.\n");
+    } else if (_capacity - _size < count) {
+        insert_too_small_capacity(pos, count, value);
+    } else if ((size_type)(end() - pos) < count) {
+        insert_count_more_than_end_to_pos(pos, count, value);
+    } else {
+        insert_count_less_than_end_to_pos(pos, count, value);
+    }
 }
 
 template <class T, class Allocator>
     template< class InputIt >
-    void vector<T, Allocator>::insert( iterator pos, InputIt first, InputIt last ) {
+    void 
+        vector<T, Allocator>::
+        insert( iterator pos, InputIt first, InputIt last ) {
         size_type count = static_cast<size_type>(::ft::distance(first, last));
         if (!count) {
             return ;
@@ -255,18 +314,19 @@ template <class T, class Allocator>
         if (max_size() - _size < count) {
             throw std::length_error("length_error: Oops...exception. vector is too long.\n");
         } else if (_capacity - _size < count) {
-            insert_too_small_capacity(pos, count, (iterator)first);
+            insert_too_small_capacity(pos, count, (const_iterator)first);
         } else if ((size_type)(end() - pos) < count) {
-            insert_count_more_than_end_to_pos(pos, count, (iterator)first);
+            insert_count_more_than_end_to_pos(pos, count, (const_iterator)first);
         } else {
-            insert_count_less_than_end_to_pos(pos, count, (iterator)first);
+            insert_count_less_than_end_to_pos(pos, count, (const_iterator)first);
         }
     }
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::iterator
-    vector<T, Allocator>::erase( vector<T, Allocator>::iterator first, 
-                                 vector<T, Allocator>::iterator last ) {
+    vector<T, Allocator>::
+    erase( vector<T, Allocator>::iterator first, 
+           vector<T, Allocator>::iterator last ) {
     if (first == last) {
         return (first);
     }
@@ -329,10 +389,9 @@ typename vector<T, Allocator>::iterator
     // private
 
 template <class T, class Allocator>
-void
-    vector<T, Allocator>::insert_too_small_capacity(iterator & pos, size_type & count, iterator first) {
-    size_type count_capacity = _capacity;
-    // increase _capacity
+void 
+    vector<T, Allocator>::
+    increase_capacity(size_type & count) {
     if (!_capacity) {
         _capacity = count;
     } else if (_capacity * 2 < max_size()) {
@@ -340,6 +399,64 @@ void
     } else {
         _capacity = max_size();
     }
+}
+
+template <class T, class Allocator>
+void
+    vector<T, Allocator>::
+    insert_too_small_capacity(iterator & pos, 
+                              size_type & count,
+                              const T& value ) {
+    size_type count_capacity = _capacity;
+    increase_capacity(count);
+    pointer tmp_capacity = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(_capacity);
+    pointer tmp_current;
+    try {
+        // copy part befor insert/pasting
+        tmp_current = _arr == 0 ? tmp_capacity : copy(static_cast<iterator>(_arr), pos, tmp_capacity);
+        // copying the part that is located after pasting (after pos).
+        int i = 0;
+        try {
+            for (; (size_type)i < count; ++i) {
+                ::ft::_Vector_base<T, Allocator>::_alloc.construct(tmp_current++, value);
+            }
+
+        } catch (...) {
+            for (; i--;) {
+                ::ft::_Vector_base<T, Allocator>::_alloc.destroy(--tmp_current);
+                }
+            throw;
+        }
+        // copy part after insert/pasting
+        copy(pos, end(), tmp_current);
+    } catch (...) {
+        for (; tmp_current-- != tmp_capacity;) {
+            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(tmp_current);
+        }
+        ::ft::_Vector_base<T, Allocator>::_alloc.deallocate(tmp_capacity, _capacity);
+        throw;
+    }
+    // freeing the old array
+    if (_arr != 0) {
+        for (iterator start = begin(); start != end(); ++start) {
+            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(start.base());
+        }
+        ::ft::_Vector_base<T, Allocator>::_alloc.deallocate(_arr, count_capacity);
+    }
+    // new private/protected values
+    _size += count;
+    _arr = tmp_capacity;
+    _arr_end = _arr + _size;
+}
+
+template <class T, class Allocator>
+void
+    vector<T, Allocator>::
+    insert_too_small_capacity(iterator & pos, 
+                              size_type & count, 
+                              const_iterator first) {
+    size_type count_capacity = _capacity;
+    increase_capacity(count);
     pointer tmp_capacity = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(_capacity);
     pointer tmp_current;
     try {
@@ -383,7 +500,40 @@ void
 template <class T, class Allocator>
 void 
     vector<T, Allocator>::
-    insert_count_more_than_end_to_pos(iterator & pos, size_type & count, iterator first) {
+    insert_count_more_than_end_to_pos(iterator & pos, 
+                                      size_type & count, 
+                                      const T& value) {
+    // 1) transfer values from pos to pos + count (not previously initialized)
+    copy(pos, end(), pos.base() + count);
+    // 2) insert value in a place befor old end() (was construct)
+    iterator pos_copy = pos;
+    for (; pos_copy != end() ; ++pos_copy) {
+        *pos_copy = value;
+    }
+    // 3) insert value in a place where there was no construct before (only allocate)
+    size_type i = 0;
+    try {
+        size_type to_construct = ::ft::distance(end(), pos + count);
+        for (; i < to_construct; ++i) {
+            ::ft::_Vector_base<T, Allocator>::
+                _alloc.construct(end().base() + i, value);
+        }
+    } catch (...) {
+        for (; i--;) {
+            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(pos.base() + i);
+        }            
+        throw;
+    }
+    _size += count;
+    _arr_end += count;
+}
+
+template <class T, class Allocator>
+void 
+    vector<T, Allocator>::
+    insert_count_more_than_end_to_pos(iterator & pos, 
+                                      size_type & count, 
+                                      const_iterator first) {
     // 1) transfer values from pos to pos + count (not previously initialized)
     copy(pos, end(), pos.base() + count);
     // 2) insert value in a place befor old end() (was construct)
@@ -412,7 +562,28 @@ void
 template <class T, class Allocator>
 void 
     vector<T, Allocator>::
-    insert_count_less_than_end_to_pos(iterator & pos, size_type & count, iterator first) {
+    insert_count_less_than_end_to_pos(iterator & pos, 
+                                      size_type & count, 
+                                      const T& value) {
+    // move "count" positions before end() to position after end() (with construct)
+    copy(end() - count, end(), end().base());
+    // move the remaining values in the range from "pos" to "end() - count" 
+    // by "count" positions to the right (near the end)
+    std::copy_backward(pos, end() - count, end());
+    // fill in insert positions
+    for (size_type i = 0; i < count; ) {
+        pos[(int)i++] = value;
+    }
+    _size += count;
+    _arr_end += count;
+}
+
+template <class T, class Allocator>
+void 
+    vector<T, Allocator>::
+    insert_count_less_than_end_to_pos(iterator & pos, 
+                                      size_type & count, 
+                                      const_iterator first) {
     // move "count" positions before end() to position after end() (with construct)
     copy(end() - count, end(), end().base());
     // move the remaining values in the range from "pos" to "end() - count" 
@@ -428,7 +599,8 @@ void
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::pointer 
-    vector<T, Allocator>::copy(iterator first, iterator last, pointer for_copy) {
+    vector<T, Allocator>::
+    copy(iterator first, iterator last, pointer for_copy) {
     int i = 0;
     try {
         for (; first != last;) {
