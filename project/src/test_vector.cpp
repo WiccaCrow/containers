@@ -10,7 +10,7 @@ void    check_insert();
 int main() {
     check_constructor(); // 1, 2, 3
     check_insert();
-    check_asisgn(); // 4, 21.3
+    check_asisgn(); // 4,      21.3
 }
 
 void    check_constructor() {

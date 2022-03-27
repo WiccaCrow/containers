@@ -71,6 +71,7 @@ class vector : public _Vector_base<T, Allocator> {
     void assign( size_type count, const T& value );
     template< class InputIt >
         void assign( InputIt first, InputIt last );
+    allocator_type get_allocator() const;
 
     // Element access
     T &     operator[](int i);
@@ -91,12 +92,6 @@ class vector : public _Vector_base<T, Allocator> {
     template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last );
     iterator erase( iterator first, iterator last );
-
-    /* operators */
-    /* Set atributs */
-    /* Get and show atributs */
-
-    // allocator_type alloc() const;
 
     /* other methods */
     // void        push_back(const T& x);
@@ -217,6 +212,13 @@ void
     assign( InputIt first, InputIt last ) {
         erase(begin(), end());
         insert(begin(), first.base(), last.base());
+}
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::allocator_type 
+    vector<T, Allocator>::
+    get_allocator() const {
+        return (::ft::_Vector_base<T, Allocator>::_alloc);
 }
 
     // Element access
@@ -345,11 +347,6 @@ typename vector<T, Allocator>::iterator
 /* operators */
 
 // /* Get and show atributs */
-
-// // template <class T, class Allocator>
-// // typename vector<T, Allocator>::allocator_type vector<T, Allocator>::alloc() const {
-// //     return (_allocator);
-// // }
 
 // // template <class T, class Allocator>
 // // void vector<T, Allocator>::push_back(const T& x) {
