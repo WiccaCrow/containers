@@ -62,7 +62,7 @@ class vector : public _Vector_base<T, Allocator> {
     template <class InputIt>
         vector(InputIt first, InputIt last, const Allocator& alloc = Allocator());
     vector( const vector& other );
-    ~vector() {}
+    ~vector();
     vector<T, Allocator>& operator=(const vector<T, Allocator>& other);
 
     // Element access
@@ -157,6 +157,21 @@ vector<T, Allocator>::vector( const vector<T, Allocator> & other ) :
 }
 
 template <class T, class Allocator>
+vector<T, Allocator>::~vector() {
+    if (_size != 0) {
+        for (; _arr_end-- != _arr;) {
+            this->_alloc.destroy(_arr_end);
+        }
+    }
+    _size = 0;
+    if (_capacity != 0) {
+        this->_alloc.deallocate(_arr, _capacity);
+        _capacity = 0;
+        _arr = _arr_end = NULL;
+    }
+}
+
+template <class T, class Allocator>
 vector<T, Allocator>& vector<T, Allocator>::operator=(const vector<T, Allocator>& other) {
     if (this == &other) {
         return (*this);
@@ -168,7 +183,8 @@ vector<T, Allocator>& vector<T, Allocator>::operator=(const vector<T, Allocator>
     _size = other.size();
     _capacity = other.capacity();
     ::ft::_Vector_base<T, Allocator>::_alloc = other._alloc;
-    for (int i = 0; (size_type)i < _size; ++i) {
+    _arr = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(_capacity);
+    for (int i = 0; static_cast<size_type>(i) < _size; ++i) {
         ::ft::_Vector_base<T, Allocator>::_alloc.construct(&_arr[i], other._arr[i]);
     }
     _arr_end = _arr + _size;
@@ -251,6 +267,9 @@ template <class T, class Allocator>
 typename vector<T, Allocator>::iterator
     vector<T, Allocator>::erase( vector<T, Allocator>::iterator first, 
                                  vector<T, Allocator>::iterator last ) {
+    if (first == last) {
+        return (first);
+    }
     iterator first_copy = first;
     for (; last != end(); ++first_copy, ++last) {
         *first_copy = *last;
@@ -368,16 +387,17 @@ void
     // 1) transfer values from pos to pos + count (not previously initialized)
     copy(pos, end(), pos.base() + count);
     // 2) insert value in a place befor old end() (was construct)
-    size_type i = 0;
-    size_type count_with_init = ::ft::distance(pos, end());
-    for (; i <= count_with_init; ++first) {
-        pos[(int)i++] = *first;
+    iterator pos_copy = pos;
+    for (; pos_copy != end() ; ++first, ++pos_copy) {
+        *pos_copy = *(first.base());
     }
     // 3) insert value in a place where there was no construct before (only allocate)
+    size_type i = 0;
     try {
-        size_type to_construct = count - count_with_init;
-        for (;i < to_construct; ++i, ++first) {
-            ::ft::_Vector_base<T, Allocator>::_alloc.construct(pos.base() + i, *first);
+        size_type to_construct = ::ft::distance(end(), pos + count);
+        for (; i < to_construct; ++i, ++first) {
+            ::ft::_Vector_base<T, Allocator>::
+                _alloc.construct(end().base() + i, *first);
         }
     } catch (...) {
         for (; i--;) {

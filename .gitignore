@@ -1,0 +1,9 @@
+# Object files
+*.o
+
+# vscode
+.vscode
+*.json
+
+# Other
+.DS_Store

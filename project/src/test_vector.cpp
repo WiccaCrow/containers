@@ -8,7 +8,7 @@ void    check_insert();
 
 int main() {
     check_constructor();
-    // check_insert();
+    check_insert();
 }
 
 void    check_constructor() {
@@ -187,6 +187,13 @@ void    check_insert() {
         }
         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
         std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        std::vector<std::string>::iterator  std_iter = vect_for_iter.begin();
+        for (;std_iter < vect_for_iter.end(); ++std_iter) {
+            std::cout << *std_iter;
+        }
+        std::cout << "capacity: " << vect_for_iter.capacity() << std::endl;
+        std::cout << "size:     " << vect_for_iter.size() << std::endl;
 
         ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
         ft_iter = ft_vect.begin();
