@@ -4,6 +4,7 @@
 
 void    check_constructor();
 void    check_asisgn();
+void    check_Element_access_and_iterators();
 void    check_insert();
 
 
@@ -11,6 +12,7 @@ int main() {
     check_constructor(); // 1, 2, 3
     check_insert();
     check_asisgn(); // 4,      21.3
+    // check_Element_access_and_iterators(); // 6
 }
 
 void    check_constructor() {
@@ -274,4 +276,80 @@ void    check_asisgn() {
         std::cout << *iter << ' ';
     }
     std::cout << std::endl;
+}
+
+
+void    check_Element_access_and_iterators() {
+    // https://en.cppreference.com/w/cpp/container/vector/at
+
+
+    // std::cout << std::endl << "\033[33m" << "_____6 - 10_____     Element access" << "\033[0m" << std::endl;
+    // std::cout << "\033[34m" << "\t6) at " << "\033[0m" << std::endl;
+
+    // ft::vector<int> data;
+    // // data.push_back(1);
+    // // data.push_back(2);
+    // // data.push_back(4);
+    // // data.push_back(5);
+    // // data.push_back(5);
+    // // data.push_back(6);
+    // data.insert(data.begin(), 1, 6);
+    // // data.insert(data.begin(), 1, 5);
+    // // data.insert(data.begin(), 1, 5);
+    // // data.insert(data.begin(), 1, 4);
+    // // data.insert(data.begin(), 1, 2);
+    // // data.insert(data.begin(), 1, 1);
+
+
+
+    // // // Set element 1
+    // // data.at(1) = 88;
+ 
+    // // // Read element 2
+    // // std::cout << "Element at index 2 has value " << data.at(2) << '\n';
+ 
+    // // std::cout << "data size = " << data.size() << '\n';
+ 
+    // // try {
+    // //     // Set element 6
+    // //     data.at(6) = 666;
+    // // } catch (std::out_of_range const& exc) {
+    // //     std::cout << exc.what() << '\n';
+    // // }
+ 
+    // // // Print final values
+    // // std::cout << "data:";
+    // // for (long unsigned int i = 0; i < data.size(); ++i)
+    // //     std::cout << " " << data[i];
+    // // std::cout << '\n';
+
+    // // std::cout << "\033[34m" << "\t7) operator[] " << "\033[0m" << std::endl;
+    // // std::cout << "data[2] = " << data[2] << std::endl;
+
+    // // std::cout << "\033[34m" << "\t8) front " << "\033[0m" << std::endl;
+    // // std::cout << "front = " << data.front() << std::endl;
+
+    // // std::cout << "\033[34m" << "\t9) back " << "\033[0m" << std::endl;
+    // // std::cout << "back = " << data.back() << std::endl;
+
+    // // std::cout << "\033[34m" << "\t10) data " << "\033[0m" << std::endl;
+    // // std::cout << "*data.data() = " << *data.data() << std::endl;
+    // // std::cout << " data.data() = " << data.data() << std::endl;
+
+
+    // // std::cout << std::endl << "\033[33m" << "_____11-14_____     iterators" << "\033[0m" << std::endl;
+    
+    // // std::cout << "\033[34m" << "\t11) begin " << "\033[0m" << std::endl;
+    // // std::cout << "*data.begin(); \n" << *data.begin() << std::endl;
+
+    // // std::cout << "\033[34m" << "\t12) end " << "\033[0m" << std::endl;
+    // // std::cout << "*(data.end() - 1); \n" << *(data.end() - 1) << std::endl;
+
+    // // std::cout << "\033[34m" << "\t13) rbegin " << "\033[0m" << std::endl;
+    // // std::cout << "*data.rbegin(); \n" << *data.rbegin() << std::endl;
+
+    // // std::cout << "\033[34m" << "\t14) rend " << "\033[0m" << std::endl;
+    // // std::cout << "*(data.rend() - 1); \n" << *(data.rend() - 1) << std::endl;
+
+
 }

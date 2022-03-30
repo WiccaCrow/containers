@@ -42,8 +42,8 @@ class vector : public _Vector_base<T, Allocator> {
     private:
     size_t    _size;
     size_t    _capacity;
-    pointer        _arr;
-    pointer        _arr_end;
+    pointer   _arr;
+    pointer   _arr_end;
 
     void    increase_capacity(size_type & count);
     void    insert_too_small_capacity(iterator & pos, size_type & count, const T& value);
@@ -74,12 +74,25 @@ class vector : public _Vector_base<T, Allocator> {
     allocator_type get_allocator() const;
 
     // Element access
-    T &     operator[](int i);
-    T*      data();
+    reference at( size_type pos );
+    const_reference at( size_type pos ) const;
+    reference       operator[]( size_type i );
+    const_reference operator[]( size_type pos ) const;
+    reference       front();
+    const_reference front() const;
+    reference       back();
+    const_reference back() const;
+    T*              data();
 
     // Iterators
-    iterator       begin() const;
-    iterator       end() const;
+    iterator       begin();
+    const_iterator begin() const;
+    iterator       end();
+    const_iterator end() const;
+    // reverse_iterator rbegin();
+    // const_reverse_iterator rbegin() const;
+    // reverse_iterator rend();
+    // const_reverse_iterator rend() const;
 
     // Capacity
     size_t         size() const;
@@ -87,8 +100,8 @@ class vector : public _Vector_base<T, Allocator> {
     size_t         capacity() const;
     
     // Modifiers
-    void    clear();
-    void insert( iterator pos, size_type count, const T& value );
+    void     clear();
+    void     insert( iterator pos, size_type count, const T& value );
     template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last );
     iterator erase( iterator first, iterator last );
@@ -224,11 +237,62 @@ typename vector<T, Allocator>::allocator_type
     // Element access
 
 template <class T, class Allocator>
-T &
+typename vector<T, Allocator>::reference 
     vector<T, Allocator>::
-    operator[](int i) {
+    at( size_type pos ) {
+    if (_size < pos) {
+        throw std::out_of_range("out_of_range: Oops...exception. pos value too high.\n");
+    }
+    return (_arr[pos]);
+    }
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::const_reference 
+    vector<T, Allocator>::
+    at( size_type pos ) const {
+    if (_size < pos) {
+        throw std::out_of_range("out_of_range: Oops...exception. pos value too high.\n");
+    }
+    return (_arr[pos]);
+    }
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::reference
+    vector<T, Allocator>::
+    operator[](size_type i) {
     return (_arr[i]);
 }
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::const_reference
+    vector<T, Allocator>::
+    operator[](size_type i) const {
+    return (_arr[i]);
+}
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::reference 
+    vector<T, Allocator>::front() {
+        return (_arr[0]);
+    }
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::const_reference 
+    vector<T, Allocator>::front() const {
+        return (_arr[0]);
+    }
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::reference 
+    vector<T, Allocator>::back() {
+        return (_arr[_size - 1]);
+    }
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::const_reference 
+    vector<T, Allocator>::back() const {
+        return (_arr[_size - 1]);
+    }
 
 template <class T, class Allocator>
 T* 
@@ -242,6 +306,13 @@ T*
 template <class T, class Allocator>
 typename vector<T, Allocator>::iterator 
     vector<T, Allocator>::
+    begin() {
+    return (iterator(_arr));
+}
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::const_iterator 
+    vector<T, Allocator>::
     begin() const {
     return (iterator(_arr));
 }
@@ -249,9 +320,44 @@ typename vector<T, Allocator>::iterator
 template <class T, class Allocator>
 typename vector<T, Allocator>::iterator 
     vector<T, Allocator>::
+    end() {
+    return (iterator(_arr_end));
+}
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::const_iterator 
+    vector<T, Allocator>::
     end() const {
     return (iterator(_arr_end));
 }
+
+// template <class T, class Allocator>
+// typename vector<T, Allocator>::reverse_iterator 
+//     vector<T, Allocator>::
+//     rbegin() {
+//     return (reverse_iterator(end()));
+// }
+
+// template <class T, class Allocator>
+// typename vector<T, Allocator>::const_reverse_iterator 
+//     vector<T, Allocator>::
+//     rbegin() const {
+//     return (const_reverse_iterator(end()));
+// }
+
+// template <class T, class Allocator>
+// typename vector<T, Allocator>::reverse_iterator 
+//     vector<T, Allocator>::
+//     rend() {
+//     return (reverse_iterator(begin()));
+// }
+
+// template <class T, class Allocator>
+// typename vector<T, Allocator>::const_reverse_iterator 
+//     vector<T, Allocator>::
+//     rend() const {
+//     return (const_reverse_iterator(begin()));
+// }
 
     // Capacity
 
@@ -329,7 +435,7 @@ typename vector<T, Allocator>::iterator
     vector<T, Allocator>::
     erase( vector<T, Allocator>::iterator first, 
            vector<T, Allocator>::iterator last ) {
-    if (first == last) {
+    if (first == last || _arr == NULL) {
         return (first);
     }
     iterator first_copy = first;
