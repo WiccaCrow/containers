@@ -9,10 +9,10 @@ void    check_insert();
 
 
 int main() {
-    check_constructor(); // 1, 2, 3
-    check_insert();
-    check_asisgn(); // 4,      21.3
-    // check_Element_access_and_iterators(); // 6
+    // check_constructor(); // 1, 2, 3
+    // check_insert();
+    // check_asisgn(); // 4,      21.3
+    check_Element_access_and_iterators(); // 6 + constuctor and inser for int
 }
 
 void    check_constructor() {
@@ -283,23 +283,27 @@ void    check_Element_access_and_iterators() {
     // https://en.cppreference.com/w/cpp/container/vector/at
 
 
-    // std::cout << std::endl << "\033[33m" << "_____6 - 10_____     Element access" << "\033[0m" << std::endl;
-    // std::cout << "\033[34m" << "\t6) at " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____6 - 10_____     Element access" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t6) at " << "\033[0m" << std::endl;
 
-    // ft::vector<int> data;
+    ft::vector<int> data;
+    // for (int i = 0; i < 5; ++i) {
+    //     std::cout << data[i] << std::endl;
+    // }
     // // data.push_back(1);
     // // data.push_back(2);
     // // data.push_back(4);
     // // data.push_back(5);
     // // data.push_back(5);
     // // data.push_back(6);
-    // data.insert(data.begin(), 1, 6);
-    // // data.insert(data.begin(), 1, 5);
-    // // data.insert(data.begin(), 1, 5);
-    // // data.insert(data.begin(), 1, 4);
-    // // data.insert(data.begin(), 1, 2);
-    // // data.insert(data.begin(), 1, 1);
+    data.insert(data.begin(), 1, 6);
+    // data.insert(data.begin(), 1, 5);
+    // data.insert(data.begin(), 1, 5);
+    // data.insert(data.begin(), 1, 4);
+    // data.insert(data.begin(), 1, 2);
+    // data.insert(data.begin(), 1, 1);
 
+        // std::cout << data[0] << std::endl;
 
 
     // // // Set element 1
@@ -350,6 +354,5 @@ void    check_Element_access_and_iterators() {
 
     // // std::cout << "\033[34m" << "\t14) rend " << "\033[0m" << std::endl;
     // // std::cout << "*(data.rend() - 1); \n" << *(data.rend() - 1) << std::endl;
-
 
 }

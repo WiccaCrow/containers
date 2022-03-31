@@ -65,6 +65,13 @@ class vector : public _Vector_base<T, Allocator> {
                     const allocator_type& alloc = allocator_type());
     template <class InputIt>
         vector(InputIt first, InputIt last, const Allocator& alloc = Allocator());
+
+    void vector_val(size_type count, const value_type& val);
+    template <class InputIt>
+        void    vector_val_iter(InputIt first, InputIt last, input_iterator_tag);
+    template <class InputIt>
+        void    vector_val_iter(InputIt first, InputIt last, int_iterator_tag);
+
     vector( const vector& other );
     ~vector();
     vector<T, Allocator>& operator=(const vector<T, Allocator>& other);
@@ -142,6 +149,25 @@ vector<T, Allocator>::vector(size_type count, const value_type& val,
                                 _capacity(count),
                                 _arr(::ft::_Vector_base<T, Allocator>::_alloc.allocate(count)),
                                 _arr_end(_arr + count) {
+    vector_val(count, val);
+}
+
+template <class T, class Allocator>
+template <class InputIt>
+    vector<T, Allocator>::vector(InputIt first, InputIt last, const Allocator& alloc) :
+                        ::ft::_Vector_base<T, Allocator>::_Vector_base(alloc),
+                        _size(0),
+                        _capacity(0),
+                        _arr(NULL),
+                        _arr_end(NULL) {
+    vector_val_iter(first, last, Iter_cat(first));
+}
+
+
+///////////////////////////////////////////////////////
+template <class T, class Allocator>
+void
+vector<T, Allocator>::vector_val(size_type count, const value_type& val) {
     size_type i = 0;
     try {
         for (; i < count; ++i) {
@@ -153,18 +179,34 @@ vector<T, Allocator>::vector(size_type count, const value_type& val,
         }
         throw;
     }
+    _arr_end = _arr + _size;
 }
 
 template <class T, class Allocator>
 template <class InputIt>
-    vector<T, Allocator>::vector(InputIt first, InputIt last, const Allocator& alloc) :
-                        ::ft::_Vector_base<T, Allocator>::_Vector_base(alloc),
-                        _size(0),
-                        _capacity(0),
-                        _arr(NULL),
-                        _arr_end(NULL) {
+void
+    vector<T, Allocator>::
+    vector_val_iter(InputIt first, InputIt last, input_iterator_tag) {
     insert(begin(), first, last);
 }
+
+template <class T, class Allocator>
+template <class InputIt>
+void
+    vector<T, Allocator>::
+    vector_val_iter(InputIt first, InputIt last, int_iterator_tag) {
+    size_type count = (size_type)first;
+    _size = count,
+    _capacity = count,
+    _arr = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(count);
+    T value = (T)last;
+    vector_val(first, last);
+}
+///////////////////////////////////////////////////////
+
+
+
+
 
 template <class T, class Allocator>
 vector<T, Allocator>::vector( const vector<T, Allocator> & other ) :
@@ -179,6 +221,7 @@ vector<T, Allocator>::~vector() {
             this->_alloc.destroy(_arr_end);
         }
     }
+
     _size = 0;
     if (_capacity != 0) {
         this->_alloc.deallocate(_arr, _capacity);

@@ -12,7 +12,7 @@ SRC_CPP     	=	test_iterator.cpp
 endif
 
 ifeq ($(MAKE_ENABLE_IF),0)
-SRC_CPP     	=	test_enable_if.cpp
+SRC_CPP     	=	test_enable_if_11.cpp
 FLAGS 			+=	-std=c++17
 else
 FLAGS 			+=	-std=c++98
