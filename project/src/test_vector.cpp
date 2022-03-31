@@ -12,7 +12,7 @@ int main() {
     // check_constructor(); // 1, 2, 3
     // check_insert();
     // check_asisgn(); // 4,      21.3
-    check_Element_access_and_iterators(); // 6 + constuctor and inser for int
+    check_Element_access_and_iterators(); // 6
 }
 
 void    check_constructor() {
@@ -58,6 +58,18 @@ void    check_constructor() {
         std::cout << "capacity: " << std_vec_int.capacity() << "   |   " << ft_vec_int.capacity() << std::endl;
         std::cout << "size:     " << std_vec_int.size() << "   |   " << ft_vec_int.size() << std::endl;
         std::cout << std::endl;
+    }
+    {
+        std::cout << "\n\033[34m" << "\t3) for int\n"
+                 "\n\t        ft::vector<int> data(5, 5); " << "\033[0m" << std::endl;
+        std::cout << "\n\033[36m" << "\t\tcout " << "\033[0m"  << std::endl;
+
+        ft::vector<int> data(5, 5);
+        for (int i = 0; i < 5; ++i) {
+            std::cout << data[i];
+        }
+        std::cout << std::endl;
+
     }
     {
         std::cout << "\n\033[34m" << "\t5 elements, std::string \"hello \" " << "\033[0m" << std::endl;
@@ -284,12 +296,8 @@ void    check_Element_access_and_iterators() {
 
 
     std::cout << std::endl << "\033[33m" << "_____6 - 10_____     Element access" << "\033[0m" << std::endl;
-    std::cout << "\033[34m" << "\t6) at " << "\033[0m" << std::endl;
 
     ft::vector<int> data;
-    // for (int i = 0; i < 5; ++i) {
-    //     std::cout << data[i] << std::endl;
-    // }
     // // data.push_back(1);
     // // data.push_back(2);
     // // data.push_back(4);
@@ -297,62 +305,71 @@ void    check_Element_access_and_iterators() {
     // // data.push_back(5);
     // // data.push_back(6);
     data.insert(data.begin(), 1, 6);
-    // data.insert(data.begin(), 1, 5);
-    // data.insert(data.begin(), 1, 5);
-    // data.insert(data.begin(), 1, 4);
-    // data.insert(data.begin(), 1, 2);
-    // data.insert(data.begin(), 1, 1);
+    data.insert(data.begin(), 1, 5);
+    data.insert(data.begin(), 1, 5);
+    data.insert(data.begin(), 1, 4);
+    data.insert(data.begin(), 1, 2);
+    data.insert(data.begin(), 1, 1);
 
-        // std::cout << data[0] << std::endl;
+    for (int i = 0; i < data.size(); ++i) {
+        std::cout << data[i] << " ";
+    }
+    std::cout << std::endl;
 
+    std::cout << "\033[34m" << "\t6) at " << "\033[0m" << std::endl;
 
-    // // // Set element 1
-    // // data.at(1) = 88;
+    // Set element 1
+    data.at(1) = 88;
+    std::cout << "data.at(1) = 88, cout data[1]: " << data[1] << std::endl;
  
-    // // // Read element 2
-    // // std::cout << "Element at index 2 has value " << data.at(2) << '\n';
+    // Read element 2
+    std::cout << "Element at index 2 has value " << data.at(2) << '\n';
  
-    // // std::cout << "data size = " << data.size() << '\n';
+    std::cout << "data size = " << data.size() << '\n';
+
+    std::cout << std::endl;
+    try {
+        // Set element 7
+        std::cout << "try: data.at(7) = 666" << std::endl;
+
+        data.at(7) = 666;
+    } catch (std::out_of_range const& exc) {
+        std::cout << exc.what() << '\n';
+    }
+    std::cout << std::endl;
  
-    // // try {
-    // //     // Set element 6
-    // //     data.at(6) = 666;
-    // // } catch (std::out_of_range const& exc) {
-    // //     std::cout << exc.what() << '\n';
-    // // }
- 
-    // // // Print final values
-    // // std::cout << "data:";
-    // // for (long unsigned int i = 0; i < data.size(); ++i)
-    // //     std::cout << " " << data[i];
-    // // std::cout << '\n';
+    // Print final values
+    std::cout << "Print final values. \ndata:";
+    for (long unsigned int i = 0; i < data.size(); ++i)
+        std::cout << " " << data[i];
+    std::cout << "\n\n";
 
-    // // std::cout << "\033[34m" << "\t7) operator[] " << "\033[0m" << std::endl;
-    // // std::cout << "data[2] = " << data[2] << std::endl;
+    std::cout << "\033[34m" << "\t7) operator[] " << "\033[0m" << std::endl;
+    std::cout << "data[2] = " << data[2] << std::endl;
 
-    // // std::cout << "\033[34m" << "\t8) front " << "\033[0m" << std::endl;
-    // // std::cout << "front = " << data.front() << std::endl;
+    std::cout << "\033[34m" << "\t8) front " << "\033[0m" << std::endl;
+    std::cout << "front = " << data.front() << std::endl;
 
-    // // std::cout << "\033[34m" << "\t9) back " << "\033[0m" << std::endl;
-    // // std::cout << "back = " << data.back() << std::endl;
+    std::cout << "\033[34m" << "\t9) back " << "\033[0m" << std::endl;
+    std::cout << "back = " << data.back() << std::endl;
 
-    // // std::cout << "\033[34m" << "\t10) data " << "\033[0m" << std::endl;
-    // // std::cout << "*data.data() = " << *data.data() << std::endl;
-    // // std::cout << " data.data() = " << data.data() << std::endl;
+    std::cout << "\033[34m" << "\t10) data " << "\033[0m" << std::endl;
+    std::cout << "*data.data() = " << *data.data() << std::endl;
+    std::cout << " data.data() = " << data.data() << std::endl;
 
 
-    // // std::cout << std::endl << "\033[33m" << "_____11-14_____     iterators" << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____11-14_____     iterators" << "\033[0m" << std::endl;
     
-    // // std::cout << "\033[34m" << "\t11) begin " << "\033[0m" << std::endl;
-    // // std::cout << "*data.begin(); \n" << *data.begin() << std::endl;
+    std::cout << "\033[34m" << "\t11) begin " << "\033[0m" << std::endl;
+    std::cout << "*data.begin(); \n" << *data.begin() << std::endl;
 
-    // // std::cout << "\033[34m" << "\t12) end " << "\033[0m" << std::endl;
-    // // std::cout << "*(data.end() - 1); \n" << *(data.end() - 1) << std::endl;
+    std::cout << "\033[34m" << "\t12) end " << "\033[0m" << std::endl;
+    std::cout << "*(data.end() - 1); \n" << *(data.end() - 1) << std::endl;
 
-    // // std::cout << "\033[34m" << "\t13) rbegin " << "\033[0m" << std::endl;
-    // // std::cout << "*data.rbegin(); \n" << *data.rbegin() << std::endl;
+    std::cout << "\033[34m" << "\t13) rbegin " << "\033[0m" << std::endl;
+    std::cout << "*data.rbegin(); \n" << *data.rbegin() << std::endl;
 
-    // // std::cout << "\033[34m" << "\t14) rend " << "\033[0m" << std::endl;
-    // // std::cout << "*(data.rend() - 1); \n" << *(data.rend() - 1) << std::endl;
+    std::cout << "\033[34m" << "\t14) rend " << "\033[0m" << std::endl;
+    std::cout << "*(data.rend() - 1); \n" << *(data.rend() - 1) << std::endl;
 
 }

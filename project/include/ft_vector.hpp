@@ -45,6 +45,17 @@ class vector : public _Vector_base<T, Allocator> {
     pointer   _arr;
     pointer   _arr_end;
 
+    void vector_val(size_type count, const value_type& val);
+    template <class InputIt>
+        void    vector_val_iter(InputIt first, InputIt last, input_iterator_tag);
+    template <class InputIt>
+        void    vector_val_iter(InputIt first, InputIt last, int_iterator_tag);
+
+    template< class InputIt >
+        void    insert( iterator pos, InputIt first, InputIt last, input_iterator_tag );
+    template< class InputIt >
+        void    insert( iterator pos, InputIt first, InputIt last, int_iterator_tag );
+    void    insert_not_iterator( iterator pos, size_type count, const T& value );
     void    increase_capacity(size_type & count);
     void    insert_too_small_capacity(iterator & pos, size_type & count, const T& value);
     void    insert_too_small_capacity(iterator & pos, size_type & count, const_iterator first);
@@ -65,13 +76,6 @@ class vector : public _Vector_base<T, Allocator> {
                     const allocator_type& alloc = allocator_type());
     template <class InputIt>
         vector(InputIt first, InputIt last, const Allocator& alloc = Allocator());
-
-    void vector_val(size_type count, const value_type& val);
-    template <class InputIt>
-        void    vector_val_iter(InputIt first, InputIt last, input_iterator_tag);
-    template <class InputIt>
-        void    vector_val_iter(InputIt first, InputIt last, int_iterator_tag);
-
     vector( const vector& other );
     ~vector();
     vector<T, Allocator>& operator=(const vector<T, Allocator>& other);
@@ -96,10 +100,10 @@ class vector : public _Vector_base<T, Allocator> {
     const_iterator begin() const;
     iterator       end();
     const_iterator end() const;
-    // reverse_iterator rbegin();
-    // const_reverse_iterator rbegin() const;
-    // reverse_iterator rend();
-    // const_reverse_iterator rend() const;
+    reverse_iterator rbegin();
+    const_reverse_iterator rbegin() const;
+    reverse_iterator rend();
+    const_reverse_iterator rend() const;
 
     // Capacity
     size_t         size() const;
@@ -162,51 +166,6 @@ template <class InputIt>
                         _arr_end(NULL) {
     vector_val_iter(first, last, Iter_cat(first));
 }
-
-
-///////////////////////////////////////////////////////
-template <class T, class Allocator>
-void
-vector<T, Allocator>::vector_val(size_type count, const value_type& val) {
-    size_type i = 0;
-    try {
-        for (; i < count; ++i) {
-            ::ft::_Vector_base<T, Allocator>::_alloc.construct(_arr + (int)i, val);
-        }
-    } catch (...) {
-        for (; i--;) {
-            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(_arr + i);
-        }
-        throw;
-    }
-    _arr_end = _arr + _size;
-}
-
-template <class T, class Allocator>
-template <class InputIt>
-void
-    vector<T, Allocator>::
-    vector_val_iter(InputIt first, InputIt last, input_iterator_tag) {
-    insert(begin(), first, last);
-}
-
-template <class T, class Allocator>
-template <class InputIt>
-void
-    vector<T, Allocator>::
-    vector_val_iter(InputIt first, InputIt last, int_iterator_tag) {
-    size_type count = (size_type)first;
-    _size = count,
-    _capacity = count,
-    _arr = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(count);
-    T value = (T)last;
-    vector_val(first, last);
-}
-///////////////////////////////////////////////////////
-
-
-
-
 
 template <class T, class Allocator>
 vector<T, Allocator>::vector( const vector<T, Allocator> & other ) :
@@ -374,33 +333,33 @@ typename vector<T, Allocator>::const_iterator
     return (iterator(_arr_end));
 }
 
-// template <class T, class Allocator>
-// typename vector<T, Allocator>::reverse_iterator 
-//     vector<T, Allocator>::
-//     rbegin() {
-//     return (reverse_iterator(end()));
-// }
+template <class T, class Allocator>
+typename vector<T, Allocator>::reverse_iterator 
+    vector<T, Allocator>::
+    rbegin() {
+    return (reverse_iterator(end()));
+}
 
-// template <class T, class Allocator>
-// typename vector<T, Allocator>::const_reverse_iterator 
-//     vector<T, Allocator>::
-//     rbegin() const {
-//     return (const_reverse_iterator(end()));
-// }
+template <class T, class Allocator>
+typename vector<T, Allocator>::const_reverse_iterator 
+    vector<T, Allocator>::
+    rbegin() const {
+    return (const_reverse_iterator(end()));
+}
 
-// template <class T, class Allocator>
-// typename vector<T, Allocator>::reverse_iterator 
-//     vector<T, Allocator>::
-//     rend() {
-//     return (reverse_iterator(begin()));
-// }
+template <class T, class Allocator>
+typename vector<T, Allocator>::reverse_iterator 
+    vector<T, Allocator>::
+    rend() {
+    return (reverse_iterator(begin()));
+}
 
-// template <class T, class Allocator>
-// typename vector<T, Allocator>::const_reverse_iterator 
-//     vector<T, Allocator>::
-//     rend() const {
-//     return (const_reverse_iterator(begin()));
-// }
+template <class T, class Allocator>
+typename vector<T, Allocator>::const_reverse_iterator 
+    vector<T, Allocator>::
+    rend() const {
+    return (const_reverse_iterator(begin()));
+}
 
     // Capacity
 
@@ -434,11 +393,12 @@ void
     erase(begin(), end());
 }
 
- template <class T, class Allocator>
-void 
-    vector<T, Allocator>::insert( iterator pos, 
-                                  size_type count, 
-                                  const T& value ) {
+template <class T, class Allocator>
+void
+    vector<T, Allocator>::
+    insert_not_iterator( iterator pos, 
+                         size_type count, 
+                         const T& value ) {
     if (!count) {
         return ;
     }
@@ -454,10 +414,38 @@ void
 }
 
 template <class T, class Allocator>
+void 
+    vector<T, Allocator>::
+    insert( iterator pos, 
+            size_type count, 
+            const T& value ) {
+    insert_not_iterator(pos, count, value );
+}
+///////////////////////////////////////////////////
+template <class T, class Allocator>
     template< class InputIt >
     void 
         vector<T, Allocator>::
         insert( iterator pos, InputIt first, InputIt last ) {
+            insert(pos, first, last, Iter_cat(first));
+        }
+///////////////////////////////////////////////////
+
+template <class T, class Allocator>
+    template< class InputIt >
+    void 
+        vector<T, Allocator>::
+        insert( iterator pos, InputIt first, InputIt last, int_iterator_tag ) {
+        size_type count = (size_type)first;
+        T value = (T)last;
+        insert_not_iterator(pos, first, last);
+    }
+
+template <class T, class Allocator>
+    template< class InputIt >
+    void 
+        vector<T, Allocator>::
+        insert( iterator pos, InputIt first, InputIt last, input_iterator_tag ) {
         size_type count = static_cast<size_type>(::ft::distance(first, last));
         if (!count) {
             return ;
@@ -533,6 +521,48 @@ typename vector<T, Allocator>::iterator
 // // }
 
     // private
+
+////// for constructors
+
+template <class T, class Allocator>
+void
+vector<T, Allocator>::vector_val(size_type count, const value_type& val) {
+    size_type i = 0;
+    try {
+        for (; i < count; ++i) {
+            ::ft::_Vector_base<T, Allocator>::_alloc.construct(_arr + (int)i, val);
+        }
+    } catch (...) {
+        for (; i--;) {
+            ::ft::_Vector_base<T, Allocator>::_alloc.destroy(_arr + i);
+        }
+        throw;
+    }
+    _arr_end = _arr + _size;
+}
+
+template <class T, class Allocator>
+template <class InputIt>
+void
+    vector<T, Allocator>::
+    vector_val_iter(InputIt first, InputIt last, input_iterator_tag) {
+    insert(begin(), first, last);
+}
+
+template <class T, class Allocator>
+template <class InputIt>
+void
+    vector<T, Allocator>::
+    vector_val_iter(InputIt first, InputIt last, int_iterator_tag) {
+    size_type count = (size_type)first;
+    _size = count,
+    _capacity = count,
+    _arr = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(count);
+    T value = (T)last;
+    vector_val(first, last);
+}
+
+////// for insert
 
 template <class T, class Allocator>
 void 
