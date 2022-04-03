@@ -18,7 +18,7 @@ typename iterator_traits<InputIt>::difference_type
 
 template< class InputIt, class D >
 void
-    distance_with_cat( InputIt first, InputIt last, D& dist, input_iterator_tag ) {
+    distance_with_cat( InputIt first, InputIt last, D& dist, ::std::input_iterator_tag ) {
         for (; first != last; ++first) {
             ++dist;
         }
@@ -26,7 +26,7 @@ void
 
 template< class InputIt, class D >
 void
-    distance_with_cat( InputIt first, InputIt last, D& dist, std_input_iterator_tag ) {
+    distance_with_cat( InputIt first, InputIt last, D& dist, ::std::forward_iterator_tag ) {
         for (; first != last; ++first) {
             ++dist;
         }
@@ -34,7 +34,7 @@ void
 
 template< class InputIt, class D >
 void
-    distance_with_cat( InputIt first, InputIt last, D& dist, forward_iterator_tag ) {
+    distance_with_cat( InputIt first, InputIt last, D& dist, ::std::bidirectional_iterator_tag ) {
         for (; first != last; ++first) {
             ++dist;
         }
@@ -42,15 +42,7 @@ void
 
 template< class InputIt, class D >
 void
-    distance_with_cat( InputIt first, InputIt last, D& dist, bidirectional_iterator_tag ) {
-        for (; first != last; ++first) {
-            ++dist;
-        }
-    }
-
-template< class InputIt, class D >
-void
-    distance_with_cat( InputIt first, InputIt last, D& dist, random_access_iterator_tag ) {
+    distance_with_cat( InputIt first, InputIt last, D& dist, ::std::random_access_iterator_tag ) {
         dist += last - first;
     }
 

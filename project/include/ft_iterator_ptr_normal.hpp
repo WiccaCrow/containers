@@ -15,7 +15,7 @@ template <
     typename _Pt = _Container*,
     typename _Rt = _Container&>
 class normal_iterator : public iterator_base<
-                            random_access_iterator_tag,
+                            ::std::random_access_iterator_tag,
                             _Container,
                             _Dist,
                             _Pt,

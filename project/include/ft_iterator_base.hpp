@@ -2,7 +2,6 @@
 #define FT_ITERATOR_BASE_HPP
 
 #include <cstddef>
-#include <ft_iterator_tag_structs.hpp>
 #include <ft_iterator_traits.hpp>
 
 namespace ft {
@@ -24,7 +23,7 @@ struct iterator_base {
 //
 //
 // OUTPUT iterator
-struct OutIt : public iterator_base<output_iterator_tag, void, void, void, void> {};
+struct OutIt : public iterator_base< ::std::output_iterator_tag, void, void, void, void> {};
 //
 //
 // BIDIRECTIONAL iterator
@@ -34,7 +33,7 @@ template <
     typename _Dist = std::ptrdiff_t,
     typename _Pt = _T*,
     typename _Rt = _T&>
-struct bidirIt : public iterator_base<bidirectional_iterator_tag, _T, _Dist, _Pt, _Rt> {};
+struct bidirIt : public iterator_base< ::std::bidirectional_iterator_tag, _T, _Dist, _Pt, _Rt> {};
 //
 //
 // RANDOM access iterator
@@ -44,7 +43,7 @@ template <
     typename _Dist = std::ptrdiff_t,
     typename _Pt = _T*,
     typename _Rt = _T&>
-struct RandomIt : public iterator_base<random_access_iterator_tag, _T, _Dist, _Pt, _Rt> {};
+struct RandomIt : public iterator_base< ::std::random_access_iterator_tag, _T, _Dist, _Pt, _Rt> {};
 } // namespace ft
 
 #endif

@@ -10,15 +10,12 @@
 #include <ft_iterator_ptr_reverse.hpp>
 #include <ft_iterator_ptr_reverse_non_class.hpp>
 #include <ft_iterator_distance.hpp>
+#include <iterator>
 
 namespace ft {
 
 // tag
-struct input_iterator_tag;
-struct output_iterator_tag;
-struct forward_iterator_tag;
-struct bidirectional_iterator_tag;
-struct random_access_iterator_tag;
+struct int_iterator_tag;
 
 // template struct iterator (for inheritance)
 template <typename _iterTag, typename _T, typename _Dist, typename _Pt, typename _Rt>
