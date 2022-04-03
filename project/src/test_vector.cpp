@@ -10,9 +10,12 @@ void    check_clear();
 void    check_insert_erase_21_4_and_22_2();
 void    check_insert_erase_21_1_3_and_22_1();
 void    check_insert_iter();
+void    check_push_back_pop_back();
+void    check_resize();
+void    check_swap();
 
 template < class T>
-void print_vector(ft::vector<T> & characters);
+void print_vector(T & characters);
 
 int main() {
     check_constructor(); // 1, 2, 3, 5
@@ -24,11 +27,14 @@ int main() {
     check_insert_erase_21_4_and_22_2(); // 21.4, 22.2
     check_insert_iter(); // 21.3, 21.4
     check_insert_erase_21_1_3_and_22_1(); // 21.1, 21.3, 22.1
+    check_push_back_pop_back(); // 23, 24
+    check_resize(); // 25
+    check_swap(); // 26
 }
 
 template < class T>
-void print_vector(ft::vector<T> & characters) {
-    for (typename ft::vector<T>::iterator iter = characters.begin();
+void print_vector(T & characters) {
+    for (typename T::iterator iter = characters.begin();
          iter != characters.end(); ++iter) {
         std::cout << *iter << ' ';
     }
@@ -627,4 +633,114 @@ void    check_insert_erase_21_1_3_and_22_1() {
                 std::cout << *std_iter_erase;
             }
         }
+}
+
+void    check_push_back_pop_back() {
+    std::cout << std::endl << "\033[33m" << "_____23_____" << "\033[0m" << std::endl;
+    std::cout << "\n\033[34m" << "\t23) "
+                                    "void push_back( const T& value ); "
+                                    << "\033[0m" << std::endl;
+    ft::vector<int> vect_int;
+    vect_int.push_back(0);
+    vect_int.push_back(1);
+    vect_int.push_back(2);
+    vect_int.push_back(3);
+    vect_int.push_back(4);
+    vect_int.push_back(5);
+    ft::vector<int>::iterator vect_int_iter = vect_int.begin();
+    for (; vect_int_iter != vect_int.end(); ++vect_int_iter) {
+        std::cout << *vect_int_iter << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "capacity: " << vect_int.capacity() << std::endl;
+    std::cout << "size:     " << vect_int.size() << std::endl;
+
+    {
+        std::cout << std::endl << "\033[33m" << "_____24_____" << "\033[0m" << std::endl;
+        std::cout << "\n\033[34m" << "\t24) "
+                                    "void pop_back( ); "
+                                    << "\033[0m" << std::endl;
+        vect_int.pop_back();
+        // vect_int.pop_back();
+        // vect_int.pop_back();
+        // vect_int.pop_back();
+        // vect_int.pop_back();
+        // vect_int.pop_back(); for 0
+        // vect_int.pop_back(); for empty
+        vect_int_iter = vect_int.begin();
+        for (; vect_int_iter != vect_int.end(); ++vect_int_iter) {
+            std::cout << *vect_int_iter << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "capacity: " << vect_int.capacity() << std::endl;
+        std::cout << "size:     " << vect_int.size() << std::endl;
+    }
+}
+
+void    check_resize() {
+    std::cout << std::endl << "\033[33m" << "_____25_____" << "\033[0m" << std::endl;
+    std::cout << "\n\033[34m" << "\t25) "
+                                 "void resize( size_type count, T value = T() ); "
+                              << "\033[0m" << std::endl;
+    ft::vector<int> c;
+    c.push_back(1);
+    c.push_back(2);
+    c.push_back(3);
+    std::cout << "The vector holds: ";
+    print_vector(c);
+    c.resize(5);
+    std::cout << "After resize up to 5: ";
+    print_vector(c);
+    c.resize(2);
+    std::cout << "After resize down to 2: ";
+    print_vector(c);
+    c.resize(6, 4);
+    std::cout << "After resize up to 6 (initializer = 4): ";
+    print_vector(c);
+}
+
+void    check_swap() {
+    std::cout << std::endl << "\033[33m" << "_____26_____" << "\033[0m" << std::endl;
+    std::cout << "\n\033[34m" << "\t26) "
+                                 "void swap( vector& other ); "
+                              << "\033[0m" << std::endl;    std::vector<int> a1, a2;
+    a1.push_back(1);
+    a1.push_back(2);
+    a1.push_back(3);
+    a2.push_back(4);
+    a2.push_back(5);
+
+ 
+    std::vector<int>::iterator it1 = a1.begin() + 1;
+    std::vector<int>::iterator it2 = a2.begin() + 1;
+ 
+    int& ref1 = a1.front();
+    int& ref2 = a2.front();
+
+    std::cout << "\n\033[36m" << "\t\tbefor swap: " << "\033[0m"  << std::endl;
+    std::cout << "\t vectors: "  << std::endl;
+    print_vector(a1);
+    print_vector(a2);
+    std::cout << "\t *it1: " << *it1 << std::endl;
+    std::cout << "\t *it2: " << *it2 << std::endl;
+    std::cout << "\t ref1: " << *it1 << std::endl;
+    std::cout << "\t ref2: " << *it2 << std::endl;
+    std::cout << "a1 capacity: " << a1.capacity() << std::endl;
+    std::cout << "a1 size:     " << a1.size() << std::endl;
+    std::cout << "a2 capacity: " << a2.capacity() << std::endl;
+    std::cout << "a2 size:     " << a2.size() << std::endl;
+
+    std::cout << "\n\033[36m" << "\t\tafter swap: " << "\033[0m"  << std::endl;
+    a1.swap(a2);
+    std::cout << "\t vectors: "  << std::endl;
+    print_vector(a1);
+    print_vector(a2);
+    std::cout << "\t *it1: " << *it1 << std::endl;
+    std::cout << "\t *it2: " << *it2 << std::endl;
+    std::cout << "\t ref1: " << *it1 << std::endl;
+    std::cout << "\t ref2: " << *it2 << std::endl;
+    std::cout << "a1 capacity: " << a1.capacity() << std::endl;
+    std::cout << "a1 size:     " << a1.size() << std::endl;
+    std::cout << "a2 capacity: " << a2.capacity() << std::endl;
+    std::cout << "a2 size:     " << a2.size() << std::endl;
 }

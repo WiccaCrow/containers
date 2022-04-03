@@ -37,15 +37,6 @@ std::input_iterator_tag
     return (obj);
 }
 
-
-
-// template < class T>
-// int_iterator_tag    Iter_cat(T t, typename enable_if< ::std::numeric_limits<T>::is_specialized, T>::type) {
-//     std::cout << "int Iter_cat\n";
-//     int_iterator_tag obj;
-//     return (obj);
-// }
-
 int_iterator_tag    Iter_cat(bool) {
     int_iterator_tag obj;
     return (obj);
