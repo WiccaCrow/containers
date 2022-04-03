@@ -7,7 +7,8 @@ void    check_asisgn();
 void    check_Element_access_and_iterators();
 void    check_capacity();
 void    check_clear(); 
-void    check_insert();
+void    check_insert_erase_21_4_and_22_2();
+void    check_insert_erase_21_1_3_and_22_1();
 void    check_insert_iter();
 
 template < class T>
@@ -20,8 +21,9 @@ int main() {
     check_capacity(); // 15 - 19
     std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
     check_clear(); // 20  
-    check_insert();
-    check_insert_iter();
+    check_insert_erase_21_4_and_22_2(); // 21.4, 22.2
+    check_insert_iter(); // 21.3, 21.4
+    check_insert_erase_21_1_3_and_22_1(); // 21.1, 21.3, 22.1
 }
 
 template < class T>
@@ -403,11 +405,11 @@ void    check_clear() {
     std::cout << "size: " << vect_clear.size() << std::endl;
 }
 
-void    check_insert() {
-    std::cout << std::endl << "\033[33m" << "_____20_____     " << "\033[0m" << std::endl;
+void    check_insert_erase_21_4_and_22_2() {
+    std::cout << std::endl << "\033[33m" << "_____21_____     4" << "\033[0m" << std::endl;
     
     {
-        std::cout << "\n\033[34m" << "\t20.4) template< class InputIt >\n"
+        std::cout << "\n\033[34m" << "\t21.4) template< class InputIt >\n"
                                      "\t   void insert( iterator pos, InputIt first, InputIt last ); "
                                      << "\033[0m" << std::endl;
         std::vector<std::string>    vect_for_iter;
@@ -477,8 +479,8 @@ void    check_insert() {
         }
         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
         std::cout << "size:     " << ft_vect.size() << std::endl;
-
-        std::cout << "\n\033[34m" << "\t2) iterator erase( iterator first, iterator last );"
+        std::cout << std::endl << "\033[33m" << "_____22_____     2" << "\033[0m" << std::endl;
+        std::cout << "\n\033[34m" << "\t22.2) iterator erase( iterator first, iterator last );"
                                   << "\033[0m" << std::endl;
         ft_vect.erase(ft_vect.begin() + 4, ft_vect.begin() + 6);
         ft_iter = ft_vect.begin();
@@ -488,7 +490,8 @@ void    check_insert() {
         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
         std::cout << "size:     " << ft_vect.size() << std::endl;
 
-        std::cout << "\n\033[34m" << "\tvoid clear();"
+        std::cout << std::endl << "\033[33m" << "_____20_____     " << "\033[0m" << std::endl;
+        std::cout << "\n\033[34m" << "\t20) void clear();"
                                   << "\033[0m" << std::endl;
         ft_vect.clear();
         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
@@ -497,9 +500,9 @@ void    check_insert() {
 }
 
 void    check_insert_iter() {
-    std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____21_____     4 for int" << "\033[0m" << std::endl;
     {
-        std::cout << "\n\033[34m" << "\t4) template< class InputIt >\n"
+        std::cout << "\n\033[34m" << "\t21.4) template< class InputIt >\n"
                                      "\t   void insert( iterator pos, InputIt first, InputIt last ); "
                                      << "\033[0m" << std::endl;
         std::vector<int>    vect_for_iter(5);
@@ -521,4 +524,107 @@ void    check_insert_iter() {
         }
         std::cout << std::endl;
     }
+}
+
+void    check_insert_erase_21_1_3_and_22_1() {
+    std::cout << std::endl << "\033[33m" << "_____21_____     3" << "\033[0m" << std::endl;
+            std::cout << "\n\033[34m" << "\t21.3) "
+                                     "void insert( iterator pos, size_type count, const T& value ); "
+                                     << "\033[0m" << std::endl;
+        std::vector<std::string>    vect_for_iter;
+        vect_for_iter.push_back("Hello ");
+        vect_for_iter.push_back("my ");
+        vect_for_iter.push_back("very ");
+        vect_for_iter.push_back("beautiful ");
+        vect_for_iter.push_back("world ");
+        vect_for_iter.push_back("!!!\n");
+        std::vector<std::string>::iterator  iter = vect_for_iter.begin();
+        for (;iter < vect_for_iter.end(); ++iter) {
+            std::cout << *iter;
+        }
+        iter = vect_for_iter.begin();
+
+        ft::vector<std::string>    ft_vect(vect_for_iter.begin(), vect_for_iter.end());
+        ft_vect.insert(ft_vect.begin() + 2, 3, "_:-)_");
+        ft::vector<std::string>::iterator  ft_iter = ft_vect.begin();
+        for (;ft_iter < ft_vect.end(); ++ft_iter) {
+            std::cout << *ft_iter;
+        }
+        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+        std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        ft_vect.insert(ft_vect.begin() + 2, 1, "_:-)_");
+        ft_iter = ft_vect.begin();
+        for (;ft_iter < ft_vect.end(); ++ft_iter) {
+            std::cout << *ft_iter;
+        }
+        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+        std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        std::cout << std::endl << "\033[33m" << "_____21_____     1" << "\033[0m" << std::endl;
+            std::cout << "\n\033[34m" << "\t21.1) "
+                                     "iterator insert( iterator pos, const T& value ); "
+                                     << "\033[0m" << std::endl;
+        ft_vect.insert(ft_vect.begin() + 4, "..m(*_*)m..");
+        ft_iter = ft_vect.begin();
+        for (;ft_iter < ft_vect.end(); ++ft_iter) {
+            std::cout << *ft_iter;
+        }
+        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+        std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        ft::vector<std::string>::iterator ft_iter_insert = ft_vect.insert(ft_vect.end() - 2, "..m(*_*)m..");
+        ft_iter = ft_vect.begin();
+        for (;ft_iter < ft_vect.end(); ++ft_iter) {
+            std::cout << *ft_iter;
+        }
+        std::cout << "\n\033[36m" << "\t\tafter insert: " << "\033[0m"  << std::endl;
+        for (;ft_iter_insert < ft_vect.end(); ++ft_iter_insert) {
+            std::cout << *ft_iter_insert;
+        }
+        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+        std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        std::cout << std::endl << "\033[33m" << "_____22_____     1" << "\033[0m" << std::endl;
+        std::cout << "\n\033[34m" << "\t22.1) "
+                                     "iterator erase( iterator pos ); "
+                                     << "\033[0m" << std::endl;
+        ft::vector<std::string>::iterator ft_iter_erase = ft_vect.erase(ft_vect.begin() + 4);
+        ft_iter = ft_vect.begin();
+        for (;ft_iter < ft_vect.end(); ++ft_iter) {
+            std::cout << *ft_iter;
+        }
+        std::cout << "\n\033[36m" << "\t\tafter erase: " << "\033[0m"  << std::endl;
+        for (;ft_iter_erase < ft_vect.end(); ++ft_iter_erase) {
+            std::cout << *ft_iter_erase;
+        }
+        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+        std::cout << "size:     " << ft_vect.size() << std::endl;
+
+        {
+              // std example (erase)
+            std::cout << "\n\033[34m" << "\tstd example \033[0m\n";
+
+            std::vector<std::string>    vect_for_iter1;
+            vect_for_iter1.push_back("Hello ");
+            vect_for_iter1.push_back("my ");
+            vect_for_iter1.push_back("very ");
+            vect_for_iter1.push_back("beautiful ");
+            vect_for_iter1.push_back("world ");
+            vect_for_iter1.push_back("!!!\n");
+            std::vector<std::string>::iterator  iter = vect_for_iter1.begin();
+            for (;iter < vect_for_iter1.end(); ++iter) {
+                std::cout << *iter;
+            }
+            std::vector<std::string>::iterator std_iter_erase = 
+                vect_for_iter1.erase(vect_for_iter1.begin() + 1);
+            iter = vect_for_iter1.begin();
+            for (;iter < vect_for_iter1.end(); ++iter) {
+                std::cout << *iter;
+            }
+            std::cout << "\033[36m" << "\t\tafter erase: " << "\033[0m"  << std::endl;
+            for (;std_iter_erase < vect_for_iter1.end(); ++std_iter_erase) {
+                std::cout << *std_iter_erase;
+            }
+        }
 }

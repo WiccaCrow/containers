@@ -51,15 +51,9 @@ class vector : public _Vector_base<T, Allocator> {
         void    construct_base( iterator pos, InputIt first, InputIt last, int_iterator_tag );
 
     void vector_val(size_type count, const value_type& val);
-    // template <class InputIt>
-    //     void    vector_val_iter(InputIt first, InputIt last, input_iterator_tag);
     template <class InputIt>
         void    vector_val_iter(InputIt first, InputIt last, int_iterator_tag);
 
-    // template< class InputIt >
-    //     void    insert( iterator pos, InputIt first, InputIt last, input_iterator_tag );
-    // template< class InputIt >
-    //     void    insert_base( iterator pos, InputIt first, InputIt last, input_iterator_tag );
     template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last, ::std::input_iterator_tag );
     template< class InputIt >
@@ -130,9 +124,11 @@ class vector : public _Vector_base<T, Allocator> {
     
     // Modifiers
     void     clear();
+    iterator insert( iterator pos, const T& value );
     void     insert( iterator pos, size_type count, const T& value );
     template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last );
+    iterator erase( iterator pos );
     iterator erase( iterator first, iterator last );
 
     /* other methods */
@@ -442,6 +438,15 @@ void
 }
 
 template <class T, class Allocator>
+typename vector<T, Allocator>::iterator 
+    vector<T, Allocator>::
+    insert( iterator pos, const T& value ) {
+    size_type dist_pos = ::std::distance(begin(), pos);
+    insert_not_iterator(pos, 1, value );
+    return (begin() + dist_pos);
+}
+
+template <class T, class Allocator>
 void 
     vector<T, Allocator>::
     insert( iterator pos, 
@@ -456,7 +461,14 @@ template <class T, class Allocator>
         vector<T, Allocator>::
         insert( iterator pos, InputIt first, InputIt last ) {
             insert(pos, first, last, Iter_cat(first));
-    }
+}
+
+template <class T, class Allocator>
+typename vector<T, Allocator>::iterator
+    vector<T, Allocator>::
+    erase( iterator pos ) {
+    return (erase(pos, pos + 1));
+}
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::iterator
@@ -571,9 +583,9 @@ void
     } else if (_capacity - _size < count) {
         insert_too_small_capacity(pos, count, value);
     } else if ((size_type)(end() - pos) < count) {
-        // insert_count_more_than_end_to_pos(pos, count, value);
+        insert_count_more_than_end_to_pos(pos, count, value);
     } else {
-    //     insert_count_less_than_end_to_pos(pos, count, value);
+        insert_count_less_than_end_to_pos(pos, count, value);
     }
 }
 
