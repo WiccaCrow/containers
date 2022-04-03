@@ -5,21 +5,41 @@
 void    check_constructor();
 void    check_asisgn();
 void    check_Element_access_and_iterators();
+void    check_capacity();
+
 void    check_insert();
 void    check_insert_iter();
 
+template < class T>
+void print_vector(ft::vector<T> & characters);
 
 int main() {
-    check_constructor(); // 1, 2, 3
+    // check_constructor(); // 1, 2, 3, 5
+    // check_asisgn(); // 4
+    // check_Element_access_and_iterators(); // 6 - 14
+    check_capacity(); // 15 - 19
     // check_insert();
     // check_insert_iter();
-    // check_asisgn(); // 4,      21.3
-    check_Element_access_and_iterators(); // 6
+}
+
+template < class T>
+void print_vector(ft::vector<T> & characters) {
+    for (typename ft::vector<T>::iterator iter = characters.begin();
+         iter != characters.end(); ++iter) {
+        std::cout << *iter << ' ';
+    }
+    std::cout << std::endl;  
 }
 
 void    check_constructor() {
     std::cout << std::endl << "\033[35m" << "CHECK CONSTRUCTORS " << "\033[0m" << std::endl;
-    std::cout << "\t\033[35m" << "with capacity, size " << "\033[0m" << std::endl;
+    std::cout << "\033[35m" << "with capacity, size \n"
+                 "\t(constructor)\n"
+                 "\t(destructor)\n" 
+                 "\toperator=\n" 
+                 "\tassign\n" 
+                 "\tget_allocator\n" 
+                 "\033[0m" << std::endl;
     {
         std::cout << std::endl << "\033[33m" << "_____1.1_____" << "\033[0m" << std::endl;
         std::cout << "\033[34m" << "\t1) vector(); " << "\033[0m" << std::endl;
@@ -370,71 +390,78 @@ void    check_constructor() {
 //     // }
 // }
 
-// template < class T>
-// void print_vector(ft::vector<T> & characters) {
-//     for (typename ft::vector<T>::iterator iter = characters.begin();
-//          iter != characters.end(); ++iter) {
-//         std::cout << *iter << ' ';
-//     }
-//     std::cout << std::endl;  
-// }
+void    check_asisgn() {
+    {
+        ft::vector<char> characters;
 
-// void    check_asisgn() {
-//     {
-//         ft::vector<char> characters;
+        std::cout << std::endl << "\033[33m" << "_____4.1_____ characters" << "\033[0m" << std::endl;
+        std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
 
-//         std::cout << std::endl << "\033[33m" << "_____4.1_____ characters" << "\033[0m" << std::endl;
-//         std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
+        characters.assign(5, 'a');
+            for (typename ft::vector<char>::iterator iter = characters.begin();
+            iter != characters.end(); ++iter) {
+            std::cout << *iter << ' ';
+        }
+        std::cout << std::endl; 
+        std::cout << "capacity: " << characters.capacity() << std::endl;
+        std::cout << "size: " << characters.size() << std::endl;
 
-//         characters.assign(5, 'a');
-//             for (typename ft::vector<char>::iterator iter = characters.begin();
-//             iter != characters.end(); ++iter) {
-//             std::cout << *iter << ' ';
-//         }
-//         std::cout << std::endl; 
+        std::cout << std::endl << "\033[33m" << "_____4.2_____ characters" << "\033[0m" << std::endl;
+        std::cout << "\033[34m" << "\t4.2) template< class InputIt >\n"
+                                "\t     void assign( InputIt first, InputIt last );  " << "\033[0m" << std::endl;
 
-//         std::cout << std::endl << "\033[33m" << "_____4.2_____ characters" << "\033[0m" << std::endl;
-//         std::cout << "\033[34m" << "\t4.2) template< class InputIt >\n"
-//                                 "\t     void assign( InputIt first, InputIt last );  " << "\033[0m" << std::endl;
+        const std::string extra(6, 'b');
+        characters.assign(extra.begin(), extra.end());
+            for (typename ft::vector<char>::iterator iter = characters.begin();
+            iter != characters.end(); ++iter) {
+            std::cout << *iter << ' ';
+        }
+        std::cout << std::endl;
+        std::cout << "capacity: " << characters.capacity() << std::endl;
+        std::cout << "size: " << characters.size() << std::endl;
+    }
+    {
+        ft::vector<int> integers;
 
-//         const std::string extra(6, 'b');
-//         // characters.assign(extra.begin(), extra.end());
-//         //     for (typename std::vector<char>::iterator iter = characters.begin();
-//         //     iter != characters.end(); ++iter) {
-//         //     std::cout << *iter << ' ';
-//         // }
-//         // std::cout << std::endl;
-//     }
-//     {
-//         ft::vector<int> integers;
+        std::cout << std::endl << "\033[33m" << "_____4.1_____ integers" << "\033[0m" << std::endl;
+        std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
 
-//         std::cout << std::endl << "\033[33m" << "_____4.1_____ integers" << "\033[0m" << std::endl;
-//         std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
+        integers.assign(5, 0);
+            for (typename ft::vector<int>::iterator iter = integers.begin();
+            iter != integers.end(); ++iter) {
+            std::cout << *iter << ' ';
+        }
+        std::cout << std::endl;
+        std::cout << "capacity: " << integers.capacity() << std::endl;
+        std::cout << "size: " << integers.size() << std::endl;
 
-//         integers.assign(5, 0);
-//             for (typename ft::vector<int>::iterator iter = integers.begin();
-//             iter != integers.end(); ++iter) {
-//             std::cout << *iter << ' ';
-//         }
-//         std::cout << std::endl; 
+        std::cout << std::endl << "\033[33m" << "_____4.2_____ integers" << "\033[0m" << std::endl;
+        std::cout << "\033[34m" << "\t4.2) template< class InputIt >\n"
+                                "\t     void assign( InputIt first, InputIt last );  " << "\033[0m" << std::endl;
 
-//         // std::cout << std::endl << "\033[33m" << "_____4.2_____ integers" << "\033[0m" << std::endl;
-//         // std::cout << "\033[34m" << "\t4.2) template< class InputIt >\n"
-//         //                         "\t     void assign( InputIt first, InputIt last );  " << "\033[0m" << std::endl;
-
-//         // const std::string extra_integers(6, 6);
-//         // integers.assign(extra_integers.begin(), extra_integers.end());
-//         //     for (typename ft::vector<int>::iterator iter = integers.begin();
-//         //     iter != integers.end(); ++iter) {
-//         //     std::cout << *iter << ' ';
-//         // }
-//         // std::cout << std::endl;
-//     }
-// }
+        const std::string extra_integers(6, 6);
+        integers.assign(extra_integers.begin(), extra_integers.end());
+            for (typename ft::vector<int>::iterator iter = integers.begin();
+            iter != integers.end(); ++iter) {
+            std::cout << *iter << ' ';
+        }
+        std::cout << std::endl;
+        std::cout << "capacity: " << integers.capacity() << std::endl;
+        std::cout << "size: " << integers.size() << std::endl;
+    }
+}
 
 void    check_Element_access_and_iterators() {
     https://en.cppreference.com/w/cpp/container/vector/at
 
+    std::cout << std::endl << "\033[35m" << "check ELEMENT ACCESS " << "\033[0m" << std::endl;
+    std::cout << "\033[35m" << 
+                 "\tat\n"
+                 "\toperator[]\n" 
+                 "\tfront\n" 
+                 "\tback\n" 
+                 "\tdata\n" 
+                 "\033[0m" << std::endl;
 
     std::cout << std::endl << "\033[33m" << "_____6 - 10_____     Element access" << "\033[0m" << std::endl;
 
@@ -492,7 +519,13 @@ void    check_Element_access_and_iterators() {
     std::cout << "*data.data() = " << *data.data() << std::endl;
     std::cout << " data.data() = " << data.data() << std::endl;
 
-
+    std::cout << std::endl << "\033[35m" << "check ITERATORS " << "\033[0m" << std::endl;
+    std::cout << "\033[35m" << 
+                 "\tbegin\n"
+                 "\tend\n" 
+                 "\trbegin\n" 
+                 "\trend\n"  
+                 "\033[0m" << std::endl;
     std::cout << std::endl << "\033[33m" << "_____11-14_____     iterators" << "\033[0m" << std::endl;
     
     std::cout << "\033[34m" << "\t11) begin " << "\033[0m" << std::endl;
@@ -507,4 +540,42 @@ void    check_Element_access_and_iterators() {
     std::cout << "\033[34m" << "\t14) rend " << "\033[0m" << std::endl;
     std::cout << "*(data.rend() - 1); \n" << *(data.rend() - 1) << std::endl;
 
+}
+
+void    check_capacity() {
+    std::cout << std::endl << "\033[35m" << "check CAPACITY " << "\033[0m" << std::endl;
+    std::cout << "\033[35m" << 
+                 "\tempty\n"
+                 "\tsize\n" 
+                 "\tmax_size\n" 
+                 "\treserve\n"
+                 "\tcapacity\n"
+                 "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____15-19_____     " << "\033[0m" << std::endl;
+    
+    std::cout << "\033[34m" << "\t15) empty " << "\033[0m" << std::endl;
+        std::cout << std::boolalpha;
+    ft::vector<int> numbers;
+    std::cout << "Initially, numbers.empty():            " << numbers.empty() << "\n\n";
+    numbers.assign(5, 5);
+    std::cout << "After adding elements\nnumbers.assign(5, 5); numbers.empty(): " << numbers.empty() << '\n';
+
+    std::cout << "\033[34m" << "\t16) size " << "\033[0m" << std::endl;
+    std::cout << "numbers.size(); \n" << numbers.size() << std::endl;
+
+    std::cout << "\033[34m" << "\t17) max_size " << "\033[0m" << std::endl;
+    std::cout << "numbers.max_size(); \n" << numbers.max_size() << std::endl;
+
+    std::cout << "\033[34m" << "\t18) reserve " << "\033[0m" << std::endl;
+    numbers.reserve(2);
+    std::cout << "numbers.reserve(2);  capacity: " << numbers.capacity() << std::endl;
+    numbers.reserve(5);
+    std::cout << "numbers.reserve(5);  capacity: " << numbers.capacity() << std::endl;
+    numbers.reserve(10);
+    std::cout << "numbers.reserve(10); capacity: " << numbers.capacity() << std::endl;
+    std::cout << "print_vector(numbers): ";
+    print_vector(numbers);
+
+    std::cout << "\033[34m" << "\t19) capacity " << "\033[0m" << std::endl;
+    std::cout << "numbers.capacity(); \n" << numbers.capacity() << std::endl;
 }

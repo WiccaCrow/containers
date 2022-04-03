@@ -57,14 +57,6 @@ class vector : public _Vector_base<T, Allocator> {
         void    vector_val_iter(InputIt first, InputIt last, int_iterator_tag);
 
     template< class InputIt >
-        void assign( InputIt first, InputIt last, ::std::input_iterator_tag );
-    template< class InputIt >
-        void assign( InputIt first, InputIt last, input_iterator_tag );
-    template< class InputIt >
-        void assign( InputIt first, InputIt last, int_iterator_tag );
-    void assign_not_iterator( size_type count, const T& value );
-
-    template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last, input_iterator_tag );
     template< class InputIt >
         void    insert_base( iterator pos, InputIt first, InputIt last, input_iterator_tag );
@@ -129,8 +121,10 @@ class vector : public _Vector_base<T, Allocator> {
     const_reverse_iterator rend() const;
 
     // Capacity
+    bool           empty() const;
     size_t         size() const;
     size_type      max_size() const;
+    void           reserve( size_type new_cap );
     size_t         capacity() const;
     
     // Modifiers
@@ -223,7 +217,6 @@ void
         insert_too_small_capacity(pos, count, value);
     }
 }
-//////////////////////////////////////////////////
 
 template <class T, class Allocator>
 vector<T, Allocator>::vector( const vector<T, Allocator> & other ) :
@@ -287,42 +280,9 @@ template< class InputIt >
 void
     vector<T, Allocator>::
     assign( InputIt first, InputIt last ) {
-        erase(begin(), end());
-                std::cout << "------assign------\n";
-        // insert(begin(), first, last, Iter_cat(first));
-        // assign(first, last, Iter_cat(first));
-        // insert(begin(), first.base(), last.base());
+    erase(begin(), end());
+    construct_base(begin(), first, last, Iter_cat(first));
 }
-
-///////////////////////////////////////////////////
-template <class T, class Allocator>
-template< class InputIt >
-void
-    vector<T, Allocator>::
-    assign( InputIt first, InputIt last, ::std::input_iterator_tag ) {
-                std::cout << "------assign------input_iterator_tag\n";
-    // insert(begin(), first.base(), last.base(), Iter_cat(first.base()));
-}
-
-template <class T, class Allocator>
-template< class InputIt >
-void
-    vector<T, Allocator>::
-    assign( InputIt first, InputIt last, int_iterator_tag ) {
-                std::cout << "------assign------int_iterator_tag\n";
-
-    size_type count = static_cast<size_type>(first);
-    T value = static_cast<T>(last);
-    insert_not_iterator(begin(), count, value);
-    }
-
-// template <class T, class Allocator>
-// void 
-//     vector<T, Allocator>::
-//     assign_not_iterator( size_type count, const T& value ) {
-        
-// }
-///////////////////////////////////////////////////
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::allocator_type 
@@ -341,7 +301,7 @@ typename vector<T, Allocator>::reference
         throw std::out_of_range("out_of_range: Oops...exception. pos value too high.\n");
     }
     return (_arr[pos]);
-    }
+}
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::const_reference 
@@ -351,7 +311,7 @@ typename vector<T, Allocator>::const_reference
         throw std::out_of_range("out_of_range: Oops...exception. pos value too high.\n");
     }
     return (_arr[pos]);
-    }
+}
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::reference
@@ -371,32 +331,32 @@ template <class T, class Allocator>
 typename vector<T, Allocator>::reference 
     vector<T, Allocator>::front() {
         return (_arr[0]);
-    }
+}
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::const_reference 
     vector<T, Allocator>::front() const {
         return (_arr[0]);
-    }
+}
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::reference 
     vector<T, Allocator>::back() {
         return (_arr[_size - 1]);
-    }
+}
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::const_reference 
     vector<T, Allocator>::back() const {
         return (_arr[_size - 1]);
-    }
+}
 
 template <class T, class Allocator>
 T* 
     vector<T, Allocator>::
     data() {
         return (_arr);
-    }
+}
 
     // Iterators
 
@@ -459,6 +419,14 @@ typename vector<T, Allocator>::const_reverse_iterator
     // Capacity
 
 template <class T, class Allocator>
+bool
+    vector<T, Allocator>::
+    empty() const {
+    return (!_size);
+}
+
+
+template <class T, class Allocator>
 typename vector<T, Allocator>::size_type
     vector<T, Allocator>::
     size() const {
@@ -471,6 +439,24 @@ typename vector<T, Allocator>::size_type
     max_size() const {
         return (::ft::_Vector_base<T, Allocator>::_alloc.max_size());
     }
+
+template <class T, class Allocator>
+void
+    vector<T, Allocator>::
+    reserve( size_type new_cap ) {
+    if (new_cap <= _capacity) {
+        return ;
+    }
+    T* arr_new = get_allocator().allocate(new_cap);
+    for (int i = 0; i < _size ; ++i) {
+        get_allocator().construct(arr_new + i, _arr[i]);
+        get_allocator().destroy(_arr + i);
+    }
+    get_allocator().deallocate(_arr, _capacity);
+    _arr = arr_new;
+    _arr_end = _arr + _size;
+    _capacity = new_cap;
+}
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::size_type
