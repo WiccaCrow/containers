@@ -26,6 +26,14 @@ void
 
 template< class InputIt, class D >
 void
+    distance_with_cat( InputIt first, InputIt last, D& dist, std_input_iterator_tag ) {
+        for (; first != last; ++first) {
+            ++dist;
+        }
+    }
+
+template< class InputIt, class D >
+void
     distance_with_cat( InputIt first, InputIt last, D& dist, forward_iterator_tag ) {
         for (; first != last; ++first) {
             ++dist;

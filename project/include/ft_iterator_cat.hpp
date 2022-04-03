@@ -9,13 +9,6 @@
 
 namespace ft {
 
-template < class T>
-random_access_iterator_tag    Iter_cat(const T *) {
-    // std::cout << "rand Iter_cat\n";
-    random_access_iterator_tag obj;
-    return (obj);
-}
-
 template <
     typename _iterTag,
     typename _T,
@@ -23,10 +16,30 @@ template <
     typename _Pt,
     typename _Rt>
 _iterTag    Iter_cat(const iterator_base<_iterTag, _T, _Dist, _Pt, _Rt> &) {
-    // std::cout << "_iterTag Iter_cat\n";
+    std::cout << "_iterTag Iter_cat\n";
     _iterTag obj;
     return (obj);
 }
+
+template < class T >
+random_access_iterator_tag
+    Iter_cat(const T *) {
+    std::cout << "rand Iter_cat\n";
+    random_access_iterator_tag obj;
+    return (obj);
+}
+
+template < class T >
+std::input_iterator_tag
+// typename ::std::iterator_traits<T>::iterator_category
+    Iter_cat(const T ) {
+        // Iter_cat(typename __gnu_cxx::__normal_iterator<_Tp *, std::vector<_Tp, std::allocator<_Tp> > > &) {
+        std::cout << "std_input_iterator_tag Iter_cat\n";
+        // typename ::std::iterator_traits<T>::iterator_category obj;
+    std::input_iterator_tag obj;
+    return (obj);
+}
+
 
 
 // template < class T>
@@ -73,6 +86,7 @@ int_iterator_tag    Iter_cat(unsigned short) {
 
 int_iterator_tag    Iter_cat(int) {
     int_iterator_tag obj;
+        // std::cout << "int Iter_cat\n";
     return (obj);
 }
 

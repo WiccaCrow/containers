@@ -34,8 +34,8 @@ class vector : public _Vector_base<T, Allocator> {
     typedef typename ::std::allocator<T>::pointer       pointer;
     typedef typename ::std::allocator<T>::const_pointer const_pointer;
 
-    typedef ft::normal_iterator<random_access_iterator_tag, T>       iterator;
-    typedef ft::normal_iterator<random_access_iterator_tag, const T> const_iterator;
+    typedef ft::normal_iterator< ::std::random_access_iterator_tag, T>       iterator;
+    typedef ft::normal_iterator< ::std::random_access_iterator_tag, const T> const_iterator;
     typedef ft::reverse_iterator<iterator>                           reverse_iterator;
     typedef ft::reverse_iterator<const_iterator>                     const_reverse_iterator;
 
@@ -45,6 +45,11 @@ class vector : public _Vector_base<T, Allocator> {
     pointer   _arr;
     pointer   _arr_end;
 
+    template< class InputIt >
+        void    construct_base( iterator pos, InputIt first, InputIt last, std::input_iterator_tag );
+    template< class InputIt >
+        void    construct_base( iterator pos, InputIt first, InputIt last, int_iterator_tag );
+
     void vector_val(size_type count, const value_type& val);
     template <class InputIt>
         void    vector_val_iter(InputIt first, InputIt last, input_iterator_tag);
@@ -52,13 +57,31 @@ class vector : public _Vector_base<T, Allocator> {
         void    vector_val_iter(InputIt first, InputIt last, int_iterator_tag);
 
     template< class InputIt >
+        void assign( InputIt first, InputIt last, ::std::input_iterator_tag );
+    template< class InputIt >
+        void assign( InputIt first, InputIt last, input_iterator_tag );
+    template< class InputIt >
+        void assign( InputIt first, InputIt last, int_iterator_tag );
+    void assign_not_iterator( size_type count, const T& value );
+
+    template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last, input_iterator_tag );
     template< class InputIt >
+        void    insert_base( iterator pos, InputIt first, InputIt last, input_iterator_tag );
+    template< class InputIt >
+        void    insert( iterator pos, InputIt first, InputIt last, std::input_iterator_tag );
+    template< class InputIt >
+        void    insert_base( iterator pos, InputIt first, InputIt last, std::input_iterator_tag );
+    template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last, int_iterator_tag );
+    template< class InputIt >
+        void    insert_base( iterator pos, InputIt first, InputIt last, int_iterator_tag );
     void    insert_not_iterator( iterator pos, size_type count, const T& value );
     void    increase_capacity(size_type & count);
     void    insert_too_small_capacity(iterator & pos, size_type & count, const T& value);
-    void    insert_too_small_capacity(iterator & pos, size_type & count, const_iterator first);
+    // void    insert_too_small_capacity(iterator & pos, size_type & count, const_iterator first);
+    template< class InputIt >
+    void    insert_too_small_capacity(iterator & pos, size_type & count, InputIt first);
     void    insert_count_more_than_end_to_pos(iterator & pos, size_type & count, const T& value);
     void    insert_count_more_than_end_to_pos(iterator & pos, size_type & count, const_iterator first);
     void    insert_count_less_than_end_to_pos(iterator & pos, size_type & count, const T& value);
@@ -164,12 +187,51 @@ template <class InputIt>
                         _capacity(0),
                         _arr(NULL),
                         _arr_end(NULL) {
-    vector_val_iter(first, last, Iter_cat(first));
+    construct_base(begin(), first, last, Iter_cat(first));
+}
+
+//////////////////////////////////////////////////
+template <class T, class Allocator>
+    template< class InputIt >
+    void 
+        vector<T, Allocator>::
+        construct_base( iterator pos, InputIt first, InputIt last, ::std::input_iterator_tag ) {
+        size_type count = static_cast<size_type>(::std::distance(first, last));
+        if (!count) {
+            return ;
+        }
+        if (max_size() - _size < count) {
+            throw std::length_error("length_error: Oops...exception. vector is too long.\n");
+        } else if (_capacity - _size < count) {
+            insert_too_small_capacity(pos, count, first);
+        }
 }
 
 template <class T, class Allocator>
+template< class InputIt >
+void 
+    vector<T, Allocator>::
+    construct_base( iterator pos, InputIt first, InputIt last, int_iterator_tag obj ) {
+    size_type count = (size_type)first;
+    T value = (T)last;
+    if (!count) {
+        return ;
+    }
+    if (max_size() - _size < count) {
+        throw std::length_error("length_error: Oops...exception. vector is too long.\n");
+    } else {
+        insert_too_small_capacity(pos, count, value);
+    }
+}
+//////////////////////////////////////////////////
+
+template <class T, class Allocator>
 vector<T, Allocator>::vector( const vector<T, Allocator> & other ) :
-                        ::ft::_Vector_base<T, Allocator>::_Vector_base(other._alloc) {
+                        ::ft::_Vector_base<T, Allocator>::_Vector_base(other._alloc),
+                        _size(0),
+                        _capacity(0),
+                        _arr(NULL),
+                        _arr_end(NULL) {
     operator=(other);
 }
 
@@ -216,7 +278,7 @@ void
     vector<T, Allocator>::
     assign( size_type count, const T& value ) {
         erase(begin(), end());
-        insert(begin(), count, value);
+        insert_not_iterator(begin(), count, value);
     }
 
 
@@ -226,8 +288,41 @@ void
     vector<T, Allocator>::
     assign( InputIt first, InputIt last ) {
         erase(begin(), end());
-        insert(begin(), first.base(), last.base());
+                std::cout << "------assign------\n";
+        // insert(begin(), first, last, Iter_cat(first));
+        // assign(first, last, Iter_cat(first));
+        // insert(begin(), first.base(), last.base());
 }
+
+///////////////////////////////////////////////////
+template <class T, class Allocator>
+template< class InputIt >
+void
+    vector<T, Allocator>::
+    assign( InputIt first, InputIt last, ::std::input_iterator_tag ) {
+                std::cout << "------assign------input_iterator_tag\n";
+    // insert(begin(), first.base(), last.base(), Iter_cat(first.base()));
+}
+
+template <class T, class Allocator>
+template< class InputIt >
+void
+    vector<T, Allocator>::
+    assign( InputIt first, InputIt last, int_iterator_tag ) {
+                std::cout << "------assign------int_iterator_tag\n";
+
+    size_type count = static_cast<size_type>(first);
+    T value = static_cast<T>(last);
+    insert_not_iterator(begin(), count, value);
+    }
+
+// template <class T, class Allocator>
+// void 
+//     vector<T, Allocator>::
+//     assign_not_iterator( size_type count, const T& value ) {
+        
+// }
+///////////////////////////////////////////////////
 
 template <class T, class Allocator>
 typename vector<T, Allocator>::allocator_type 
@@ -394,26 +489,6 @@ void
 }
 
 template <class T, class Allocator>
-void
-    vector<T, Allocator>::
-    insert_not_iterator( iterator pos, 
-                         size_type count, 
-                         const T& value ) {
-    if (!count) {
-        return ;
-    }
-    if (max_size() - _size < count) {
-        throw std::length_error("length_error: Oops...exception. vector is too long.\n");
-    } else if (_capacity - _size < count) {
-        insert_too_small_capacity(pos, count, value);
-    } else if ((size_type)(end() - pos) < count) {
-        insert_count_more_than_end_to_pos(pos, count, value);
-    } else {
-        insert_count_less_than_end_to_pos(pos, count, value);
-    }
-}
-
-template <class T, class Allocator>
 void 
     vector<T, Allocator>::
     insert( iterator pos, 
@@ -421,44 +496,13 @@ void
             const T& value ) {
     insert_not_iterator(pos, count, value );
 }
-///////////////////////////////////////////////////
+
 template <class T, class Allocator>
     template< class InputIt >
     void 
         vector<T, Allocator>::
         insert( iterator pos, InputIt first, InputIt last ) {
             insert(pos, first, last, Iter_cat(first));
-        }
-///////////////////////////////////////////////////
-
-template <class T, class Allocator>
-    template< class InputIt >
-    void 
-        vector<T, Allocator>::
-        insert( iterator pos, InputIt first, InputIt last, int_iterator_tag ) {
-        size_type count = (size_type)first;
-        T value = (T)last;
-        insert_not_iterator(pos, first, last);
-    }
-
-template <class T, class Allocator>
-    template< class InputIt >
-    void 
-        vector<T, Allocator>::
-        insert( iterator pos, InputIt first, InputIt last, input_iterator_tag ) {
-        size_type count = static_cast<size_type>(::ft::distance(first, last));
-        if (!count) {
-            return ;
-        }
-        if (max_size() - _size < count) {
-            throw std::length_error("length_error: Oops...exception. vector is too long.\n");
-        } else if (_capacity - _size < count) {
-            insert_too_small_capacity(pos, count, (const_iterator)first);
-        } else if ((size_type)(end() - pos) < count) {
-            insert_count_more_than_end_to_pos(pos, count, (const_iterator)first);
-        } else {
-            insert_count_less_than_end_to_pos(pos, count, (const_iterator)first);
-        }
     }
 
 template <class T, class Allocator>
@@ -466,14 +510,14 @@ typename vector<T, Allocator>::iterator
     vector<T, Allocator>::
     erase( vector<T, Allocator>::iterator first, 
            vector<T, Allocator>::iterator last ) {
-    if (first == last || _arr == NULL) {
+    if (first == last || _arr == NULL || _size == 0) {
         return (first);
     }
     iterator first_copy = first;
     for (; last != end(); ++first_copy, ++last) {
         *first_copy = *last;
     }
-    for ( ; first_copy != end(); ++first_copy) {
+    for ( ; _size != 0 && first_copy != end(); ++first_copy) {
         ::ft::_Vector_base<T, Allocator>::_alloc.destroy(first_copy.base());
         --_size;
     }
@@ -562,7 +606,116 @@ void
     vector_val(first, last);
 }
 
+////// for assign
+
 ////// for insert
+
+template <class T, class Allocator>
+void
+    vector<T, Allocator>::
+    insert_not_iterator( iterator pos, 
+                         size_type count, 
+                         const T& value ) {
+    if (!count) {
+        return ;
+    }    
+    if (max_size() - _size < count) {
+        throw std::length_error("length_error: Oops...exception. vector is too long.\n");
+    } else if (_capacity - _size < count) {
+        insert_too_small_capacity(pos, count, value);
+    } else if ((size_type)(end() - pos) < count) {
+        // insert_count_more_than_end_to_pos(pos, count, value);
+    } else {
+    //     insert_count_less_than_end_to_pos(pos, count, value);
+    }
+}
+
+template <class T, class Allocator>
+template< class InputIt >
+void 
+    vector<T, Allocator>::
+    insert( iterator pos, InputIt first, InputIt last, int_iterator_tag ) {
+    size_type count = (size_type)first;
+    T value = (T)last;
+    if (!count) {
+        return ;
+    }
+    if (max_size() - _size < count) {
+        throw std::length_error("length_error: Oops...exception. vector is too long.\n");
+    } else {
+        insert_too_small_capacity(pos, count, value);
+    }
+}
+
+
+template <class T, class Allocator>
+    template< class InputIt >
+    void 
+        vector<T, Allocator>::
+        insert_base( iterator pos, InputIt first, InputIt last, int_iterator_tag obj) {
+        insert( pos, first, last, obj );
+}
+
+template <class T, class Allocator>
+    template< class InputIt >
+    void 
+        vector<T, Allocator>::
+        insert_base( iterator pos, InputIt first, InputIt last, input_iterator_tag obj ) {
+        insert( pos, first, last, obj );
+}
+
+template <class T, class Allocator>
+    template< class InputIt >
+    void 
+        vector<T, Allocator>::
+        insert( iterator pos, InputIt first, InputIt last, input_iterator_tag ) {
+        size_type count = static_cast<size_type>(::ft::distance(first, last));
+        if (!count) {
+            return ;
+        }
+        if (max_size() - _size < count) {
+            throw std::length_error("length_error: Oops...exception. vector is too long.\n");
+        } else if (_capacity - _size < count) {
+            insert_too_small_capacity(pos, count, (const_iterator)first);
+        } else if ((size_type)(end() - pos) < count) {
+            insert_count_more_than_end_to_pos(pos, count, (const_iterator)first);
+        } else {
+            insert_count_less_than_end_to_pos(pos, count, (const_iterator)first);
+        }
+    }
+
+template <class T, class Allocator>
+    template< class InputIt >
+    void 
+        vector<T, Allocator>::
+        insert_base( iterator pos, InputIt first, InputIt last, ::std::input_iterator_tag ) {
+        // insert_base( iterator pos, InputIt first, InputIt last, ::std::iterator_traits<first>::iterator_category ) {
+// Iter_cat(first);
+// Iter_cat(first.base());
+// std::cout << "\t\ttest insert base\n";
+        // insert( pos, first.base(), last.base(), Iter_cat(first.base()) );
+        insert( pos, first, last, Iter_cat(first) );
+}
+
+template <class T, class Allocator>
+    template< class InputIt >
+    void 
+        vector<T, Allocator>::
+        insert( iterator pos, InputIt first, InputIt last, std::input_iterator_tag ) {
+        size_type count = static_cast<size_type>(::std::distance(first, last));
+        if (!count) {
+            return ;
+        }
+        if (max_size() - _size < count) {
+            throw std::length_error("length_error: Oops...exception. vector is too long.\n");
+        } else if (_capacity - _size < count) {
+            insert_too_small_capacity(pos, count, first);
+        } else if ((size_type)(end() - pos) < count) {
+            // insert_count_more_than_end_to_pos(pos, count, (const_iterator)first);
+        } else {
+        //     insert_count_less_than_end_to_pos(pos, count, (const_iterator)first);
+        }
+} 
 
 template <class T, class Allocator>
 void 
@@ -626,11 +779,12 @@ void
 }
 
 template <class T, class Allocator>
+template < class InputIt >
 void
     vector<T, Allocator>::
     insert_too_small_capacity(iterator & pos, 
                               size_type & count, 
-                              const_iterator first) {
+                              InputIt first) {
     size_type count_capacity = _capacity;
     increase_capacity(count);
     pointer tmp_capacity = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(_capacity);
@@ -720,7 +874,7 @@ void
     // 3) insert value in a place where there was no construct before (only allocate)
     size_type i = 0;
     try {
-        size_type to_construct = ::ft::distance(end(), pos + count);
+        size_type to_construct = ::std::distance(end().base(), pos.base() + count);
         for (; i < to_construct; ++i, ++first) {
             ::ft::_Vector_base<T, Allocator>::
                 _alloc.construct(end().base() + i, *first);

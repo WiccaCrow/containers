@@ -12,6 +12,8 @@ struct bidirectional_iterator_tag : public forward_iterator_tag {};
 struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 struct int_iterator_tag {};
 
+struct std_input_iterator_tag { int i; }; // for std:iterator
+
 }
 
 #endif

@@ -6,11 +6,13 @@ void    check_constructor();
 void    check_asisgn();
 void    check_Element_access_and_iterators();
 void    check_insert();
+void    check_insert_iter();
 
 
 int main() {
-    // check_constructor(); // 1, 2, 3
+    check_constructor(); // 1, 2, 3
     // check_insert();
+    // check_insert_iter();
     // check_asisgn(); // 4,      21.3
     check_Element_access_and_iterators(); // 6
 }
@@ -24,13 +26,14 @@ void    check_constructor() {
         std::vector<int> std_vec_int();
         ft::vector<int>  ft_vec_int();
 
-        // does not compile
-        // std::cout << "capacity: " << std_vec_int.capacity() << std::endl;
-        // std::cout << "size: " << std_vec_int.size() << std::endl;
+    //     // does not compile
+    //     // std::cout << "capacity: " << std_vec_int.capacity() << std::endl;
+    //     // std::cout << "size: " << std_vec_int.size() << std::endl;
 
-        // std::cout << "capacity: " << ft_vec_int.capacity() << std::endl;
-        // std::cout << "size: " << ft_vec_int.size() << std::endl;
+    //     // std::cout << "capacity: " << ft_vec_int.capacity() << std::endl;
+    //     // std::cout << "size: " << ft_vec_int.size() << std::endl;
     }
+
     {
         std::cout << std::endl << "\033[33m" << "_____1.2_____" << "\033[0m" << std::endl;
         std::cout << "\033[34m" << "\t2) explicit vector( const Allocator& alloc ); " << "\033[0m" << std::endl;
@@ -45,6 +48,7 @@ void    check_constructor() {
         std::cout << std_vec_int[0] << "  |  " << std::endl;
         // std::cout << std_vec_int[0] << "  |  " << ft_vec_int[0] << std::endl;
     }
+
     {
         std::cout << std::endl << "\033[33m" << "_____1.3_____" << "\033[0m" << std::endl;
         std::cout << "\n\033[34m" << "\t3) explicit vector( size_type count,\n"
@@ -53,30 +57,30 @@ void    check_constructor() {
                  "\n\t5 elements " << "\033[0m" << std::endl;
         std::vector<int> std_vec_int(5);
         ft::vector<int>  ft_vec_int(5);
-
         std::cout << "         std  |  ft " << std::endl;
         std::cout << "capacity: " << std_vec_int.capacity() << "   |   " << ft_vec_int.capacity() << std::endl;
         std::cout << "size:     " << std_vec_int.size() << "   |   " << ft_vec_int.size() << std::endl;
         std::cout << std::endl;
     }
+
     {
         std::cout << "\n\033[34m" << "\t3) for int\n"
                  "\n\t        ft::vector<int> data(5, 5); " << "\033[0m" << std::endl;
         std::cout << "\n\033[36m" << "\t\tcout " << "\033[0m"  << std::endl;
-
+    
         ft::vector<int> data(5, 5);
         for (int i = 0; i < 5; ++i) {
             std::cout << data[i];
         }
         std::cout << std::endl;
-
     }
+
     {
         std::cout << "\n\033[34m" << "\t5 elements, std::string \"hello \" " << "\033[0m" << std::endl;
         int size = 5;
         std::vector<std::string> std_vec_str(size, "hello ");
         ft::vector<std::string>  ft_vec_str(size, "hello ");
-
+    
         std::cout << "         std  |  ft " << std::endl;
         std::cout << "capacity: " << std_vec_str.capacity() << "   |   " << ft_vec_str.capacity() << std::endl;
         std::cout << "size:     " << std_vec_str.size() << "   |   " << ft_vec_str.size() << std::endl;
@@ -84,17 +88,18 @@ void    check_constructor() {
         std::cout << "   std  |  ft " << std::endl;
         for (int i = 0; i < size; ++i) {
             std::cout << std_vec_str[i] << "  |  " << ft_vec_str[i] << std::endl;
-
+    
         }
         std::cout << std::endl;
     }
+
     {
         std::cout << "\n\033[34m" << "\t5 elements, std::string \"hello \", allocator " << "\033[0m" << std::endl;
         int size = 5;
         std::allocator<std::string> alloc;
         std::vector<std::string> std_vec_str(size, "hello ", alloc);
         ft::vector<std::string>  ft_vec_str(size, "hello ", alloc);
-
+    
         std::cout << "         std  |  ft " << std::endl;
         std::cout << "capacity: " << std_vec_str.capacity() << "   |   " << ft_vec_str.capacity() << std::endl;
         std::cout << "size:     " << std_vec_str.size() << "   |   " << ft_vec_str.size() << std::endl;
@@ -119,15 +124,16 @@ void    check_constructor() {
         vect_for_iter.push_back("beautiful ");
         vect_for_iter.push_back("world ");
         vect_for_iter.push_back("!!!\n");
+        std::cout << "\n\033[36m" << "\t\tcout std:" << "\033[0m"  << std::endl;
         std::vector<std::string>::iterator  iter = vect_for_iter.begin();
         for (;iter < vect_for_iter.end(); ++iter) {
             std::cout << *iter;
         }
+    
+        std::cout << "\n\033[36m" << "\t\tcout ft:" << "\033[0m"  << std::endl;
         iter = vect_for_iter.begin();
-
-        std::cout << "test ft_vect\n";
-
-        ft::vector<std::string>    ft_vect(vect_for_iter.data(), vect_for_iter.data() + vect_for_iter.size());
+        std::vector<std::string>::iterator  iter_end = vect_for_iter.end();
+        ft::vector<std::string>    ft_vect(iter, iter_end);
         ft::vector<std::string>::iterator  ft_iter = ft_vect.begin();
         for (;ft_iter < ft_vect.end(); ++ft_iter) {
             std::cout << *ft_iter;
@@ -135,6 +141,7 @@ void    check_constructor() {
         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
         std::cout << "size:     " << ft_vect.size() << std::endl;
     }
+    
     {
         std::cout << std::endl << "\033[33m" << "_____1.6_____      _____3_____" << "\033[0m" << std::endl;
         std::cout << "\n\033[34m" << "\t6) vector( const vector& other );"
@@ -148,7 +155,7 @@ void    check_constructor() {
         vect_for_iter.push_back("beautiful ");
         vect_for_iter.push_back("world ");
         vect_for_iter.push_back("!!!\n");
-        ft::vector<std::string>    ft_vect(vect_for_iter.data(), vect_for_iter.data() + vect_for_iter.size());
+        ft::vector<std::string>    ft_vect(vect_for_iter.begin(), vect_for_iter.begin() + vect_for_iter.size());
         ft::vector<std::string>    ft_vect_copy = ft_vect;
         ft::vector<std::string>::iterator ft_iter = ft_vect_copy.begin();
         for (;ft_iter < ft_vect_copy.end(); ++ft_iter) {
@@ -156,154 +163,282 @@ void    check_constructor() {
         }
         std::cout << "capacity: " << ft_vect_copy.capacity() << std::endl;
         std::cout << "size:     " << ft_vect_copy.size() << std::endl;
+
+        ft::vector<std::string>    ft_ft_vect(vect_for_iter.data(), vect_for_iter.data() + vect_for_iter.size());
+        std::vector<std::string>    ft_ft_ft_vect(vect_for_iter.data(), vect_for_iter.data() + vect_for_iter.size());
     }
 }
 
-void    check_insert() {
-    std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
-    {
-        std::cout << "\n\033[34m" << "\t4) template< class InputIt >\n"
-                                     "\t   void insert( iterator pos, InputIt first, InputIt last ); "
-                                     << "\033[0m" << std::endl;
-        std::vector<std::string>    vect_for_iter;
-        vect_for_iter.push_back("Hello ");
-        vect_for_iter.push_back("my ");
-        vect_for_iter.push_back("very ");
-        vect_for_iter.push_back("beautiful ");
-        vect_for_iter.push_back("world ");
-        vect_for_iter.push_back("!!!\n");
-        std::vector<std::string>::iterator  iter = vect_for_iter.begin();
-        for (;iter < vect_for_iter.end(); ++iter) {
-            std::cout << *iter;
-        }
-        iter = vect_for_iter.begin();
+// void    check_insert() {
+//     std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
+//     {
+//         std::cout << "\n\033[34m" << "\t4) template< class InputIt >\n"
+//                                      "\t   void insert( iterator pos, InputIt first, InputIt last ); "
+//                                      << "\033[0m" << std::endl;
+//         std::vector<std::string>    vect_for_iter;
+//         vect_for_iter.push_back("Hello ");
+//         vect_for_iter.push_back("my ");
+//         vect_for_iter.push_back("very ");
+//         vect_for_iter.push_back("beautiful ");
+//         vect_for_iter.push_back("world ");
+//         vect_for_iter.push_back("!!!\n");
+//         std::vector<std::string>::iterator  iter = vect_for_iter.begin();
+//         for (;iter < vect_for_iter.end(); ++iter) {
+//             std::cout << *iter;
+//         }
+//         iter = vect_for_iter.begin();
 
-        ft::vector<std::string>    ft_vect(vect_for_iter.data(), vect_for_iter.data() + vect_for_iter.size());
-        ft::vector<std::string>::iterator  ft_iter = ft_vect.begin();
-        for (;ft_iter < ft_vect.end(); ++ft_iter) {
-            std::cout << *ft_iter;
-        }
-        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
-        std::cout << "size:     " << ft_vect.size() << std::endl;
+//         ft::vector<std::string>    ft_vect(vect_for_iter.data(), vect_for_iter.data() + vect_for_iter.size());
+//         ft::vector<std::string>::iterator  ft_iter = ft_vect.begin();
+//         for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//             std::cout << *ft_iter;
+//         }
+//         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//         std::cout << "size:     " << ft_vect.size() << std::endl;
 
-        // vect_for_iter.insert(vect_for_iter.begin() + vect_for_iter.size()/3*2, ft_vect.begin().base(), ft_vect.end().base() - 1);
-        // std::vector<std::string>::iterator  std_iter = vect_for_iter.begin();
-        // for (;std_iter < vect_for_iter.end(); ++std_iter) {
-        //     std::cout << *std_iter;
-        // }
-        // std::cout << "capacity: " << vect_for_iter.capacity() << std::endl;
-        // std::cout << "size:     " << vect_for_iter.size() << std::endl;
+//         // vect_for_iter.insert(vect_for_iter.begin() + vect_for_iter.size()/3*2, ft_vect.begin().base(), ft_vect.end().base() - 1);
+//         // std::vector<std::string>::iterator  std_iter = vect_for_iter.begin();
+//         // for (;std_iter < vect_for_iter.end(); ++std_iter) {
+//         //     std::cout << *std_iter;
+//         // }
+//         // std::cout << "capacity: " << vect_for_iter.capacity() << std::endl;
+//         // std::cout << "size:     " << vect_for_iter.size() << std::endl;
 
-        // ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.end().base() - 1);
-        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
-        ft_iter = ft_vect.begin();
-        for (;ft_iter < ft_vect.end(); ++ft_iter) {
-            std::cout << *ft_iter;
-        }
-        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
-        std::cout << "size:     " << ft_vect.size() << std::endl;
+//         // ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.end().base() - 1);
+//         ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
+//         ft_iter = ft_vect.begin();
+//         for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//             std::cout << *ft_iter;
+//         }
+//         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//         std::cout << "size:     " << ft_vect.size() << std::endl;
 
-        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 4);
-        ft_iter = ft_vect.begin();
-        for (;ft_iter < ft_vect.end(); ++ft_iter) {
-            std::cout << *ft_iter;
-        }
-        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
-        std::cout << "size:     " << ft_vect.size() << std::endl;
+//         ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 4);
+//         ft_iter = ft_vect.begin();
+//         for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//             std::cout << *ft_iter;
+//         }
+//         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//         std::cout << "size:     " << ft_vect.size() << std::endl;
 
-        std::vector<std::string>::iterator  std_iter = vect_for_iter.begin();
-        for (;std_iter < vect_for_iter.end(); ++std_iter) {
-            std::cout << *std_iter;
-        }
-        std::cout << "capacity: " << vect_for_iter.capacity() << std::endl;
-        std::cout << "size:     " << vect_for_iter.size() << std::endl;
+//         std::vector<std::string>::iterator  std_iter = vect_for_iter.begin();
+//         for (;std_iter < vect_for_iter.end(); ++std_iter) {
+//             std::cout << *std_iter;
+//         }
+//         std::cout << "capacity: " << vect_for_iter.capacity() << std::endl;
+//         std::cout << "size:     " << vect_for_iter.size() << std::endl;
 
-        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
-        ft_iter = ft_vect.begin();
-        for (;ft_iter < ft_vect.end(); ++ft_iter) {
-            std::cout << *ft_iter;
-        }
-        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
-        std::cout << "size:     " << ft_vect.size() << std::endl;
+//         ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
+//         ft_iter = ft_vect.begin();
+//         for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//             std::cout << *ft_iter;
+//         }
+//         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//         std::cout << "size:     " << ft_vect.size() << std::endl;
 
-        ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
-        ft_iter = ft_vect.begin();
-        for (;ft_iter < ft_vect.end(); ++ft_iter) {
-            std::cout << *ft_iter;
-        }
-        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
-        std::cout << "size:     " << ft_vect.size() << std::endl;
+//         ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
+//         ft_iter = ft_vect.begin();
+//         for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//             std::cout << *ft_iter;
+//         }
+//         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//         std::cout << "size:     " << ft_vect.size() << std::endl;
 
-        std::cout << "\n\033[34m" << "\t2) iterator erase( iterator first, iterator last );"
-                                  << "\033[0m" << std::endl;
-        ft_vect.erase(ft_vect.begin() + 4, ft_vect.begin() + 6);
-        ft_iter = ft_vect.begin();
-        for (;ft_iter < ft_vect.end(); ++ft_iter) {
-            std::cout << *ft_iter;
-        }
-        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
-        std::cout << "size:     " << ft_vect.size() << std::endl;
+//         std::cout << "\n\033[34m" << "\t2) iterator erase( iterator first, iterator last );"
+//                                   << "\033[0m" << std::endl;
+//         ft_vect.erase(ft_vect.begin() + 4, ft_vect.begin() + 6);
+//         ft_iter = ft_vect.begin();
+//         for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//             std::cout << *ft_iter;
+//         }
+//         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//         std::cout << "size:     " << ft_vect.size() << std::endl;
 
-        std::cout << "\n\033[34m" << "\tvoid clear();"
-                                  << "\033[0m" << std::endl;
-        ft_vect.clear();
-        std::cout << "capacity: " << ft_vect.capacity() << std::endl;
-        std::cout << "size:     " << ft_vect.size() << std::endl;
-    }
-    {
+//         std::cout << "\n\033[34m" << "\tvoid clear();"
+//                                   << "\033[0m" << std::endl;
+//         ft_vect.clear();
+//         std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//         std::cout << "size:     " << ft_vect.size() << std::endl;
+//     }
+//     {
 
-    }
-}
+//     }
+// }
 
-template < class T>
-void print_vector(ft::vector<T> & characters) {
-    for (typename ft::vector<T>::iterator iter = characters.begin();
-         iter != characters.end(); ++iter) {
-        std::cout << *iter << ' ';
-    }
-    std::cout << std::endl;  
-}
+// void    check_insert_iter() {
+//     std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
+//     {
+//         std::cout << "\n\033[34m" << "\t4) template< class InputIt >\n"
+//                                      "\t   void insert( iterator pos, InputIt first, InputIt last ); "
+//                                      << "\033[0m" << std::endl;
+//         std::vector<int>    vect_for_iter(5);
 
-void    check_asisgn() {
-    ft::vector<char> characters;
+//         std::vector<int>::iterator  iter = vect_for_iter.begin();
+//         for (int i = 0;iter < vect_for_iter.end(); ++iter, ++i) {
+//             *iter = i;
+//             std::cout << *iter;
+//         }
+//         std::cout << std::endl;
 
-    std::cout << std::endl << "\033[33m" << "_____4.1_____" << "\033[0m" << std::endl;
-    std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
+//         ft::vector<int>    vect_for_iter_copy;
+//         iter = vect_for_iter.begin();
+//         vect_for_iter_copy.insert(vect_for_iter_copy.begin(), vect_for_iter.data(), vect_for_iter.data() + vect_for_iter.size());
+//         ft::vector<int>::iterator  ft_iter = vect_for_iter_copy.begin();
+//         for (int i = 0; ft_iter < vect_for_iter_copy.end(); ++ft_iter, ++i) {
+//             *ft_iter = i;
+//             std::cout << *ft_iter;
+//         }
+//         std::cout << std::endl;
 
-    characters.assign(5, 'a');
-        for (typename ft::vector<char>::iterator iter = characters.begin();
-         iter != characters.end(); ++iter) {
-        std::cout << *iter << ' ';
-    }
-    std::cout << std::endl; 
 
-    std::cout << std::endl << "\033[33m" << "_____4.2_____" << "\033[0m" << std::endl;
-    std::cout << "\033[34m" << "\t4.2) template< class InputIt >\n"
-                               "\t     void assign( InputIt first, InputIt last );  " << "\033[0m" << std::endl;
+//     //     iter = vect_for_iter.begin();
 
-    const std::string extra(6, 'b');
-    characters.assign(extra.begin(), extra.end());
-        for (typename ft::vector<char>::iterator iter = characters.begin();
-         iter != characters.end(); ++iter) {
-        std::cout << *iter << ' ';
-    }
-    std::cout << std::endl;
-}
+//     //     ft::vector<std::string>    ft_vect(vect_for_iter.data(), vect_for_iter.data() + vect_for_iter.size());
+//     //     ft::vector<std::string>::iterator  ft_iter = ft_vect.begin();
+//     //     for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//     //         std::cout << *ft_iter;
+//     //     }
+//     //     std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//     //     std::cout << "size:     " << ft_vect.size() << std::endl;
 
+//     //     // vect_for_iter.insert(vect_for_iter.begin() + vect_for_iter.size()/3*2, ft_vect.begin().base(), ft_vect.end().base() - 1);
+//     //     // std::vector<std::string>::iterator  std_iter = vect_for_iter.begin();
+//     //     // for (;std_iter < vect_for_iter.end(); ++std_iter) {
+//     //     //     std::cout << *std_iter;
+//     //     // }
+//     //     // std::cout << "capacity: " << vect_for_iter.capacity() << std::endl;
+//     //     // std::cout << "size:     " << vect_for_iter.size() << std::endl;
+
+//     //     // ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.end().base() - 1);
+//     //     ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
+//     //     ft_iter = ft_vect.begin();
+//     //     for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//     //         std::cout << *ft_iter;
+//     //     }
+//     //     std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//     //     std::cout << "size:     " << ft_vect.size() << std::endl;
+
+//     //     ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 4);
+//     //     ft_iter = ft_vect.begin();
+//     //     for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//     //         std::cout << *ft_iter;
+//     //     }
+//     //     std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//     //     std::cout << "size:     " << ft_vect.size() << std::endl;
+
+//     //     std::vector<std::string>::iterator  std_iter = vect_for_iter.begin();
+//     //     for (;std_iter < vect_for_iter.end(); ++std_iter) {
+//     //         std::cout << *std_iter;
+//     //     }
+//     //     std::cout << "capacity: " << vect_for_iter.capacity() << std::endl;
+//     //     std::cout << "size:     " << vect_for_iter.size() << std::endl;
+
+//     //     ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
+//     //     ft_iter = ft_vect.begin();
+//     //     for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//     //         std::cout << *ft_iter;
+//     //     }
+//     //     std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//     //     std::cout << "size:     " << ft_vect.size() << std::endl;
+
+//     //     ft_vect.insert(ft_vect.begin() + ft_vect.size()/3*2, vect_for_iter.begin().base(), vect_for_iter.begin().base() + 1);
+//     //     ft_iter = ft_vect.begin();
+//     //     for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//     //         std::cout << *ft_iter;
+//     //     }
+//     //     std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//     //     std::cout << "size:     " << ft_vect.size() << std::endl;
+
+//     //     std::cout << "\n\033[34m" << "\t2) iterator erase( iterator first, iterator last );"
+//     //                               << "\033[0m" << std::endl;
+//     //     ft_vect.erase(ft_vect.begin() + 4, ft_vect.begin() + 6);
+//     //     ft_iter = ft_vect.begin();
+//     //     for (;ft_iter < ft_vect.end(); ++ft_iter) {
+//     //         std::cout << *ft_iter;
+//     //     }
+//     //     std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//     //     std::cout << "size:     " << ft_vect.size() << std::endl;
+
+//     //     std::cout << "\n\033[34m" << "\tvoid clear();"
+//     //                               << "\033[0m" << std::endl;
+//     //     ft_vect.clear();
+//     //     std::cout << "capacity: " << ft_vect.capacity() << std::endl;
+//     //     std::cout << "size:     " << ft_vect.size() << std::endl;
+//     }
+//     // {
+
+//     // }
+// }
+
+// template < class T>
+// void print_vector(ft::vector<T> & characters) {
+//     for (typename ft::vector<T>::iterator iter = characters.begin();
+//          iter != characters.end(); ++iter) {
+//         std::cout << *iter << ' ';
+//     }
+//     std::cout << std::endl;  
+// }
+
+// void    check_asisgn() {
+//     {
+//         ft::vector<char> characters;
+
+//         std::cout << std::endl << "\033[33m" << "_____4.1_____ characters" << "\033[0m" << std::endl;
+//         std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
+
+//         characters.assign(5, 'a');
+//             for (typename ft::vector<char>::iterator iter = characters.begin();
+//             iter != characters.end(); ++iter) {
+//             std::cout << *iter << ' ';
+//         }
+//         std::cout << std::endl; 
+
+//         std::cout << std::endl << "\033[33m" << "_____4.2_____ characters" << "\033[0m" << std::endl;
+//         std::cout << "\033[34m" << "\t4.2) template< class InputIt >\n"
+//                                 "\t     void assign( InputIt first, InputIt last );  " << "\033[0m" << std::endl;
+
+//         const std::string extra(6, 'b');
+//         // characters.assign(extra.begin(), extra.end());
+//         //     for (typename std::vector<char>::iterator iter = characters.begin();
+//         //     iter != characters.end(); ++iter) {
+//         //     std::cout << *iter << ' ';
+//         // }
+//         // std::cout << std::endl;
+//     }
+//     {
+//         ft::vector<int> integers;
+
+//         std::cout << std::endl << "\033[33m" << "_____4.1_____ integers" << "\033[0m" << std::endl;
+//         std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
+
+//         integers.assign(5, 0);
+//             for (typename ft::vector<int>::iterator iter = integers.begin();
+//             iter != integers.end(); ++iter) {
+//             std::cout << *iter << ' ';
+//         }
+//         std::cout << std::endl; 
+
+//         // std::cout << std::endl << "\033[33m" << "_____4.2_____ integers" << "\033[0m" << std::endl;
+//         // std::cout << "\033[34m" << "\t4.2) template< class InputIt >\n"
+//         //                         "\t     void assign( InputIt first, InputIt last );  " << "\033[0m" << std::endl;
+
+//         // const std::string extra_integers(6, 6);
+//         // integers.assign(extra_integers.begin(), extra_integers.end());
+//         //     for (typename ft::vector<int>::iterator iter = integers.begin();
+//         //     iter != integers.end(); ++iter) {
+//         //     std::cout << *iter << ' ';
+//         // }
+//         // std::cout << std::endl;
+//     }
+// }
 
 void    check_Element_access_and_iterators() {
-    // https://en.cppreference.com/w/cpp/container/vector/at
+    https://en.cppreference.com/w/cpp/container/vector/at
 
 
     std::cout << std::endl << "\033[33m" << "_____6 - 10_____     Element access" << "\033[0m" << std::endl;
 
     ft::vector<int> data;
-    // // data.push_back(1);
-    // // data.push_back(2);
-    // // data.push_back(4);
-    // // data.push_back(5);
-    // // data.push_back(5);
-    // // data.push_back(6);
     data.insert(data.begin(), 1, 6);
     data.insert(data.begin(), 1, 5);
     data.insert(data.begin(), 1, 5);
