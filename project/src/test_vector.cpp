@@ -13,23 +13,25 @@ void    check_insert_iter();
 void    check_push_back_pop_back();
 void    check_resize();
 void    check_swap();
+void    check_non_member_functions();
 
 template < class T>
 void print_vector(T & characters);
 
 int main() {
-    check_constructor(); // 1, 2, 3, 5
-    check_asisgn(); // 4
-    check_Element_access_and_iterators(); // 6 - 14
-    check_capacity(); // 15 - 19
-    std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
-    check_clear(); // 20  
-    check_insert_erase_21_4_and_22_2(); // 21.4, 22.2
-    check_insert_iter(); // 21.3, 21.4
-    check_insert_erase_21_1_3_and_22_1(); // 21.1, 21.3, 22.1
-    check_push_back_pop_back(); // 23, 24
-    check_resize(); // 25
-    check_swap(); // 26
+    // check_constructor(); // 1, 2, 3, 5
+    // check_asisgn(); // 4
+    // check_Element_access_and_iterators(); // 6 - 14
+    // check_capacity(); // 15 - 19
+    // std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
+    // check_clear(); // 20  
+    // check_insert_erase_21_4_and_22_2(); // 21.4, 22.2
+    // check_insert_iter(); // 21.3, 21.4
+    // check_insert_erase_21_1_3_and_22_1(); // 21.1, 21.3, 22.1
+    // check_push_back_pop_back(); // 23, 24
+    // check_resize(); // 25
+    // check_swap(); // 26
+    check_non_member_functions();
 }
 
 template < class T>
@@ -703,7 +705,8 @@ void    check_swap() {
     std::cout << std::endl << "\033[33m" << "_____26_____" << "\033[0m" << std::endl;
     std::cout << "\n\033[34m" << "\t26) "
                                  "void swap( vector& other ); "
-                              << "\033[0m" << std::endl;    std::vector<int> a1, a2;
+                              << "\033[0m" << std::endl;
+    std::vector<int> a1, a2;
     a1.push_back(1);
     a1.push_back(2);
     a1.push_back(3);
@@ -743,4 +746,108 @@ void    check_swap() {
     std::cout << "a1 size:     " << a1.size() << std::endl;
     std::cout << "a2 capacity: " << a2.capacity() << std::endl;
     std::cout << "a2 size:     " << a2.size() << std::endl;
+}
+
+void    check_non_member_functions() {
+    std::cout << std::endl << "\033[35m" << "check NON-MEMBER FUNCTIONS " << "\033[0m" << std::endl;
+    std::cout << "\033[35m" << 
+                 "\t operator== \n"
+                 "\t operator!= \n" 
+                 "\t operator< \n" 
+                 "\t operator<= \n"
+                 "\t operator> \n"
+                 "\t operator>= \n"
+                 "\t swap \n"
+                 "\033[0m" << std::endl;
+    ft::vector<std::string>    vect1;
+    vect1.push_back("It's ");
+    vect1.push_back("a ");
+    vect1.push_back("beautiful ");
+    vect1.push_back("life, ");
+    vect1.push_back("oh ");
+    vect1.push_back("oh ");
+    vect1.push_back("oh ");
+    vect1.push_back("oh ");
+    ft::vector<std::string>    vect2(vect1);
+    std::cout << std::boolalpha;
+    vect2.reserve(vect2.capacity() + 10);
+
+    std::cout << std::endl << "\033[33m" << "_____27-32_____" << "\033[0m" << std::endl;
+    std::cout << "\n\033[34m" << "\t27) template< class T, class Alloc >\n"
+                                 "\t\tbool operator==( const std::vector<T,Alloc>& lhs,\n"
+                                 "\t\t                 const std::vector<T,Alloc>& rhs ); \n"
+                              << "\033[0m" << std::endl;
+    std::cout << "\n\033[34m" << "\t28) template< class T, class Alloc >\n"
+                                 "\t\tbool operator!=( const std::vector<T,Alloc>& lhs,\n"
+                                 "\t\t                 const std::vector<T,Alloc>& rhs ); \n"
+                              << "\033[0m" << std::endl;
+    std::cout << "operator== equal:     " << (vect1 == vect2) << std::endl;
+    std::cout << "operator!= equal:     " << (vect1 != vect2) << std::endl;
+    vect1.push_back("oh\n");
+    std::cout << "operator== not equal: " << (vect1 == vect2) << std::endl;
+    std::cout << "operator!= not equal: " << (vect1 != vect2) << std::endl;
+
+    std::cout << "\n\033[34m" << "\t29) template< class T, class Alloc >\n"
+                                 "\t\tbool operator<( const std::vector<T,Alloc>& lhs,\n"
+                                 "\t\t                 const std::vector<T,Alloc>& rhs ); \n"
+                              << "\033[0m" << std::endl;
+    std::cout << "\n\033[34m" << "\t30) template< class T, class Alloc >\n"
+                                 "\t\tbool operator<=( const std::vector<T,Alloc>& lhs,\n"
+                                 "\t\t                 const std::vector<T,Alloc>& rhs ); \n"
+                              << "\033[0m" << std::endl;
+    std::cout << "\n\033[34m" << "\t31) template< class T, class Alloc >\n"
+                                 "\t\tbool operator>( const std::vector<T,Alloc>& lhs,\n"
+                                 "\t\t                 const std::vector<T,Alloc>& rhs ); \n"
+                              << "\033[0m" << std::endl;
+    std::cout << "\n\033[34m" << "\t32) template< class T, class Alloc >\n"
+                                 "\t\tbool operator>=( const std::vector<T,Alloc>& lhs,\n"
+                                 "\t\t                 const std::vector<T,Alloc>& rhs ); \n"
+                              << "\033[0m" << std::endl;
+    vect1.pop_back();
+    std::cout << "equal:     " << std::endl;
+    print_vector(vect1);
+    print_vector(vect2);
+
+    std::cout << "operator== equal:     " << (vect1 == vect2) << std::endl;
+    std::cout << "\t operator<     " << (vect1 < vect2) << std::endl;
+    std::cout << "\t operator<=    " << (vect1 <= vect2) << std::endl;
+    std::cout << "\t operator>     " << (vect1 > vect2) << std::endl;
+    std::cout << "\t operator>=    " << (vect1 >= vect2) << std::endl;
+    vect1[2] = 'a';
+    print_vector(vect1);
+    print_vector(vect2);
+    std::cout << "not equal: " << std::endl;
+    std::cout << "\t operator<     " << (vect1 < vect2) << std::endl;
+    std::cout << "\t operator<=    " << (vect1 <= vect2) << std::endl;
+    std::cout << "\t operator>     " << (vect1 > vect2) << std::endl;
+    std::cout << "\t operator>=    " << (vect1 >= vect2) << std::endl;
+
+
+    std::cout << "\n\033[34m" << "\t33) template< class T, class Alloc >\n"
+                                 "\t\t void swap( std::vector<T,Alloc>& lhs,\n"
+                                 "\t\t std::vector<T,Alloc>& rhs );"
+                              << "\033[0m" << std::endl;
+    std::vector<int> alice;
+    alice.push_back(1);
+    alice.push_back(2);
+    alice.push_back(3);
+    std::vector<int> bob;
+    bob.push_back(7);
+    bob.push_back(8);
+    bob.push_back(9);
+    bob.push_back(10);
+
+    std::cout << "\n\033[36m" << "befor SWAP " << "\033[0m"  << std::endl;
+    std::cout << "alice: ";
+    print_vector(alice);
+    std::cout << "bob:   ";
+    print_vector(bob);
+    
+    std::swap(alice, bob);
+    std::cout << "\n\033[36m" << "after SWAP " << "\033[0m"  << std::endl;
+    std::cout << "alice: ";
+    print_vector(alice);
+    std::cout << "bob:   ";
+    print_vector(bob);
+    std::cout << '\n';
 }

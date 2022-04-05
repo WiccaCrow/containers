@@ -4,6 +4,7 @@
 #include <memory>
 #include <ft_iterator.hpp>
 #include <stdexcept>
+#include <lexicographical_compare.hpp>
 
 namespace ft {
 
@@ -135,6 +136,38 @@ class vector : public _Vector_base<T, Allocator> {
     void     resize( size_type count, T value = T() );
     void     swap( vector& other );
 };
+
+    //////////////////////////
+    // Non-member functions //
+    //////////////////////////
+
+template< class T, class Alloc >
+bool operator==( const ::ft::vector<T,Alloc>& lhs,
+                 const ::ft::vector<T,Alloc>& rhs );
+
+template< class T, class Alloc >
+bool operator!=( const ::ft::vector<T,Alloc>& lhs,
+                 const ::ft::vector<T,Alloc>& rhs );
+
+template< class T, class Alloc >
+bool operator<( const ::ft::vector<T,Alloc>& lhs,
+                const ::ft::vector<T,Alloc>& rhs );
+
+template< class T, class Alloc >
+bool operator<=( const ::ft::vector<T,Alloc>& lhs,
+                 const ::ft::vector<T,Alloc>& rhs );
+
+template< class T, class Alloc >
+bool operator>( const ::ft::vector<T,Alloc>& lhs,
+                const ::ft::vector<T,Alloc>& rhs );
+
+template< class T, class Alloc >
+bool operator>=( const ::ft::vector<T,Alloc>& lhs,
+                 const ::ft::vector<T,Alloc>& rhs );
+
+template< class T, class Alloc >
+void swap( ft::vector<T,Alloc>& lhs,
+           ft::vector<T,Alloc>& rhs );
 
 /******************************************************************************/
     //////////////////////
@@ -334,7 +367,7 @@ template <class T, class Allocator>
 typename vector<T, Allocator>::const_iterator 
     vector<T, Allocator>::
     begin() const {
-    return (iterator(_arr));
+    return (const_iterator(_arr));
 }
 
 template <class T, class Allocator>
@@ -348,7 +381,7 @@ template <class T, class Allocator>
 typename vector<T, Allocator>::const_iterator 
     vector<T, Allocator>::
     end() const {
-    return (iterator(_arr_end));
+    return (const_iterator(_arr_end));
 }
 
 template <class T, class Allocator>
@@ -901,6 +934,62 @@ typename vector<T, Allocator>::pointer
         throw;
     }
     return (for_copy);
+}
+
+
+/******************************************************************************/
+    //////////////////////////
+    // Non-member functions //
+    //////////////////////////
+
+template< class T, class Alloc >
+bool operator==( const ::ft::vector<T,Alloc>& lhs,
+                 const ::ft::vector<T,Alloc>& rhs ) {
+    if (lhs.size() != rhs.size()) {
+        return (false);
+    }
+    for (int i = 0; i < lhs.size() ; ++i) {
+        if (lhs[i] != rhs[i]) {
+            return (false);
+        }
+    }
+    return (true);
+}
+
+template< class T, class Alloc >
+bool operator!=( const ::ft::vector<T,Alloc>& lhs,
+                 const ::ft::vector<T,Alloc>& rhs ) {
+    return (!(lhs == rhs));
+}
+
+template< class T, class Alloc >
+bool operator<( const ::ft::vector<T,Alloc>& lhs,
+                const ::ft::vector<T,Alloc>& rhs ) {
+    return (::ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+}
+
+template< class T, class Alloc >
+bool operator<=( const ::ft::vector<T,Alloc>& lhs,
+                 const ::ft::vector<T,Alloc>& rhs ) {
+    return (!(rhs < lhs));
+}
+
+template< class T, class Alloc >
+bool operator>( const ::ft::vector<T,Alloc>& lhs,
+                const ::ft::vector<T,Alloc>& rhs ) {
+    return (!(lhs <= rhs));
+}
+
+template< class T, class Alloc >
+bool operator>=( const ::ft::vector<T,Alloc>& lhs,
+                 const ::ft::vector<T,Alloc>& rhs ) {
+    return (!(lhs < rhs));
+}
+
+template< class T, class Alloc >
+void swap( std::vector<T,Alloc>& lhs,
+           std::vector<T,Alloc>& rhs ) {
+    lhs.swap(rhs);
 }
 
 } // namespace ft
