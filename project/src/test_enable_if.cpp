@@ -12,8 +12,8 @@
 
 int main()
 {
-    typedef ft::normal_iterator<ft::random_access_iterator_tag, int*>       iterator_ran;
-    typedef ft::normal_iterator<ft::bidirectional_iterator_tag, char*>       iterator_bid;
+    typedef ft::normal_iterator<std::random_access_iterator_tag, int*>       iterator_ran;
+    typedef ft::normal_iterator<std::bidirectional_iterator_tag, char*>       iterator_bid;
     typedef ft::normal_iterator<ft::int_iterator_tag, int>                 iterator_int;
 
     iterator_ran    rand_it;

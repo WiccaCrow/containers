@@ -969,8 +969,8 @@ bool operator>=( const ::ft::vector<T,Alloc>& lhs,
 }
 
 template< class T, class Alloc >
-void swap( std::vector<T,Alloc>& lhs,
-           std::vector<T,Alloc>& rhs ) {
+void swap( ::ft::vector<T,Alloc>& lhs,
+           ::ft::vector<T,Alloc>& rhs ) {
     lhs.swap(rhs);
 }
 

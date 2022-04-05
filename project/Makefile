@@ -7,10 +7,6 @@ FLAGS       	=   -Wall -Wextra -Werror -g
 FLAGS       	+=  -Wpedantic
 # FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
 
-ifeq ($(MAKE_ITERATOR),0)
-SRC_CPP     	=	test_iterator.cpp
-endif
-
 ifeq ($(MAKE_ENABLE_IF),0)
 SRC_CPP     	=	test_enable_if_11.cpp
 FLAGS 			+=	-std=c++17
@@ -18,9 +14,16 @@ else
 FLAGS 			+=	-std=c++98
 endif
 
+ifeq ($(MAKE_ITERATOR),0)
+SRC_CPP     	=	test_iterator.cpp
+endif
+
 ifeq ($(MAKE_VECTOR),0)
-# FLAGS 			+=	-std=c++98
 SRC_CPP     	=	test_vector.cpp
+endif
+
+ifeq ($(MAKE_PAIR),0)
+SRC_CPP     	=	test_pair.cpp
 endif
 
 SRC_FOLDER  	=   src/
@@ -38,12 +41,17 @@ re_iterator: ; $(MAKE) MAKE_ITERATOR=0 fclean iterator
 enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 all
 clean_enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 clean
 fclean_enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 clean ; rm -rf $(NAME)
-re_enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 fclean iterator
+re_enable_if: ; $(MAKE) MAKE_ENABLE_IF=0 fclean enable_if
 
 vector: ; $(MAKE) MAKE_VECTOR=0 all
 clean_vector: ; $(MAKE) MAKE_VECTOR=0 clean
 fclean_vector: ; $(MAKE) MAKE_VECTOR=0 clean ; rm -rf $(NAME)
-re_vector: ; $(MAKE) MAKE_VECTOR=0 fclean iterator
+re_vector: ; $(MAKE) MAKE_VECTOR=0 fclean vector
+
+pair: ; $(MAKE) MAKE_PAIR=0 all
+clean_pair: ; $(MAKE) MAKE_PAIR=0 clean
+fclean_pair: ; $(MAKE) MAKE_PAIR=0 clean ; rm -rf $(NAME)
+re_pair: ; $(MAKE) MAKE_PAIR=0 fclean pair
 
 all: objdir $(NAME)
 

@@ -55,8 +55,8 @@ void    check_constructor() {
     {
         std::cout << std::endl << "\033[33m" << "_____1.1_____" << "\033[0m" << std::endl;
         std::cout << "\033[34m" << "\t1) vector(); " << "\033[0m" << std::endl;
-        std::vector<int> std_vec_int();
-        ft::vector<int>  ft_vec_int();
+        std::vector<int> std_vec_int;
+        ft::vector<int>  ft_vec_int;
 
     //     // does not compile
     //     // std::cout << "capacity: " << std_vec_int.capacity() << std::endl;
@@ -209,7 +209,7 @@ void    check_asisgn() {
         std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
 
         characters.assign(5, 'a');
-            for (typename ft::vector<char>::iterator iter = characters.begin();
+            for (ft::vector<char>::iterator iter = characters.begin();
             iter != characters.end(); ++iter) {
             std::cout << *iter << ' ';
         }
@@ -223,7 +223,7 @@ void    check_asisgn() {
 
         const std::string extra(6, 'b');
         characters.assign(extra.begin(), extra.end());
-            for (typename ft::vector<char>::iterator iter = characters.begin();
+            for (ft::vector<char>::iterator iter = characters.begin();
             iter != characters.end(); ++iter) {
             std::cout << *iter << ' ';
         }
@@ -238,7 +238,7 @@ void    check_asisgn() {
         std::cout << "\033[34m" << "\t4.1) void assign( size_type count, const T& value );  " << "\033[0m" << std::endl;
 
         integers.assign(5, 0);
-            for (typename ft::vector<int>::iterator iter = integers.begin();
+            for (ft::vector<int>::iterator iter = integers.begin();
             iter != integers.end(); ++iter) {
             std::cout << *iter << ' ';
         }
@@ -252,7 +252,7 @@ void    check_asisgn() {
 
         const std::string extra_integers(6, 6);
         integers.assign(extra_integers.begin(), extra_integers.end());
-            for (typename ft::vector<int>::iterator iter = integers.begin();
+            for (ft::vector<int>::iterator iter = integers.begin();
             iter != integers.end(); ++iter) {
             std::cout << *iter << ' ';
         }
