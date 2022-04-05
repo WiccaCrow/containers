@@ -2,9 +2,9 @@ NAME			=   mySTL
 
 # CPP         	=   clang++
 CPP         	=   g++
-# FLAGS       	=   -Wall -Wextra -Werror -g
-FLAGS       	=   -g
-# FLAGS       	+=  -Wpedantic
+FLAGS       	=   -Wall -Wextra -Werror -g
+# FLAGS       	=   -g
+FLAGS       	+=  -Wpedantic
 # FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
 
 ifeq ($(MAKE_ITERATOR),0)

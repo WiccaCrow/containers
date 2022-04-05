@@ -50,10 +50,7 @@ class vector : public _Vector_base<T, Allocator> {
         void    construct_base( iterator pos, InputIt first, InputIt last, ::std::input_iterator_tag );
     template< class InputIt >
         void    construct_base( iterator pos, InputIt first, InputIt last, int_iterator_tag );
-
     void vector_val(size_type count, const value_type& val);
-    template <class InputIt>
-        void    vector_val_iter(InputIt first, InputIt last, int_iterator_tag);
 
     template< class InputIt >
         void    insert( iterator pos, InputIt first, InputIt last, ::std::input_iterator_tag );
@@ -444,7 +441,7 @@ void
         return ;
     }
     T* arr_new = get_allocator().allocate(new_cap);
-    for (int i = 0; i < _size ; ++i) {
+    for (int i = 0; static_cast<size_type>(i) < _size ; ++i) {
         get_allocator().construct(arr_new + i, _arr[i]);
         get_allocator().destroy(_arr + i);
     }
@@ -582,20 +579,6 @@ vector<T, Allocator>::vector_val(size_type count, const value_type& val) {
 }
 
 template <class T, class Allocator>
-template <class InputIt>
-void
-    vector<T, Allocator>::
-    vector_val_iter(InputIt first, InputIt last, int_iterator_tag) {
-    size_type count = (size_type)first;
-    _size = count,
-    _capacity = count,
-    _arr = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(count);
-    T value = (T)last;
-    vector_val(first, last);
-}
-
-//////////////////////////////////////////////////
-template <class T, class Allocator>
     template< class InputIt >
     void 
         vector<T, Allocator>::
@@ -615,7 +598,7 @@ template <class T, class Allocator>
 template< class InputIt >
 void 
     vector<T, Allocator>::
-    construct_base( iterator pos, InputIt first, InputIt last, int_iterator_tag obj ) {
+    construct_base( iterator pos, InputIt first, InputIt last, int_iterator_tag ) {
     size_type count = (size_type)first;
     T value = (T)last;
     if (!count) {
@@ -666,7 +649,6 @@ void
         insert_too_small_capacity(pos, count, value);
     }
 }
-
 
 template <class T, class Allocator>
     template< class InputIt >
@@ -948,7 +930,7 @@ bool operator==( const ::ft::vector<T,Alloc>& lhs,
     if (lhs.size() != rhs.size()) {
         return (false);
     }
-    for (int i = 0; i < lhs.size() ; ++i) {
+    for (int i = 0; static_cast<typename ::ft::vector<T,Alloc>::size_type>(i) < lhs.size() ; ++i) {
         if (lhs[i] != rhs[i]) {
             return (false);
         }

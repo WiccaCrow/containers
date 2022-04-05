@@ -19,19 +19,19 @@ template < class T>
 void print_vector(T & characters);
 
 int main() {
-    // check_constructor(); // 1, 2, 3, 5
-    // check_asisgn(); // 4
-    // check_Element_access_and_iterators(); // 6 - 14
-    // check_capacity(); // 15 - 19
-    // std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
-    // check_clear(); // 20  
-    // check_insert_erase_21_4_and_22_2(); // 21.4, 22.2
-    // check_insert_iter(); // 21.3, 21.4
-    // check_insert_erase_21_1_3_and_22_1(); // 21.1, 21.3, 22.1
-    // check_push_back_pop_back(); // 23, 24
-    // check_resize(); // 25
-    // check_swap(); // 26
-    check_non_member_functions();
+    check_constructor(); // 1, 2, 3, 5
+    check_asisgn(); // 4
+    check_Element_access_and_iterators(); // 6 - 14
+    check_capacity(); // 15 - 19
+    std::cout << std::endl << "\033[35m" << "CHECK MODIFIERS " << "\033[0m" << std::endl;
+    check_clear(); // 20  
+    check_insert_erase_21_4_and_22_2(); // 21.4, 22.2
+    check_insert_iter(); // 21.3, 21.4
+    check_insert_erase_21_1_3_and_22_1(); // 21.1, 21.3, 22.1
+    check_push_back_pop_back(); // 23, 24
+    check_resize(); // 25
+    check_swap(); // 26
+    check_non_member_functions(); // 27-33
 }
 
 template < class T>
@@ -263,7 +263,7 @@ void    check_asisgn() {
 }
 
 void    check_Element_access_and_iterators() {
-    https://en.cppreference.com/w/cpp/container/vector/at
+    // https://en.cppreference.com/w/cpp/container/vector/at
 
     std::cout << std::endl << "\033[35m" << "check ELEMENT ACCESS " << "\033[0m" << std::endl;
     std::cout << "\033[35m" << 
@@ -284,7 +284,7 @@ void    check_Element_access_and_iterators() {
     data.insert(data.begin(), 1, 2);
     data.insert(data.begin(), 1, 1);
 
-    for (int i = 0; i < data.size(); ++i) {
+    for (int i = 0; static_cast<size_t>(i) < data.size(); ++i) {
         std::cout << data[i] << " ";
     }
     std::cout << std::endl;
@@ -726,8 +726,8 @@ void    check_swap() {
     print_vector(a2);
     std::cout << "\t *it1: " << *it1 << std::endl;
     std::cout << "\t *it2: " << *it2 << std::endl;
-    std::cout << "\t ref1: " << *it1 << std::endl;
-    std::cout << "\t ref2: " << *it2 << std::endl;
+    std::cout << "\t ref1: " << ref1 << std::endl;
+    std::cout << "\t ref2: " << ref2 << std::endl;
     std::cout << "a1 capacity: " << a1.capacity() << std::endl;
     std::cout << "a1 size:     " << a1.size() << std::endl;
     std::cout << "a2 capacity: " << a2.capacity() << std::endl;
@@ -740,8 +740,8 @@ void    check_swap() {
     print_vector(a2);
     std::cout << "\t *it1: " << *it1 << std::endl;
     std::cout << "\t *it2: " << *it2 << std::endl;
-    std::cout << "\t ref1: " << *it1 << std::endl;
-    std::cout << "\t ref2: " << *it2 << std::endl;
+    std::cout << "\t ref1: " << ref1 << std::endl;
+    std::cout << "\t ref2: " << ref2 << std::endl;
     std::cout << "a1 capacity: " << a1.capacity() << std::endl;
     std::cout << "a1 size:     " << a1.size() << std::endl;
     std::cout << "a2 capacity: " << a2.capacity() << std::endl;
