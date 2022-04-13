@@ -3,6 +3,8 @@
 
 // #include <type_traits>
 
+//////////////  enable_if
+
 namespace ft {
 
 template<bool B, class T = void>
@@ -11,6 +13,31 @@ struct enable_if {};
 template<class T>
 struct enable_if<true, T> { typedef T type; };
 
-}
+// https://runebook.dev/ru/docs/cpp/types/is_same
+
+template<class T, class U>
+struct is_same : std::false_type {};
+ 
+template<class T>
+struct is_same<T, T> : std::true_type {};
+
+} // namespace ft
+
+//////////////  is_same_f function
+
+namespace ft {
+
+template <class T1, class T2>
+bool
+    is_same_f(T1 , T2 ) {
+        return (false);
+    }
+
+template <class T1>
+bool
+    is_same_f(T1 , T1 ) {
+        return (true);
+    }
+} // namespace ft
 
 #endif

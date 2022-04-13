@@ -70,6 +70,7 @@
         "compare": "cpp",
         "concepts": "cpp",
         "random": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "map": "cpp"
     }
 }

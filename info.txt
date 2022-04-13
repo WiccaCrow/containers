@@ -18,3 +18,14 @@ https://levelup.gitconnected.com/advanced-c-templates-tutorial-7b54259b2671
 гайд
 https://github.com/BillyKlebitz/FT_Containers/wiki/5.-Iterators.-SFINAE
 
+mutable очень полезная штука!!!
+https://habr.com/ru/company/infopulse/blog/341264/
+
+кчд и 2-3 дерево. ПОчему именно красный цвет
+https://habr.com/ru/post/555404/
+
+static
+https://habr.com/ru/post/527044/
+
+O(log N)
+https://tproger.ru/articles/computational-complexity-explained/
