@@ -15,7 +15,7 @@ template <
 struct iterator_base {
     public:
     typedef _iterTag   iterator_category;
-    typedef _T value_type;
+    typedef _T         value_type;
     typedef _Dist      difference_type;
     typedef _Rt        reference;
     typedef _Pt        pointer;

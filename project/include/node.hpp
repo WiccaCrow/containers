@@ -1,7 +1,8 @@
-#ifndef FT_NODE_HPP
-# define FT_NODE_HPP
+#ifndef NODE_HPP
+# define NODE_HPP
 
 #include <memory>
+#include <utility.hpp>
 
 namespace ft {
     
@@ -10,6 +11,8 @@ typedef enum { BLACK, RED } nodeColor;
 template <class T>
 class Node {
     public:
+        typedef T data_type;
+        
         T data;
         nodeColor color;
         Node *parent;

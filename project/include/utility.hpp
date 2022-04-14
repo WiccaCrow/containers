@@ -1,5 +1,5 @@
-#ifndef FT_UTILITY_HPP
-#define FT_UTILITY_HPP
+#ifndef UTILITY_HPP
+#define UTILITY_HPP
 
 namespace ft {
 

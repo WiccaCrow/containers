@@ -1,28 +1,31 @@
-#ifndef FT_TREE_HPP
-# define FT_TREE_HPP
+#ifndef RBTREE_HPP
+# define RBTREE_HPP
 
 #include <memory>
-#include <ft_node.hpp>
+#include <node.hpp>
+#include <utility.hpp>
+// #include <iterator_binTree_normal.hpp>
 
 namespace ft {
 
 template< class T, class Allocator = std::allocator<Node<T> > >
-class Tree {
+class RBTree {
     public:
     typedef Allocator                   allocator_type;
     typedef enum { lineLeft, lineRight, angleLeft, angleRight } isLineXPG; // Are the child, parent, grandparent on the same line?
+    // typedef binTree_iterator< T >         iterator;
 
         #define NIL &empty_node
         Node<T>     empty_node;
         Node<T> *   root;
         isLineXPG   isLine;
-        Tree() : 
+        RBTree() : 
                 empty_node(),
                 root(NIL) {
                      std::cout << "constructor empy\n";
         }
 
-        Tree(T data) : 
+        RBTree(T data) : 
                 empty_node() {
                      std::cout << "constructor data\n";
             root = create_node(data);
@@ -41,6 +44,8 @@ class Tree {
             Node<T> *insert_place = find_insert_place(data);
             if (root == NIL) {
                 std::cout << "insert_node NIL\n";
+                root = create_node(data);
+                root->color = BLACK;
                 root->data = data;
                 root->left = root->right = root->parent = NIL;
                 return ;
