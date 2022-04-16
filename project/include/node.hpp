@@ -18,29 +18,37 @@ class Node {
         Node *parent;
         Node *left;
         Node *right;
+        bool _is_empty;
 
         Node() : 
             data(),
             color(BLACK),
             parent(0),
             left(0),
-            right(0) { }
+            right(0),
+            _is_empty(true) { }
         
         Node(T d, nodeColor clr, Node * prnt, Node * lft, Node * rht) : 
             data(d),
             color(clr),
             parent(prnt),
             left(lft),
-            right(rht) { }
+            right(rht),
+            _is_empty(false) { }
         
         Node(T d) : 
             data(d),
             color(RED),
             parent(NULL),
             left(NULL),
-            right(NULL) { }
+            right(NULL),
+            _is_empty(false) { }
 
         ~Node() {}
+
+        bool is_empty() {
+            return (_is_empty);
+        }
 };
 
 template< class T >

@@ -11,22 +11,29 @@ namespace ft {
 template< class T, class Allocator = std::allocator<Node<T> > >
 class RBTree {
     public:
-    typedef Allocator                   allocator_type;
     typedef enum { lineLeft, lineRight, angleLeft, angleRight } isLineXPG; // Are the child, parent, grandparent on the same line?
+    typedef typename Allocator::template
+        rebind<Node<T> >::other allocator_type;
+
     // typedef binTree_iterator< T >         iterator;
 
         #define NIL &empty_node
-        Node<T>     empty_node;
-        Node<T> *   root;
-        isLineXPG   isLine;
+        Node<T>         empty_node;
+        Node<T> *       root;
+        allocator_type  _alloc;
+        isLineXPG       isLine;
         RBTree() : 
                 empty_node(),
-                root(NIL) {
+                root(NIL),
+                _alloc(Allocator()) {
+                empty_node._is_empty = true;
                      std::cout << "constructor empy\n";
         }
 
         RBTree(T data) : 
-                empty_node() {
+                empty_node(),
+                _alloc(Allocator()) {
+                empty_node._is_empty = true;
                      std::cout << "constructor data\n";
             root = create_node(data);
             root->color = BLACK;
@@ -43,14 +50,29 @@ class RBTree {
         void    insert_node(const T& data) {
             Node<T> *insert_place = find_insert_place(data);
             if (root == NIL) {
-                std::cout << "insert_node NIL\n";
                 root = create_node(data);
                 root->color = BLACK;
-                root->data = data;
                 root->left = root->right = root->parent = NIL;
                 return ;
             } else if (*insert_place == data) {
-                insert_place->data = data;
+                Node<T> *new_node = create_node(data);
+                new_node->color = insert_place->color;
+                new_node->left = insert_place->left;
+                new_node->right = insert_place->right;
+                new_node->parent = insert_place->parent;
+                if (new_node->left != NIL) {
+                    new_node->left->parent = new_node;
+                }
+                if (new_node->right != NIL) {
+                    new_node->right->parent = new_node;
+                }
+                if (new_node->parent->left == insert_place) {
+                    new_node->parent->left = new_node;
+                } else if (new_node->parent->right == insert_place) {
+                    new_node->parent->right = new_node;
+                }
+                _alloc.destroy(insert_place);
+			    _alloc.deallocate(insert_place, 1);
                 return ;
             } else {
                 Node<T> *new_node = create_node(data);
@@ -115,7 +137,9 @@ class RBTree {
         void    rotate_lineXPG_straight(Node<T> *parent) {
             if (isLine == lineLeft) {
                 parent->parent->left = parent->right;
-                parent->parent->left->parent = parent->parent;
+                if (parent->parent->left != NIL) {
+                    parent->parent->left->parent = parent->parent;
+                }
                 parent->right = parent->parent;
                 parent->parent = parent->parent->parent;
                 parent->right->parent = parent;
@@ -128,7 +152,9 @@ class RBTree {
                 parent->color = BLACK;
             } else if (isLine == lineRight) {
                 parent->parent->right = parent->left;
-                parent->parent->right->parent = parent->parent;
+                if (parent->parent->right != NIL) {
+                    parent->parent->right->parent = parent->parent;
+                }
                 parent->left = parent->parent;
                 parent->parent = parent->parent->parent;
                 parent->left->parent = parent;
@@ -176,6 +202,10 @@ class RBTree {
             }
             return (node);
         }
+
+        // bool is_empty(Node<T> *node) {
+        //     return (node == NIL);
+        // }
 };
 
 } // namespace ft
