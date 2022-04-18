@@ -14,7 +14,6 @@ template<
     class T,
     class Compare = std::less<Key>,
     class Allocator = std::allocator<std::pair<const Key, T> > > 
-// class map : protected RBTree<pair<const Key, T> > {
 class map : public RBTree<pair<const Key, T> > {
     public:
 
@@ -31,10 +30,8 @@ class map : public RBTree<pair<const Key, T> > {
     typedef typename Allocator::pointer          pointer;
     typedef typename Allocator::const_pointer    const_pointer;
 
-    typedef binTree_iterator<Node<value_type> >         iterator;
-    // typedef binTree_iterator<const value_type>   const_iterator;
-    // iterator	LegacyBidirectionalIterator to value_type
-    // const_iterator	LegacyBidirectionalIterator to const value_type
+    typedef typename RBTree<value_type>::iterator               iterator;
+    typedef typename RBTree<value_type>::const_iterator         const_iterator;
     // typedef reverse_iterator<iterator>              reverse_iterator;
     // typedef reverse_iterator<const_iterator>        const_reverse_iterator;
     // typedef 
@@ -43,18 +40,14 @@ class map : public RBTree<pair<const Key, T> > {
     // typedef 
 
     private:
-    typedef typename Allocator::template
-        rebind<value_type>::other alloc_type;
-    alloc_type _alloc;
-
     key_compare _comp;
 
     public:
 
     explicit map( const Compare& comp = key_compare(),
                 const Allocator& alloc = Allocator() ) :
-                    _comp(comp), 
-                    _alloc(alloc) { }
+                    RBTree<pair<const Key, T> >(alloc),
+                    _comp(comp) { }
 
 };
 

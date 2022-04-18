@@ -4,209 +4,424 @@
 #include <memory>
 #include <node.hpp>
 #include <utility.hpp>
-// #include <iterator_binTree_normal.hpp>
 
 namespace ft {
 
-template< class T, class Allocator = std::allocator<Node<T> > >
+template <
+    typename T,
+    typename Tree >
+class binTree_iterator;
+
+template< 
+    class T, 
+    class Allocator = std::allocator<Node<T> > 
+        >
 class RBTree {
     public:
+
+    // Member types
     typedef enum { lineLeft, lineRight, angleLeft, angleRight } isLineXPG; // Are the child, parent, grandparent on the same line?
     typedef typename Allocator::template
-        rebind<Node<T> >::other allocator_type;
+            rebind<Node<T> >::other                       allocator_type;
+    typedef binTree_iterator<Node<T>, RBTree<T> >         iterator;
+    typedef binTree_iterator<const Node<T>, RBTree<T> >   const_iterator;
 
-    // typedef binTree_iterator< T >         iterator;
+    private:
 
-        #define NIL &empty_node
-        Node<T>         empty_node;
-        Node<T> *       root;
-        allocator_type  _alloc;
-        isLineXPG       isLine;
-        RBTree() : 
-                empty_node(),
-                root(NIL),
-                _alloc(Allocator()) {
-                empty_node._is_empty = true;
-                     std::cout << "constructor empy\n";
-        }
+    // Members
 
-        RBTree(T data) : 
-                empty_node(),
-                _alloc(Allocator()) {
-                empty_node._is_empty = true;
-                     std::cout << "constructor data\n";
-            root = create_node(data);
-            root->color = BLACK;
-            root->left = NIL;
-            root->right = NIL;
-        }
+    Node<T> *       _root;
+    Node<T> *       _begin;
+    #define NIL &_empty_node
+    Node<T>         _empty_node;
+    Node<T>         _end_node;
+    allocator_type  _alloc;
+    isLineXPG       isLine;
 
-		Node<T> *create_node(T data, allocator_type alloc = Allocator() ) {
-			Node<T> *new_node = alloc.allocate(1);
-			alloc.construct(new_node, data); // data, RED, NULL, NULL, NULL
-			return new_node;
-		}
+    // Member functions
 
-        void    insert_node(const T& data) {
-            Node<T> *insert_place = find_insert_place(data);
-            if (root == NIL) {
-                root = create_node(data);
-                root->color = BLACK;
-                root->left = root->right = root->parent = NIL;
-                return ;
-            } else if (*insert_place == data) {
-                Node<T> *new_node = create_node(data);
-                new_node->color = insert_place->color;
-                new_node->left = insert_place->left;
-                new_node->right = insert_place->right;
-                new_node->parent = insert_place->parent;
-                if (new_node->left != NIL) {
-                    new_node->left->parent = new_node;
-                }
-                if (new_node->right != NIL) {
-                    new_node->right->parent = new_node;
-                }
-                if (new_node->parent->left == insert_place) {
-                    new_node->parent->left = new_node;
-                } else if (new_node->parent->right == insert_place) {
-                    new_node->parent->right = new_node;
-                }
-                _alloc.destroy(insert_place);
-			    _alloc.deallocate(insert_place, 1);
-                return ;
-            } else {
-                Node<T> *new_node = create_node(data);
-                new_node->color = RED;
-                new_node->parent = insert_place;
-                new_node->left = new_node->right = NIL;
-                if (data < *insert_place) {
-                    insert_place->left = new_node;
-                } else if (*insert_place < data) {
-                    insert_place->right = new_node;
-                }
-                check_balance_1(new_node);
-            }
-        }
+    Node<T> *   find_insert_place(const T& data);
+    Node<T> *   create_node(T data);
+    void        check_balance_1(Node<T> *check_node);
+    Node<T> *   check_balance_2(Node<T> *new_node, Node<T> *uncle, Node<T> *parent);
+    void        checkLineXPG(Node<T> *new_node, Node<T> *parent);
+    void        rotate_lineXPG_straight(Node<T> *parent);
+    void        rotate_lineXPG_angle(Node<T> *new_node, Node<T> *parent);
 
-        void    check_balance_1(Node<T> *check_node) {
-            Node<T> *uncle;
-            Node<T> *parent;
-            while (check_node != root) {
-                parent = check_node->parent;
-                if (parent->color == BLACK) {
-                    return ;
-                }
-                uncle = (parent->parent->left == parent ? parent->parent->right : parent->parent->left);
-                check_node = check_balance_2(check_node, uncle, parent);
-            }
-        }
+    public:
+    //////////////////////
+    // Member functions //
+    //////////////////////
 
-        Node<T> *    check_balance_2(Node<T> *new_node, Node<T> *uncle, Node<T> *parent) {
-            if (uncle->color == RED) {
-                uncle->color = parent->color = BLACK;
-                parent->parent->color = (parent->parent == root ? BLACK : RED);
-                return (parent->parent);
-            }
-            checkLineXPG(new_node, parent);
-            rotate_lineXPG_straight(parent);
-            rotate_lineXPG_angle(new_node, parent);
-            return (root);
-        }
+    RBTree(allocator_type alloc = Allocator());
+    RBTree(T data, allocator_type alloc = Allocator());
+    allocator_type get_allocator() const;
 
-        void    rotate_lineXPG_angle(Node<T> *new_node, Node<T> *parent) {
-            if (isLine != angleLeft && isLine != angleRight) {
-                return ;
-            }
-            if (isLine == angleLeft) {
-                new_node->parent = parent->parent;
-                parent->parent->left = new_node;
-                parent->parent = new_node;
-                parent->right = NIL;
-                new_node->left = parent;
-            } else if (isLine == angleRight) {
-                new_node->parent = parent->parent;
-                parent->parent->right = new_node;
-                parent->parent = new_node;
-                parent->left = NIL;
-                new_node->right = parent;
-            }
-            checkLineXPG(parent, new_node);
-            rotate_lineXPG_straight(new_node);
-        }
+    // Element access
+    // Iterators
 
-        void    rotate_lineXPG_straight(Node<T> *parent) {
-            if (isLine == lineLeft) {
-                parent->parent->left = parent->right;
-                if (parent->parent->left != NIL) {
-                    parent->parent->left->parent = parent->parent;
-                }
-                parent->right = parent->parent;
-                parent->parent = parent->parent->parent;
-                parent->right->parent = parent;
-                if (parent->parent != NIL && parent->parent->right == parent->right) {
-                    parent->parent->right = parent;
-                } else if (parent->parent != NIL) {
-                    parent->parent->left = parent;
-                }
-                parent->right->color = RED;
-                parent->color = BLACK;
-            } else if (isLine == lineRight) {
-                parent->parent->right = parent->left;
-                if (parent->parent->right != NIL) {
-                    parent->parent->right->parent = parent->parent;
-                }
-                parent->left = parent->parent;
-                parent->parent = parent->parent->parent;
-                parent->left->parent = parent;
-                if (parent->parent != NIL && parent->parent->left == parent->left) {
-                    parent->parent->left = parent;
-                } else if (parent->parent != NIL) {
-                    parent->parent->right = parent;
-                }
-                parent->left->color = RED;
-                parent->color = BLACK;
-            }
-        }
+    iterator        root();
+    iterator        begin();
+    const_iterator  begin() const;
+    iterator        end();
+    const_iterator  end() const;
 
-        void    checkLineXPG(Node<T> *new_node, Node<T> *parent) {
-            if (new_node->parent->left == new_node &&
-                (new_node->parent->parent == NIL ||
-                 new_node->parent->parent->left == new_node->parent)) {
-                    isLine = lineLeft;
-            } else if (
-                new_node->parent->right == new_node &&
-                (new_node->parent->parent == NIL ||
-                 new_node->parent->parent->right == new_node->parent)) {
-                    isLine = lineRight;
-            } else if (
-                new_node->parent->right == new_node &&
-                 new_node->parent->parent->left == new_node->parent) {
-                    isLine = angleLeft;
-            } else if (
-                new_node->parent->left == new_node &&
-                 new_node->parent->parent->right == new_node->parent) {
-                    isLine = angleRight;
-            }
-        }
+    // Capacity
+    // Modifiers
 
-        Node<T> *    find_insert_place(const T& data) {
-            Node<T> *node = root;
-            while (node != NIL) {
-                if (data < *node && node->left != NIL) {
-                    node = node->left;
-                } else if ( *node < data && node->right != NIL) {
-                    node = node->right;
-                } else {
-                    break ;
-                }
-            }
-            return (node);
-        }
+    pair<iterator, bool>    insert(const T& value);
+    iterator                insert( iterator hint, const T& value );
 
-        // bool is_empty(Node<T> *node) {
-        //     return (node == NIL);
-        // }
+    // Lookup
+    // Observers
+
 };
+
+// public:
+
+    //////////////////////
+    // Member functions //
+    //////////////////////
+
+template< 
+    class T, 
+    class Allocator >
+RBTree<T, Allocator>::
+    RBTree(allocator_type alloc) : 
+                _empty_node(),
+                _root(NULL),
+                _begin(_root),
+                _end_node(),
+                _alloc(alloc) {
+    _empty_node._is_empty = true;
+    _end_node._is_empty = true;
+    _end_node.right = _end_node.left = &_end_node;
+}
+
+template< 
+    class T, 
+    class Allocator >
+RBTree<T, Allocator>::
+    RBTree(T data, allocator_type alloc) : 
+                _empty_node(),
+                _end_node(),
+                _alloc(alloc) {
+    _empty_node._is_empty = true;
+    _end_node._is_empty = true;
+    _root = create_node(data);
+    _root->color = BLACK;
+    _root->left = NIL;
+    _root->right = &_end_node;
+    _end_node.parent = _root;
+    _end_node.right = _end_node.left = &_end_node;
+    _begin = _root;
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename RBTree<T, Allocator>::allocator_type 
+    RBTree<T, Allocator>::
+    get_allocator() const {
+        return (_alloc);
+}
+
+    // Element access
+
+    // Iterators
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::iterator                
+RBTree<T, Allocator>::
+    root() {
+    return (iterator(_root));
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::iterator                
+RBTree<T, Allocator>::
+    begin() {
+    return (iterator(_begin));
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::const_iterator                
+RBTree<T, Allocator>::
+    begin() const {
+        return (iterator(_begin));
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::iterator                
+RBTree<T, Allocator>::
+    end() {
+    if (_root == NULL) {
+        return iterator(_root);
+    }
+    return (iterator(&_end_node));
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::const_iterator                
+RBTree<T, Allocator>::
+    end() const {
+    if (_root == NULL) {
+        return iterator(_root);
+    }
+    return (iterator(&_end_node));
+}
+
+    // Capacity
+
+    // Modifiers
+
+template< 
+    class T, 
+    class Allocator >
+pair<typename ft::RBTree<T, Allocator>::iterator, bool>
+RBTree<T, Allocator>::
+    insert(const T& value) {
+    if (_root == NULL) {
+        _root = create_node(value);
+        if (_root == NIL) {
+            _root = NULL;
+            return pair<iterator, bool>(iterator(_root), false);
+        }
+        _root->color = BLACK;
+        _root->left = _root->parent = NIL;
+        _root->right = &_end_node;
+        _end_node.parent = _root;
+        _begin = _root;
+        return pair<iterator, bool>(iterator(_root), true);
+    }
+    Node<T> *insert_place = find_insert_place(value);
+    if (*insert_place == value) {
+        Node<T> *new_node = create_node(value);
+        if (new_node == NIL) {
+            return pair<iterator, bool>(iterator(insert_place), false);
+        }
+        new_node->color = insert_place->color;
+        new_node->left = insert_place->left;
+        new_node->right = insert_place->right;
+        new_node->parent = insert_place->parent;
+        if (new_node->left != NIL) {
+            new_node->left->parent = new_node;
+        }
+        if (new_node->right != NIL && new_node->right != &_end_node) {
+            new_node->right->parent = new_node;
+        }
+        if (new_node->parent->left == insert_place) {
+            new_node->parent->left = new_node;
+        } else if (new_node->parent->right == insert_place) {
+            new_node->parent->right = new_node;
+        }
+        _alloc.destroy(insert_place);
+        _alloc.deallocate(insert_place, 1);
+        return pair<iterator, bool>(iterator(insert_place), true);
+    } else {
+        Node<T> *new_node = create_node(value);
+        if (new_node == NIL) {
+            return pair<iterator, bool>(iterator(insert_place), false);
+        }
+        if (new_node->data < _begin->data) {
+            _begin = new_node;
+        }
+        new_node->color = RED;
+        new_node->parent = insert_place;
+        new_node->left = new_node->right = NIL;
+        if (value < *insert_place) {
+            insert_place->left = new_node;
+        } else if (*insert_place < value) {
+            if (insert_place->right == &_end_node) {
+                new_node->right = &_end_node;
+                _end_node.parent = new_node;
+            }
+            insert_place->right = new_node;
+        }
+        check_balance_1(new_node);
+        return pair<iterator, bool>(iterator(new_node), true);
+    }
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::iterator                
+RBTree<T, Allocator>::
+insert( iterator hint, const T& value ) {
+    return insert(value).first;
+}
+
+// private
+
+template< 
+    class T, 
+    class Allocator >
+Node<T> *
+RBTree<T, Allocator>::
+    find_insert_place(const T& data) {
+    Node<T> *node = _root;
+    while (node != NIL && node != &_end_node) {
+        if (data < *node && node->left != NIL) {
+            node = node->left;
+        } else if ( *node < data && node->right != NIL && node->right != &_end_node) {
+            node = node->right;
+        } else {
+            break ;
+        }
+    }
+    return (node);
+}
+
+template< 
+    class T,
+    class Allocator >
+Node<T> *
+RBTree<T, Allocator>::create_node(T data) {
+    try {
+        Node<T> *new_node = _alloc.allocate(1);
+        _alloc.construct(new_node, data); // data, RED, NULL, NULL, NULL
+        return new_node;
+    } catch (const std::bad_alloc& e) {
+        return NIL;
+    }
+}
+
+template< 
+    class T, 
+    class Allocator >
+void
+RBTree<T, Allocator>::
+    check_balance_1(Node<T> *check_node) {
+    Node<T> *uncle;
+    Node<T> *parent;
+    while (check_node != _root) {
+        parent = check_node->parent;
+        if (parent->color == BLACK) {
+            return ;
+        }
+        uncle = (parent->parent->left == parent ? parent->parent->right : parent->parent->left);
+        check_node = check_balance_2(check_node, uncle, parent);
+    }
+}
+
+template< 
+    class T, 
+    class Allocator >
+Node<T> *
+RBTree<T, Allocator>::
+    check_balance_2(Node<T> *new_node, Node<T> *uncle, Node<T> *parent) {
+    if (uncle->color == RED) {
+        uncle->color = parent->color = BLACK;
+        parent->parent->color = (parent->parent == _root ? BLACK : RED);
+        return (parent->parent);
+    }
+    checkLineXPG(new_node, parent);
+    rotate_lineXPG_straight(parent);
+    rotate_lineXPG_angle(new_node, parent);
+    return (_root);
+}
+
+template< 
+    class T, 
+    class Allocator >
+void
+RBTree<T, Allocator>::
+    checkLineXPG(Node<T> *new_node, Node<T> *parent) {
+    if (new_node->parent->left == new_node &&
+        (new_node->parent->parent == NIL ||
+            new_node->parent->parent->left == new_node->parent)) {
+            isLine = lineLeft;
+    } else if (
+        new_node->parent->right == new_node &&
+        (new_node->parent->parent == NIL ||
+            new_node->parent->parent->right == new_node->parent)) {
+            isLine = lineRight;
+    } else if (
+        new_node->parent->right == new_node &&
+            new_node->parent->parent->left == new_node->parent) {
+            isLine = angleLeft;
+    } else if (
+        new_node->parent->left == new_node &&
+            new_node->parent->parent->right == new_node->parent) {
+            isLine = angleRight;
+    }
+}
+
+template< 
+    class T, 
+    class Allocator >
+void
+RBTree<T, Allocator>::
+    rotate_lineXPG_straight(Node<T> *parent) {
+    if (isLine == lineLeft) {
+        parent->parent->left = parent->right;
+        if (parent->parent->left != NIL) {
+            parent->parent->left->parent = parent->parent;
+        }
+        parent->right = parent->parent;
+        parent->parent = parent->parent->parent;
+        parent->right->parent = parent;
+        if (parent->parent != NIL && parent->parent->right == parent->right) {
+            parent->parent->right = parent;
+        } else if (parent->parent != NIL) {
+            parent->parent->left = parent;
+        }
+        parent->right->color = RED;
+        parent->color = BLACK;
+    } else if (isLine == lineRight) {
+        parent->parent->right = parent->left;
+        if (parent->parent->right != NIL && parent->parent->right != &_end_node) {
+            parent->parent->right->parent = parent->parent;
+        }
+        parent->left = parent->parent;
+        parent->parent = parent->parent->parent;
+        parent->left->parent = parent;
+        if (parent->parent != NIL && parent->parent->left == parent->left) {
+            parent->parent->left = parent;
+        } else if (parent->parent != NIL) {
+            parent->parent->right = parent;
+        }
+        parent->left->color = RED;
+        parent->color = BLACK;
+    }
+}
+
+template< 
+    class T, 
+    class Allocator >
+void
+RBTree<T, Allocator>::
+    rotate_lineXPG_angle(Node<T> *new_node, Node<T> *parent) {
+    if (isLine != angleLeft && isLine != angleRight) {
+        return ;
+    }
+    if (isLine == angleLeft) {
+        new_node->parent = parent->parent;
+        parent->parent->left = new_node;
+        parent->parent = new_node;
+        parent->right = NIL;
+        new_node->left = parent;
+    } else if (isLine == angleRight) {
+        new_node->parent = parent->parent;
+        parent->parent->right = new_node;
+        parent->parent = new_node;
+        parent->left = NIL;
+        new_node->right = parent;
+    }
+    checkLineXPG(parent, new_node);
+    rotate_lineXPG_straight(new_node);
+}
 
 } // namespace ft
 

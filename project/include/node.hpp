@@ -11,7 +11,6 @@ typedef enum { BLACK, RED } nodeColor;
 template <class T>
 class Node {
     public:
-        typedef T data_type;
         
         T data;
         nodeColor color;

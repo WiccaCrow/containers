@@ -10,25 +10,26 @@
 namespace ft {
 // Итераторы как указатели для контейнеров
 // binTree_iterator
+
 template <
     typename T,
     typename Tree = RBTree<T> >
 class binTree_iterator {
     public:
     typedef typename std::bidirectional_iterator_tag iterator_category;
-    typedef typename iterator_traits<typename T::data_type *>::value_type value_type;
-    typedef typename iterator_traits<typename T::data_type *>::difference_type difference_type;
+    typedef typename iterator_traits<T *>::value_type value_type;
+    typedef typename iterator_traits<T *>::difference_type difference_type;
     typedef typename iterator_traits<T *>::reference reference;
-    typedef typename iterator_traits< T *>::pointer pointer;
-
-
+    typedef typename iterator_traits<T *>::pointer pointer;
 
     protected:
     vector< T* >    _stack;
-    T *             _M_current_node;
     T *             _M_current;
 
+    void            op_plus();
+
     public:
+    void            op_plus_test();
     /* Constructs and destructs, operator= */
     binTree_iterator();
     explicit binTree_iterator(T * TPtr);
@@ -46,7 +47,6 @@ class binTree_iterator {
     pointer                 operator->() const;
     binTree_iterator &      operator++();
     binTree_iterator        operator++(int);
-    void                    op_plus();
 
     // Bidirectional iterator requirements and getters
     // binTree_iterator &   operator--();
@@ -61,17 +61,17 @@ class binTree_iterator {
     // _Dist               operator-(const binTree_iterator & itSecond) const;
 
     // bool
-    // bool    operator==(const binTree_iterator & itSecond) const;
-    // bool    operator==(int & adrrdInt) const;
-    // bool    operator!=(const binTree_iterator & itSecond) const;
-    // bool    operator!=(int & adrrdInt) const;
+    bool    operator==(const binTree_iterator & itSecond) const;
+    bool    operator==(int & adrrdInt) const;
+    bool    operator!=(const binTree_iterator & itSecond) const;
+    bool    operator!=(int & adrrdInt) const;
 
     // bool    operator>(const binTree_iterator & itSecond) const;
     // bool    operator<(const binTree_iterator & itSecond) const;
     // bool    operator>=(const binTree_iterator & itSecond) const;
     // bool    operator<=(const binTree_iterator & itSecond) const;
 
-}; // typename не скомпилится
+};
 
 // definitions
 // Constructs and destructs, operator=
@@ -81,7 +81,6 @@ template <
 binTree_iterator<T, Tree>::
     binTree_iterator() :
             _stack(),
-            _M_current_node(NULL),
             _M_current(NULL) {}
 
 template <
@@ -90,7 +89,6 @@ template <
 binTree_iterator<T, Tree>::
     binTree_iterator(T * TPtr) :
             _stack(),
-            _M_current_node(NULL),
             _M_current(TPtr) {}
 
 template <
@@ -99,7 +97,6 @@ template <
 binTree_iterator<T, Tree>::
     binTree_iterator(const binTree_iterator<T, Tree>& obj) :
             _stack(),
-            _M_current_node(obj._M_current_node), 
             _M_current(obj.base()) {}
 
 template <
@@ -109,7 +106,6 @@ binTree_iterator<T, Tree>&
 binTree_iterator<T, Tree>::
     operator=(const binTree_iterator<T, Tree>& obj) {
     if (this != &obj) {
-        _M_current_node = obj._M_current_node;
         _M_current = obj.base();
         _stack.clear();
     }
@@ -123,7 +119,6 @@ binTree_iterator<T, Tree>&
 binTree_iterator<T, Tree>::
     operator=(T* obj) {
     _M_current = obj;
-    _M_current_node = _M_current;
     _stack.clear();
     return (*this);
 }
@@ -136,7 +131,6 @@ binTree_iterator<T, Tree>&
 binTree_iterator<T, Tree>::
     operator=(Node<pair<Key, Value> >* obj) {
     _M_current = obj;
-    _M_current_node = _M_current;
     _stack.clear();
     return (*this);
 }
@@ -170,40 +164,13 @@ typename binTree_iterator<T, Tree>::pointer
     return (_M_current);
 }
 
-// template <
-//     class T, 
-//     class Tree >
-// void
-// binTree_iterator<T, Tree>::
-//     op_plus() {
-//     if (_stack.empty() == false || (_M_current_node != NULL && _M_current_node->is_empty() == false)) {
-//         if (_M_current_node != NULL && _M_current_node->is_empty() == false) {
-//             while (_M_current_node != NULL && _M_current_node->is_empty() == false) {
-//                 _stack.push_back(_M_current_node);
-//                 _M_current_node = _M_current_node->left;
-//             }
-//         } else {
-//             _M_current_node = _stack[_stack.size() - 1];
-//             _stack.pop_back();
-//         }
-//         _M_current = _M_current_node;
-//         // std::cout << _M_current_node->data.first << std::endl;
-//         // std::cout << _M_current->data.first << std::endl;
-//             _M_current_node = _M_current_node->right;
-//     }
-// }
-
 template <
     class T, 
     class Tree >
 binTree_iterator<T, Tree>& 
 binTree_iterator<T, Tree>::
     operator++() {
-    Node<T> tmpNode = *_M_current;
     op_plus();
-    while (_M_current->_is_empty || *_M_current == tmpNode) {
-        op_plus();
-    }
     return (*this);
 }
 
@@ -224,20 +191,27 @@ template <
 void
 binTree_iterator<T, Tree>::
     op_plus() {
-    if (_stack.empty() == false || (_M_current_node != NULL && _M_current_node->is_empty() == false)) {
-        if (_M_current_node != NULL && _M_current_node->is_empty() == false) {
-            while (_M_current_node != NULL && 
-                   _M_current_node->is_empty() == false && 
-                   *_M_current_node > *_M_current) {
-                _stack.push_back(_M_current_node);
-                _M_current_node = _M_current_node->left;
-            }
-        } else {
-            _M_current_node = _stack[_stack.size() - 1];
-            _stack.pop_back();
+    // check end
+    if (_M_current->right->right == _M_current->right) {
+        _M_current =  _M_current->right;
+    // check right child/root
+    } else if ((_M_current->right != NULL && 
+        _M_current->right->is_empty() == false) ||
+        (_M_current->is_empty() == false && 
+        _M_current->parent->is_empty() == true)) {
+        _M_current = _M_current->right;
+        while (_M_current->left != NULL && 
+                _M_current->left->is_empty() == false) {
+            _M_current = _M_current->left;
         }
-        _M_current = _M_current_node;
-        _M_current_node = _M_current_node->right;
+    // not end, not root, without right child
+    } else {
+        while (_M_current->parent->right == _M_current) {
+            _M_current = _M_current->parent;
+        }
+        if (_M_current->parent->left == _M_current) {
+            _M_current = _M_current->parent;
+        }
     }
 }
 
@@ -323,43 +297,43 @@ binTree_iterator<T, Tree>::
 //     return (_M_current - itSecond._M_current);
 // }
 
-//     // bool
+    // bool
 
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// bool 
-// binTree_iterator<T, Tree>::
-//     operator==(const binTree_iterator<T, Tree> & itSecond) const {
-//     return (_M_current == itSecond._M_current);
-// }
+template <
+    class T, 
+    class Tree >
+bool 
+binTree_iterator<T, Tree>::
+    operator==(const binTree_iterator<T, Tree> & itSecond) const {
+    return (_M_current == itSecond._M_current);
+}
 
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// bool 
-// binTree_iterator<T, Tree>::
-//     operator==(int & adrrdInt) const {
-//     return (_M_current == static_cast<_Pt>(adrrdInt));
-// }
+template <
+    class T, 
+    class Tree >
+bool 
+binTree_iterator<T, Tree>::
+    operator==(int & adrrdInt) const {
+    return (_M_current == static_cast<T*>(adrrdInt));
+}
 
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// bool 
-// binTree_iterator<T, Tree>::
-//     operator!=(const binTree_iterator<T, Tree> & itSecond) const {
-//     return (!(operator==(itSecond)));
-// }
+template <
+    class T, 
+    class Tree >
+bool 
+binTree_iterator<T, Tree>::
+    operator!=(const binTree_iterator<T, Tree> & itSecond) const {
+    return (!(operator==(itSecond)));
+}
 
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// bool 
-// binTree_iterator<T, Tree>::
-//     operator!=(int & adrrdInt) const {
-//     return (!(operator==(static_cast<_Pt>(adrrdInt))));
-// }
+template <
+    class T, 
+    class Tree >
+bool 
+binTree_iterator<T, Tree>::
+    operator!=(int & adrrdInt) const {
+    return (!(operator==(static_cast<T*>(adrrdInt))));
+}
 
 // template <
 //     class T, 
