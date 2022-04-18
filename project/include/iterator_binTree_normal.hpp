@@ -23,7 +23,7 @@ class binTree_iterator {
     typedef typename iterator_traits<T *>::pointer pointer;
 
     protected:
-    vector< T* >    _stack;
+    // vector< T* >    _stack;
     T *             _M_current;
 
     void            op_plus();
@@ -49,8 +49,8 @@ class binTree_iterator {
     binTree_iterator        operator++(int);
 
     // Bidirectional iterator requirements and getters
-    // binTree_iterator &   operator--();
-    // binTree_iterator     operator--(int);
+    binTree_iterator &   operator--();
+    binTree_iterator     operator--(int);
 
     // Random access iterator requirements and getters
     // _Rt                 operator[](const _Dist n);
@@ -80,7 +80,7 @@ template <
     class Tree >
 binTree_iterator<T, Tree>::
     binTree_iterator() :
-            _stack(),
+            // _stack(),
             _M_current(NULL) {}
 
 template <
@@ -88,7 +88,7 @@ template <
     class Tree >
 binTree_iterator<T, Tree>::
     binTree_iterator(T * TPtr) :
-            _stack(),
+            // _stack(),
             _M_current(TPtr) {}
 
 template <
@@ -96,7 +96,7 @@ template <
     class Tree >
 binTree_iterator<T, Tree>::
     binTree_iterator(const binTree_iterator<T, Tree>& obj) :
-            _stack(),
+            // _stack(),
             _M_current(obj.base()) {}
 
 template <
@@ -107,7 +107,7 @@ binTree_iterator<T, Tree>::
     operator=(const binTree_iterator<T, Tree>& obj) {
     if (this != &obj) {
         _M_current = obj.base();
-        _stack.clear();
+        // _stack.clear();
     }
     return (*this);
 }
@@ -119,7 +119,7 @@ binTree_iterator<T, Tree>&
 binTree_iterator<T, Tree>::
     operator=(T* obj) {
     _M_current = obj;
-    _stack.clear();
+    // _stack.clear();
     return (*this);
 }
 
@@ -131,7 +131,7 @@ binTree_iterator<T, Tree>&
 binTree_iterator<T, Tree>::
     operator=(Node<pair<Key, Value> >* obj) {
     _M_current = obj;
-    _stack.clear();
+    // _stack.clear();
     return (*this);
 }
 
@@ -170,27 +170,6 @@ template <
 binTree_iterator<T, Tree>& 
 binTree_iterator<T, Tree>::
     operator++() {
-    op_plus();
-    return (*this);
-}
-
-template <
-    class T, 
-    class Tree >
-binTree_iterator<T, Tree> 
-binTree_iterator<T, Tree>::
-    operator++(int) {
-    binTree_iterator<T, Tree> tmp = *this;
-    ++(*this);
-    return (tmp);
-}
-
-template <
-    class T, 
-    class Tree >
-void
-binTree_iterator<T, Tree>::
-    op_plus() {
     // check end
     if (_M_current->right->right == _M_current->right) {
         _M_current =  _M_current->right;
@@ -213,30 +192,63 @@ binTree_iterator<T, Tree>::
             _M_current = _M_current->parent;
         }
     }
+    return (*this);
+}
+
+template <
+    class T, 
+    class Tree >
+binTree_iterator<T, Tree> 
+binTree_iterator<T, Tree>::
+    operator++(int) {
+    binTree_iterator<T, Tree> tmp = *this;
+    ++(*this);
+    return (tmp);
 }
 
 //     // Bidirectional iterator requirements
 
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// binTree_iterator<T, Tree>& 
-// binTree_iterator<T, Tree>::
-//     operator--() {
-//     --_M_current;
-//     return *this;
-// }
+template <
+    class T, 
+    class Tree >
+binTree_iterator<T, Tree>& 
+binTree_iterator<T, Tree>::
+    operator--() {
+    // check end
+    if (_M_current->right == _M_current) {
+        _M_current =  _M_current->parent;
+    // check right child/root
+    } else if ((_M_current->left != NULL && 
+        _M_current->left->is_empty() == false) ||
+        (_M_current->is_empty() == false && // check root
+        _M_current->parent->is_empty() == true)) {
+        _M_current = _M_current->left;
+        while (_M_current->right != NULL && 
+                _M_current->right->is_empty() == false) {
+            _M_current = _M_current->right;
+        }
+    // not end, not root, without right child
+    } else {
+        while (_M_current->parent->left == _M_current) {
+            _M_current = _M_current->parent;
+        }
+        if (_M_current->parent->right == _M_current) {
+            _M_current = _M_current->parent;
+        }
+    }
+    return *this;
+}
 
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// binTree_iterator<T, Tree> 
-// binTree_iterator<T, Tree>::
-//     operator--(int) {
-//     binTree_iterator<T, Tree> tmp = *this;
-//     --_M_current;
-//     return (tmp);
-// }
+template <
+    class T, 
+    class Tree >
+binTree_iterator<T, Tree> 
+binTree_iterator<T, Tree>::
+    operator--(int) {
+    binTree_iterator<T, Tree> tmp = *this;
+    --(*this);
+    return (tmp);
+}
 
 //     // Random access iterator requirements and getters
 // template <

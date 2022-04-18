@@ -123,6 +123,36 @@ void    testMap_iterator() {
     while (iter1 != iter2) {
         std::cout << (*iter1++).data.first << std::endl;
     }
+
+    std::cout << "\033[34m" << "\t test --iter " << "\033[0m" << std::endl;
+    iter1 = my_tree.begin();
+    std::cout << "iter1 = my_tree.begin() = " << (*iter1).data.first << std::endl;
+    iter2 = my_tree.end();
+    std::cout << "iter2 = my_tree.end() " << std::endl;
+    while (iter1 != iter2) {
+        std::cout << "\t (*iter1).data.first: " << (*--iter2).data.first << std::endl;
+    }
+
+    std::cout << "\033[34m" << "\t test iter-- " << "\033[0m" << std::endl;
+    iter1 = my_tree.begin();
+    ++iter1;
+    std::cout << "iter1 = my_tree.begin(); ++iter1; iter1: " << (*iter1).data.first << std::endl;
+    iter2 = my_tree.end();
+    --iter2;
+    std::cout << "iter2 = my_tree.end(); --iter2; iter2: " << (*iter2).data.first << std::endl;
+    while (iter1 != iter2) {
+        std::cout << (*iter2--).data.first << "\t (*iter2).data.first: " << (*iter2).data.first << std::endl;
+    }
+
+    std::cout << "\033[34m" << "\t test --iter " << "\033[0m" << std::endl;
+    iter1 = my_tree.root();
+    std::cout << "iter1 = my_tree.root(); iter1 : " << (*iter1).data.first << std::endl;
+    iter2 = my_tree.end();
+    --iter2;
+    std::cout << "iter2 = my_tree.end(); --iter2; iter2: " << (*iter2).data.first << std::endl;
+    while (iter1 != iter2) {
+        std::cout << "\t (*iter2--).data.first: " << (*iter2--).data.first << std::endl;
+    }
 }
 
 
