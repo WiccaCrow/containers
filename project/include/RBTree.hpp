@@ -25,6 +25,7 @@ class RBTree {
 
     // Member types
     typedef enum { lineLeft, lineRight, angleLeft, angleRight } isLineXPG; // Are the child, parent, grandparent on the same line?
+    typedef std::size_t                                     size_type;
     typedef typename Allocator::template
             rebind<Node<T> >::other                         allocator_type;
     typedef binTree_iterator<Node<T>, RBTree<T> >           iterator;
@@ -41,8 +42,9 @@ class RBTree {
     #define NIL &_empty_node
     Node<T>         _empty_node;
     Node<T>         _end_node;
+    size_type       _size;
     allocator_type  _alloc;
-    isLineXPG       isLine;
+    isLineXPG       _isLine;
 
     // Member functions
 
@@ -77,6 +79,11 @@ class RBTree {
     const_reverse_iterator  rend() const;
 
     // Capacity
+
+    bool        empty() const;
+    size_type   size() const;
+    size_type   max_size() const;
+
     // Modifiers
 
     pair<iterator, bool>    insert(const T& value);
@@ -102,6 +109,7 @@ RBTree<T, Allocator>::
                 _root(NULL),
                 _begin(_root),
                 _end_node(),
+                _size(0),
                 _alloc(alloc) {
     _empty_node._is_empty = true;
     _end_node._is_empty = true;
@@ -115,6 +123,7 @@ RBTree<T, Allocator>::
     RBTree(T data, allocator_type alloc) : 
                 _empty_node(),
                 _end_node(),
+                _size(1),
                 _alloc(alloc) {
     _empty_node._is_empty = true;
     _end_node._is_empty = true;
@@ -229,6 +238,32 @@ RBTree<T, Allocator>::
 
     // Capacity
 
+template< 
+    class T, 
+    class Allocator >
+bool
+RBTree<T, Allocator>::
+    empty() const {
+    return (_root == NULL);
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename RBTree<T, Allocator>::size_type   
+RBTree<T, Allocator>::
+    size() const {
+    return (_size);
+}
+template< 
+    class T, 
+    class Allocator >
+typename RBTree<T, Allocator>::size_type   
+RBTree<T, Allocator>::
+max_size() const {
+    return (_alloc.max_size());
+}
+
     // Modifiers
 
 template< 
@@ -243,6 +278,7 @@ RBTree<T, Allocator>::
             _root = NULL;
             return pair<iterator, bool>(iterator(_root), false);
         }
+        _size = 1;
         _root->color = BLACK;
         _root->left = _root->parent = NIL;
         _root->right = &_end_node;
@@ -282,6 +318,7 @@ RBTree<T, Allocator>::
         if (new_node == NIL) {
             return pair<iterator, bool>(iterator(insert_place), false);
         }
+        ++_size;
         if (new_node->data < _begin->data) {
             _begin = new_node;
         }
@@ -390,20 +427,20 @@ RBTree<T, Allocator>::
     if (new_node->parent->left == new_node &&
         (new_node->parent->parent == NIL ||
             new_node->parent->parent->left == new_node->parent)) {
-            isLine = lineLeft;
+            _isLine = lineLeft;
     } else if (
         new_node->parent->right == new_node &&
         (new_node->parent->parent == NIL ||
             new_node->parent->parent->right == new_node->parent)) {
-            isLine = lineRight;
+            _isLine = lineRight;
     } else if (
         new_node->parent->right == new_node &&
             new_node->parent->parent->left == new_node->parent) {
-            isLine = angleLeft;
+            _isLine = angleLeft;
     } else if (
         new_node->parent->left == new_node &&
             new_node->parent->parent->right == new_node->parent) {
-            isLine = angleRight;
+            _isLine = angleRight;
     }
 }
 
@@ -413,7 +450,7 @@ template<
 void
 RBTree<T, Allocator>::
     rotate_lineXPG_straight(Node<T> *parent) {
-    if (isLine == lineLeft) {
+    if (_isLine == lineLeft) {
         parent->parent->left = parent->right;
         if (parent->parent->left != NIL) {
             parent->parent->left->parent = parent->parent;
@@ -431,7 +468,7 @@ RBTree<T, Allocator>::
         if (_root == parent->right) {
             _root = parent;
         }
-    } else if (isLine == lineRight) {
+    } else if (_isLine == lineRight) {
         parent->parent->right = parent->left;
         if (parent->parent->right != NIL && parent->parent->right != &_end_node) {
             parent->parent->right->parent = parent->parent;
@@ -458,16 +495,16 @@ template<
 void
 RBTree<T, Allocator>::
     rotate_lineXPG_angle(Node<T> *new_node, Node<T> *parent) {
-    if (isLine != angleLeft && isLine != angleRight) {
+    if (_isLine != angleLeft && _isLine != angleRight) {
         return ;
     }
-    if (isLine == angleLeft) {
+    if (_isLine == angleLeft) {
         new_node->parent = parent->parent;
         parent->parent->left = new_node;
         parent->parent = new_node;
         parent->right = NIL;
         new_node->left = parent;
-    } else if (isLine == angleRight) {
+    } else if (_isLine == angleRight) {
         new_node->parent = parent->parent;
         parent->parent->right = new_node;
         parent->parent = new_node;

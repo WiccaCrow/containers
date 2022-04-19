@@ -12,7 +12,7 @@ void    testTree_iterator();
 void    testMap_insert();
 void    testMap_iterator();
 void    testMap_iterator_reverse();
-
+void    testMap_capacity();
 
 // At the Mountains of Madness
 int main() {
@@ -20,9 +20,40 @@ int main() {
     // testTree_iterator();
     // testMap_insert(); // 15
     // testMap_iterator(); // 7, 8
-    testMap_iterator_reverse(); // 9, 10
+    // testMap_iterator_reverse(); // 9, 10
+    testMap_capacity(); // 11, 12, 13
 
     return (0);
+}
+
+void    testMap_capacity() {
+    std::cout << std::endl << "\033[35m" << "CHECK testMap capacity " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____11-13_____     iterators map" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t 10) bool        empty() const;"
+                               "\t 11) size_type   size()  const;"
+              << "\033[0m" << std::endl;
+    ft::map<int, std::string>   my_tree;
+    std::map<int, std::string>   std_tree;
+    std::cout << " ft::map<int, std::string>    my_tree;  my_tree.empty(): " << std::boolalpha << my_tree.empty() << std::endl;
+    std::cout << "std::map<int, std::string>   std_tree; std_tree.empty(): " << std::boolalpha << std_tree.empty() << std::endl;
+    std::cout << "( my_tree.begin() ==  my_tree.end()): " << std::boolalpha << (my_tree.begin() == my_tree.end()) << std::endl;
+    std::cout << "(std_tree.begin() == std_tree.end()): " << std::boolalpha << (std_tree.begin() == std_tree.end()) << std::endl;
+    std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
+
+    my_tree.insert(ft::make_pair(80, "At "));
+    std_tree.insert(std::make_pair(80, "At "));
+    std::cout << "\n after insert: " << std::boolalpha << (std_tree.begin() == std_tree.end()) << std::endl;
+    std::cout << " ft::map<int, std::string>    my_tree;  my_tree.empty(): " << std::boolalpha << my_tree.empty() << std::endl;
+    std::cout << "std::map<int, std::string>   std_tree; std_tree.empty(): " << std::boolalpha << std_tree.empty() << std::endl;
+    std::cout << "( my_tree.begin() ==  my_tree.end()): " << std::boolalpha << (my_tree.begin() == my_tree.end()) << std::endl;
+    std::cout << "(std_tree.begin() == std_tree.end()): " << std::boolalpha << (std_tree.begin() == std_tree.end()) << std::endl;
+    std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
+
+    std::cout << "\033[34m" << "\t 12) size_type max_size() const;"
+              << "\033[0m" << std::endl;
+
+    std::cout << "my_tree.max_size() = " << my_tree.max_size() << "; std_tree.max_size() = " << std_tree.max_size() << std::endl;
+
 }
 
 void    testMap_iterator_reverse() {
@@ -71,6 +102,8 @@ void    testMap_iterator_reverse() {
     std_tree.insert(std::make_pair(100, "..100.. "));
     std_tree.insert(std::make_pair(90, "..90.. "));
     std_tree.insert(std::make_pair(85, "..85.. "));
+
+    // std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
 
     ft::map<int, std::string>::reverse_iterator   iter_my_tree1;
     std::map<int, std::string>::reverse_iterator  iter_std_tree1;
