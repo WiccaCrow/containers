@@ -1,10 +1,10 @@
-#ifndef FT_ITERATOR_DISTANCE_HPP
-#define FT_ITERATOR_DISTANCE_HPP
+#ifndef ITERATOR_DISTANCE_HPP
+#define ITERATOR_DISTANCE_HPP
 
-#include <ft_iterator_base.hpp>
-#include <ft_iterator_tag_structs.hpp>
-#include <ft_iterator_cat.hpp>
-#include <ft_iterator_traits.hpp>
+#include <iterator_base.hpp>
+#include <iterator_tag_structs.hpp>
+#include <iterator_cat.hpp>
+#include <iterator_traits.hpp>
 
 namespace ft {
 

@@ -1,8 +1,8 @@
-#ifndef FT_VECTOR_HPP
-#define FT_VECTOR_HPP
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
 
 #include <memory>
-#include <ft_iterator.hpp>
+#include <iterator.hpp>
 #include <stdexcept>
 #include <lexicographical_compare.hpp>
 

@@ -1,7 +1,7 @@
 #include <iostream>
-#include <ft_iterator.hpp>
+#include <iterator.hpp>
 #include <ft_enable_if.hpp>
-#include <ft_iterator_cat.hpp>
+#include <iterator_cat.hpp>
 
 // template <class It>
 // void    someFunction(It iter) {

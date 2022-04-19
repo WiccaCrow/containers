@@ -1,7 +1,7 @@
-#ifndef FT_ITERATOR_PTR_REVERSE_NON_CLASS_HPP
-# define FT_ITERATOR_PTR_REVERSE_NON_CLASS_HPP
+#ifndef ITERATOR_PTR_REVERSE_NON_CLASS_HPP
+# define ITERATOR_PTR_REVERSE_NON_CLASS_HPP
 
-#include <ft_iterator_ptr_reverse.hpp>
+#include <iterator_ptr_reverse.hpp>
 
 template <class Iterator1, class Iterator2>
     bool operator==(const ft::reverse_iterator<Iterator1>& lhs,

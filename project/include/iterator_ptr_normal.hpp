@@ -1,9 +1,9 @@
-#ifndef FT_ITERATOR_PTR_NORMAL_HPP
-#define FT_ITERATOR_PTR_NORMAL_HPP
+#ifndef ITERATOR_PTR_NORMAL_HPP
+#define ITERATOR_PTR_NORMAL_HPP
 
 #include <cstddef>
-#include <ft_iterator_base.hpp>
-#include <ft_iterator_tag_structs.hpp>
+#include <iterator_base.hpp>
+#include <iterator_tag_structs.hpp>
 
 namespace ft {
 // Итераторы как указатели для контейнеров

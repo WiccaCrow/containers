@@ -1,11 +1,10 @@
-#ifndef FT_ITERATOR_PTR_REVERSE_HPP
-# define FT_ITERATOR_PTR_REVERSE_HPP
+#ifndef ITERATOR_PTR_REVERSE_HPP
+# define ITERATOR_PTR_REVERSE_HPP
 
-#include <ft_iterator_base.hpp>
-#include <ft_iterator_traits.hpp>
+#include <iterator_base.hpp>
+#include <iterator_traits.hpp>
 
 namespace ft {
-// Итераторы как указатели для контейнеров
 // reverse_iterator
 template < 
     class Iter>
@@ -56,15 +55,15 @@ class reverse_iterator : public iterator_base<
     reverse_iterator &   operator-=(difference_type n) const;
 
     // bool
-    // bool    operator==(const normal_iterator & itSecond) const;
-    // bool    operator==(int & adrrdInt) const;
-    // bool    operator!=(const normal_iterator & itSecond) const;
-    // bool    operator!=(int & adrrdInt) const;
+    bool    operator==(const reverse_iterator & itSecond) const;
+    bool    operator==(int & adrrdInt) const;
+    bool    operator!=(const reverse_iterator & itSecond) const;
+    bool    operator!=(int & adrrdInt) const;
 
-    // bool    operator>(const normal_iterator & itSecond) const;
-    // bool    operator<(const normal_iterator & itSecond) const;
-    // bool    operator>=(const normal_iterator & itSecond) const;
-    // bool    operator<=(const normal_iterator & itSecond) const;
+    bool    operator>(const reverse_iterator & itSecond) const;
+    bool    operator<(const reverse_iterator & itSecond) const;
+    bool    operator>=(const reverse_iterator & itSecond) const;
+    bool    operator<=(const reverse_iterator & itSecond) const;
     
 };
 
@@ -77,7 +76,8 @@ reverse_iterator<Iter>::
 
 template <class Iter>
 reverse_iterator<Iter>::
-    reverse_iterator(Iter x) : _M_current(x) {}
+    reverse_iterator(Iter x) : 
+            _M_current(x) {}
 
 template <class Iter>
 reverse_iterator<Iter> &
@@ -195,103 +195,63 @@ reverse_iterator<Iter>::
 
     // Random access iterator requirements and getters
 
-//     // bool
+    // bool
 
-// template <
-//     typename _iterTag,
-//     typename _Container,
-//     typename _Dist,
-//     typename _Pt,
-//     typename _Rt>
-// bool 
-// normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
-//     operator==(const normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt> & itSecond) const {
-//     return (_M_current == itSecond._M_current);
-// }
+template <class Iter>
+bool 
+reverse_iterator<Iter>::
+    operator==(const reverse_iterator<Iter> & itSecond) const {
+    return (_M_current == itSecond._M_current);
+}
 
-// template <
-//     typename _iterTag,
-//     typename _Container,
-//     typename _Dist,
-//     typename _Pt,
-//     typename _Rt>
-// bool 
-// normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
-//     operator==(int & adrrdInt) const {
-//     return (_M_current == static_cast<_Pt>(adrrdInt));
-// }
+template <class Iter>
+bool 
+reverse_iterator<Iter>::
+    operator==(int & adrrdInt) const {
+    return (_M_current == static_cast<pointer>(adrrdInt));
+}
 
-// template <
-//     typename _iterTag,
-//     typename _Container,
-//     typename _Dist,
-//     typename _Pt,
-//     typename _Rt>
-// bool 
-// normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
-//     operator!=(const normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt> & itSecond) const {
-//     return (!(operator==(itSecond)));
-// }
+template <class Iter>
+bool 
+reverse_iterator<Iter>::
+    operator!=(const reverse_iterator<Iter> & itSecond) const {
+    return (!(operator==(itSecond)));
+}
 
-// template <
-//     typename _iterTag,
-//     typename _Container,
-//     typename _Dist,
-//     typename _Pt,
-//     typename _Rt>
-// bool 
-// normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
-//     operator!=(int & adrrdInt) const {
-//     return (!(operator==(static_cast<_Pt>(adrrdInt))));
-// }
+template <class Iter>
+bool 
+reverse_iterator<Iter>::
+    operator!=(int & adrrdInt) const {
+    return (!(operator==(static_cast<pointer>(adrrdInt))));
+}
 
-// template <
-//     typename _iterTag,
-//     typename _Container,
-//     typename _Dist,
-//     typename _Pt,
-//     typename _Rt>
-// bool 
-// normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
-//     operator>(const normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt> & itSecond) const {
-//     return (_M_current > itSecond._M_current);
-// }
+template <class Iter>
+bool 
+reverse_iterator<Iter>::
+    operator>(const reverse_iterator<Iter> & itSecond) const {
+    return (itSecond._M_current > _M_current);
+}
 
-// template <
-//     typename _iterTag,
-//     typename _Container,
-//     typename _Dist,
-//     typename _Pt,
-//     typename _Rt>
-// bool 
-// normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
-//     operator<(const normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt> & itSecond) const {
-//     return (itSecond > *this);
-// }
+template <class Iter>
+bool 
+reverse_iterator<Iter>::
+    operator<(const reverse_iterator<Iter> & itSecond) const {
+    return (*this > itSecond);
+}
 
-// template <
-//     typename _iterTag,
-//     typename _Container,
-//     typename _Dist,
-//     typename _Pt,
-//     typename _Rt>
-// bool 
-// normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
-//     operator>=(const normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt> & itSecond) const {
-//     return (!(itSecond > *this));
-// }
+template <class Iter>
+bool 
+reverse_iterator<Iter>::
+    operator>=(const reverse_iterator<Iter> & itSecond) const {
+    return (!(*this > itSecond));
+}
 
-// template <
-//     typename _iterTag,
-//     typename _Container,
-//     typename _Dist,
-//     typename _Pt,
-//     typename _Rt>
-// bool 
-// normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt>::
-//     operator<=(const normal_iterator<_iterTag, _Container, _Dist, _Pt, _Rt> & itSecond) const {
-//     return (!(*this > itSecond));
-// }
+template <class Iter>
+bool 
+reverse_iterator<Iter>::
+    operator<=(const reverse_iterator<Iter> & itSecond) const {
+    return (!(itSecond > *this));
+}
 
 } // namespace ft
 

@@ -2,13 +2,10 @@
 #define ITERATOR_BINTREE_NORMAL_HPP
 
 #include <RBTree.hpp>
-#include <cstddef>
-#include <ft_iterator_base.hpp>
-#include <ft_iterator_tag_structs.hpp>
-#include <ft_vector.hpp>
+#include <iterator_traits.hpp>
+#include <iterator_tag_structs.hpp>
 
 namespace ft {
-// Итераторы как указатели для контейнеров
 // binTree_iterator
 
 template <
@@ -17,19 +14,15 @@ template <
 class binTree_iterator {
     public:
     typedef typename std::bidirectional_iterator_tag iterator_category;
-    typedef typename iterator_traits<T *>::value_type value_type;
-    typedef typename iterator_traits<T *>::difference_type difference_type;
-    typedef typename iterator_traits<T *>::reference reference;
-    typedef typename iterator_traits<T *>::pointer pointer;
+    typedef typename iterator_traits<typename T::data_type *>::value_type value_type;
+    typedef typename iterator_traits<typename T::data_type *>::difference_type difference_type;
+    typedef typename iterator_traits<typename T::data_type *>::reference reference;
+    typedef typename iterator_traits<typename T::data_type *>::pointer pointer;
 
     protected:
-    // vector< T* >    _stack;
-    T *             _M_current;
-
-    void            op_plus();
+    T *     _M_current;
 
     public:
-    void            op_plus_test();
     /* Constructs and destructs, operator= */
     binTree_iterator();
     explicit binTree_iterator(T * TPtr);
@@ -40,7 +33,7 @@ class binTree_iterator {
         binTree_iterator<T, Tree>&  operator=(Node<pair<Key, Value> >* obj);
 
     // getters
-    pointer base() const;
+    T * base() const;
 
     // Forward iterator requirements and getters
     reference               operator*() const;
@@ -52,24 +45,11 @@ class binTree_iterator {
     binTree_iterator &   operator--();
     binTree_iterator     operator--(int);
 
-    // Random access iterator requirements and getters
-    // _Rt                 operator[](const _Dist n);
-    // binTree_iterator     operator+(const _Dist n) const;
-    // binTree_iterator     operator-(const _Dist n) const;
-    // binTree_iterator &   operator+=(const _Dist n);
-    // binTree_iterator &   operator-=(const _Dist n);
-    // _Dist               operator-(const binTree_iterator & itSecond) const;
-
     // bool
     bool    operator==(const binTree_iterator & itSecond) const;
     bool    operator==(int & adrrdInt) const;
     bool    operator!=(const binTree_iterator & itSecond) const;
     bool    operator!=(int & adrrdInt) const;
-
-    // bool    operator>(const binTree_iterator & itSecond) const;
-    // bool    operator<(const binTree_iterator & itSecond) const;
-    // bool    operator>=(const binTree_iterator & itSecond) const;
-    // bool    operator<=(const binTree_iterator & itSecond) const;
 
 };
 
@@ -80,7 +60,6 @@ template <
     class Tree >
 binTree_iterator<T, Tree>::
     binTree_iterator() :
-            // _stack(),
             _M_current(NULL) {}
 
 template <
@@ -88,7 +67,6 @@ template <
     class Tree >
 binTree_iterator<T, Tree>::
     binTree_iterator(T * TPtr) :
-            // _stack(),
             _M_current(TPtr) {}
 
 template <
@@ -96,7 +74,6 @@ template <
     class Tree >
 binTree_iterator<T, Tree>::
     binTree_iterator(const binTree_iterator<T, Tree>& obj) :
-            // _stack(),
             _M_current(obj.base()) {}
 
 template <
@@ -107,7 +84,6 @@ binTree_iterator<T, Tree>::
     operator=(const binTree_iterator<T, Tree>& obj) {
     if (this != &obj) {
         _M_current = obj.base();
-        // _stack.clear();
     }
     return (*this);
 }
@@ -119,7 +95,6 @@ binTree_iterator<T, Tree>&
 binTree_iterator<T, Tree>::
     operator=(T* obj) {
     _M_current = obj;
-    // _stack.clear();
     return (*this);
 }
 
@@ -131,7 +106,6 @@ binTree_iterator<T, Tree>&
 binTree_iterator<T, Tree>::
     operator=(Node<pair<Key, Value> >* obj) {
     _M_current = obj;
-    // _stack.clear();
     return (*this);
 }
 
@@ -139,7 +113,7 @@ binTree_iterator<T, Tree>::
 template <
     class T, 
     class Tree >
-typename binTree_iterator<T, Tree>::pointer 
+T *
     binTree_iterator<T, Tree>::
     base() const {
     return (_M_current);
@@ -152,7 +126,7 @@ template <
 typename binTree_iterator<T, Tree>::reference 
     binTree_iterator<T, Tree>::
     operator*() const {
-    return (*_M_current);
+    return (**_M_current);
 }
 
 template <
@@ -161,7 +135,7 @@ template <
 typename binTree_iterator<T, Tree>::pointer 
  binTree_iterator<T, Tree>::
     operator->() const {
-    return (_M_current);
+    return &(**_M_current);
 }
 
 template <
@@ -206,7 +180,7 @@ binTree_iterator<T, Tree>::
     return (tmp);
 }
 
-//     // Bidirectional iterator requirements
+    // Bidirectional iterator requirements
 
 template <
     class T, 
@@ -250,65 +224,6 @@ binTree_iterator<T, Tree>::
     return (tmp);
 }
 
-//     // Random access iterator requirements and getters
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// _Rt
-// binTree_iterator<T, Tree>::
-//     operator[](const _Dist n) {
-//     return (*(*this + n));
-// }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// binTree_iterator<T, Tree> 
-// binTree_iterator<T, Tree>::
-//     operator+(const _Dist n) const {
-//     binTree_iterator<T, Tree> tmp(_M_current + n);
-//     return (tmp);
-// }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// binTree_iterator<T, Tree> 
-// binTree_iterator<T, Tree>::
-//     operator-(const _Dist n) const {
-//     binTree_iterator<T, Tree> tmp(_M_current - n);
-//     return (tmp);
-// }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// binTree_iterator<T, Tree> &
-// binTree_iterator<T, Tree>::
-//     operator+=(const _Dist n) {
-//     _M_current+=n;
-//     return (*this);
-// }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// binTree_iterator<T, Tree> &
-// binTree_iterator<T, Tree>::
-//     operator-=(const _Dist n) {
-//     _M_current-=n;
-//     return (*this);
-// }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// _Dist
-// binTree_iterator<T, Tree>::
-//     operator-(const binTree_iterator & itSecond) const {
-//     return (_M_current - itSecond._M_current);
-// }
-
     // bool
 
 template <
@@ -346,43 +261,6 @@ binTree_iterator<T, Tree>::
     operator!=(int & adrrdInt) const {
     return (!(operator==(static_cast<T*>(adrrdInt))));
 }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// bool 
-// binTree_iterator<T, Tree>::
-//     operator>(const binTree_iterator<T, Tree> & itSecond) const {
-//     return (_M_current > itSecond._M_current);
-// }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// bool 
-// binTree_iterator<T, Tree>::
-//     operator<(const binTree_iterator<T, Tree> & itSecond) const {
-//     return (itSecond > *this);
-// }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// bool 
-// binTree_iterator<T, Tree>::
-//     operator>=(const binTree_iterator<T, Tree> & itSecond) const {
-//     return (!(itSecond > *this));
-// }
-
-// template <
-//     class T, 
-//     class Tree = RBTree<T> >
-// bool 
-// binTree_iterator<T, Tree>::
-//     operator<=(const binTree_iterator<T, Tree> & itSecond) const {
-//     return (!(*this > itSecond));
-// }
-
 
 } // namespace ft
 

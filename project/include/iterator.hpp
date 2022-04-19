@@ -1,15 +1,15 @@
-#ifndef FT_ITERATOR_HPP
-#define FT_ITERATOR_HPP
+#ifndef ITERATOR_HPP
+#define ITERATOR_HPP
 
 #include <cstddef>
-#include <ft_iterator_tag_structs.hpp>
-#include <ft_iterator_base.hpp>
-#include <ft_iterator_traits.hpp>
-#include <ft_iterator_cat.hpp>
-#include <ft_iterator_ptr_normal.hpp>
-#include <ft_iterator_ptr_reverse.hpp>
-#include <ft_iterator_ptr_reverse_non_class.hpp>
-#include <ft_iterator_distance.hpp>
+#include <iterator_tag_structs.hpp>
+#include <iterator_base.hpp>
+#include <iterator_traits.hpp>
+#include <iterator_cat.hpp>
+#include <iterator_ptr_normal.hpp>
+#include <iterator_ptr_reverse.hpp>
+#include <iterator_ptr_reverse_non_class.hpp>
+#include <iterator_distance.hpp>
 #include <iterator>
 
 namespace ft {

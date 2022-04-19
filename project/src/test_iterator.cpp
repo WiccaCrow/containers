@@ -1,11 +1,11 @@
 #include <iostream>
-#include <ft_iterator.hpp>
+#include <iterator.hpp>
 
 void    check_iterators();
 void    check_iterators_normal();
 void    check_iterators_reverse();
 
-#include <ft_vector.hpp>
+#include <vector.hpp>
 #include <cstdlib>
 
 int main(void) {

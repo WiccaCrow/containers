@@ -1,8 +1,8 @@
-#ifndef FT_ITERATOR_CAT_HPP
-#define FT_ITERATOR_CAT_HPP
+#ifndef ITERATOR_CAT_HPP
+#define ITERATOR_CAT_HPP
 
-#include <ft_iterator_base.hpp>
-#include <ft_iterator_tag_structs.hpp>
+#include <iterator_base.hpp>
+#include <iterator_tag_structs.hpp>
 #include <limits>
 #include <iostream>
 

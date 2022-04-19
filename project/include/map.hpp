@@ -5,6 +5,7 @@
 #include <memory>
 #include <utility.hpp>
 #include <iterator_binTree_normal.hpp>
+#include <iterator_binTree_reverse.hpp>
 #include <RBTree.hpp>
 
 namespace ft {
@@ -32,8 +33,9 @@ class map : public RBTree<pair<const Key, T> > {
 
     typedef typename RBTree<value_type>::iterator               iterator;
     typedef typename RBTree<value_type>::const_iterator         const_iterator;
-    // typedef reverse_iterator<iterator>              reverse_iterator;
-    // typedef reverse_iterator<const_iterator>        const_reverse_iterator;
+    // typedef typename RBTree<value_type>::reverse_iterator       reverse_iterator;
+    // typedef typename RBTree<value_type>::const_reverse_iterator const_reverse_iterator;
+
     // typedef 
     // typedef 
     // typedef 

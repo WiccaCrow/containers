@@ -12,6 +12,10 @@ template <
     typename Tree >
 class binTree_iterator;
 
+template <
+    typename Iter >
+class binTree_iterator_reverse;
+
 template< 
     class T, 
     class Allocator = std::allocator<Node<T> > 
@@ -22,9 +26,11 @@ class RBTree {
     // Member types
     typedef enum { lineLeft, lineRight, angleLeft, angleRight } isLineXPG; // Are the child, parent, grandparent on the same line?
     typedef typename Allocator::template
-            rebind<Node<T> >::other                       allocator_type;
-    typedef binTree_iterator<Node<T>, RBTree<T> >         iterator;
-    typedef binTree_iterator<const Node<T>, RBTree<T> >   const_iterator;
+            rebind<Node<T> >::other                         allocator_type;
+    typedef binTree_iterator<Node<T>, RBTree<T> >           iterator;
+    typedef binTree_iterator<const Node<T>, RBTree<T> >     const_iterator;
+    typedef binTree_iterator_reverse<iterator >             reverse_iterator;
+    typedef binTree_iterator_reverse<const_iterator >       const_reverse_iterator;
 
     private:
 
@@ -60,11 +66,15 @@ class RBTree {
     // Element access
     // Iterators
 
-    iterator        root();
-    iterator        begin();
-    const_iterator  begin() const;
-    iterator        end();
-    const_iterator  end() const;
+    iterator                root();
+    iterator                begin();
+    const_iterator          begin() const;
+    iterator                end();
+    const_iterator          end() const;
+    reverse_iterator        rbegin();
+    const_reverse_iterator  rbegin() const;
+    reverse_iterator        rend();
+    const_reverse_iterator  rend() const;
 
     // Capacity
     // Modifiers
@@ -181,6 +191,42 @@ RBTree<T, Allocator>::
     return (iterator(&_end_node));
 }
 
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::reverse_iterator 
+RBTree<T, Allocator>::
+    rbegin() {
+    return (reverse_iterator(end()));
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::const_reverse_iterator 
+RBTree<T, Allocator>::
+    rbegin() const {
+    return (const_reverse_iterator(end()));
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::reverse_iterator 
+RBTree<T, Allocator>::
+    rend() {
+    return (reverse_iterator(begin()));
+}
+
+template< 
+    class T, 
+    class Allocator >
+typename ft::RBTree<T, Allocator>::const_reverse_iterator 
+RBTree<T, Allocator>::
+    rend() const {
+    return (const_reverse_iterator(begin()));
+}
+
     // Capacity
 
     // Modifiers
@@ -220,14 +266,17 @@ RBTree<T, Allocator>::
         if (new_node->right != NIL && new_node->right != &_end_node) {
             new_node->right->parent = new_node;
         }
-        if (new_node->parent->left == insert_place) {
+        if (new_node->parent != NULL && new_node->parent != NIL && new_node->parent->left == insert_place) {
             new_node->parent->left = new_node;
-        } else if (new_node->parent->right == insert_place) {
+        } else if (new_node->parent != NULL && new_node->parent != NIL && new_node->parent->right == insert_place) {
             new_node->parent->right = new_node;
+        }
+        if (_root == insert_place) {
+            _root = new_node;
         }
         _alloc.destroy(insert_place);
         _alloc.deallocate(insert_place, 1);
-        return pair<iterator, bool>(iterator(insert_place), true);
+        return pair<iterator, bool>(iterator(new_node), true);
     } else {
         Node<T> *new_node = create_node(value);
         if (new_node == NIL) {
@@ -372,13 +421,16 @@ RBTree<T, Allocator>::
         parent->right = parent->parent;
         parent->parent = parent->parent->parent;
         parent->right->parent = parent;
-        if (parent->parent != NIL && parent->parent->right == parent->right) {
+        if (parent->parent != NULL && parent->parent != NIL && parent->parent->right == parent->right) {
             parent->parent->right = parent;
         } else if (parent->parent != NIL) {
             parent->parent->left = parent;
         }
         parent->right->color = RED;
         parent->color = BLACK;
+        if (_root == parent->right) {
+            _root = parent;
+        }
     } else if (isLine == lineRight) {
         parent->parent->right = parent->left;
         if (parent->parent->right != NIL && parent->parent->right != &_end_node) {
@@ -394,6 +446,9 @@ RBTree<T, Allocator>::
         }
         parent->left->color = RED;
         parent->color = BLACK;
+        if (_root == parent->left) {
+            _root = parent;
+        }
     }
 }
 

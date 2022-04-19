@@ -1,7 +1,7 @@
-#ifndef FT_ITERATOR_TRAITS_HPP
-#define FT_ITERATOR_TRAITS_HPP
+#ifndef ITERATOR_TRAITS_HPP
+#define ITERATOR_TRAITS_HPP
 
-#include <ft_iterator_tag_structs.hpp>
+#include <iterator_tag_structs.hpp>
 
 namespace ft {
     

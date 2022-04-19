@@ -11,7 +11,7 @@ typedef enum { BLACK, RED } nodeColor;
 template <class T>
 class Node {
     public:
-        
+        typedef T   data_type;
         T data;
         nodeColor color;
         Node *parent;
@@ -47,6 +47,14 @@ class Node {
 
         bool is_empty() {
             return (_is_empty);
+        }
+
+        T & operator*() {
+            return (data);
+        }
+
+        T * operator->() {
+            return (&data);
         }
 };
 

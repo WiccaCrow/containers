@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <ft_vector.hpp>
+#include <vector.hpp>
 
 void    check_constructor();
 void    check_asisgn();
@@ -74,11 +74,10 @@ void    check_constructor() {
         std::allocator<int> alloc1;
         ft::vector<int>  ft_vec_int(alloc1);
         std_vec_int.push_back(5);
-        // ft_vec_int.push_back(5);
+        ft_vec_int.push_back(5);
         std::cout << "\n\033[36m" << "\t\tpush_back(5) " << "\033[0m"  << std::endl;
         std::cout << "std  |  ft " << std::endl;
-        std::cout << std_vec_int[0] << "  |  " << std::endl;
-        // std::cout << std_vec_int[0] << "  |  " << ft_vec_int[0] << std::endl;
+        std::cout << std_vec_int[0] << "    |  " << ft_vec_int[0] << std::endl;
     }
 
     {

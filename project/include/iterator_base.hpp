@@ -1,8 +1,8 @@
-#ifndef FT_ITERATOR_BASE_HPP
-#define FT_ITERATOR_BASE_HPP
+#ifndef ITERATOR_BASE_HPP
+#define ITERATOR_BASE_HPP
 
 #include <cstddef>
-#include <ft_iterator_traits.hpp>
+#include <iterator_traits.hpp>
 
 namespace ft {
 // template struct iterator (for inheritance)
