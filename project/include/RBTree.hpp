@@ -17,8 +17,8 @@ template <
 class binTree_iterator_reverse;
 
 template< 
-    class T, 
-    class Allocator = std::allocator<Node<T> > 
+    class T_node, 
+    class Allocator = std::allocator<Node<T_node> > 
         >
 class RBTree {
     public:
@@ -27,34 +27,37 @@ class RBTree {
     typedef enum { lineLeft, lineRight, angleLeft, angleRight } isLineXPG; // Are the child, parent, grandparent on the same line?
     typedef std::size_t                                     size_type;
     typedef typename Allocator::template
-            rebind<Node<T> >::other                         allocator_type;
-    typedef binTree_iterator<Node<T>, RBTree<T> >           iterator;
-    typedef binTree_iterator<const Node<T>, RBTree<T> >     const_iterator;
+            rebind<Node<T_node> >::other                         allocator_type;
+    typedef binTree_iterator<Node<T_node>, RBTree<T_node> >           iterator;
+    typedef binTree_iterator<const Node<T_node>, RBTree<T_node> >     const_iterator;
     typedef binTree_iterator_reverse<iterator >             reverse_iterator;
     typedef binTree_iterator_reverse<const_iterator >       const_reverse_iterator;
 
-    private:
+    protected:
 
     // Members
 
-    Node<T> *       _root;
-    Node<T> *       _begin;
+    Node<T_node> *       _root;
+    Node<T_node> *       _begin;
     #define NIL &_empty_node
-    Node<T>         _empty_node;
-    Node<T>         _end_node;
+    Node<T_node>         _empty_node;
+    Node<T_node>         _end_node;
     size_type       _size;
     allocator_type  _alloc;
     isLineXPG       _isLine;
 
     // Member functions
 
-    Node<T> *   find_insert_place(const T& data);
-    Node<T> *   create_node(T data);
-    void        check_balance_1(Node<T> *check_node);
-    Node<T> *   check_balance_2(Node<T> *new_node, Node<T> *uncle, Node<T> *parent);
-    void        checkLineXPG(Node<T> *new_node, Node<T> *parent);
-    void        rotate_lineXPG_straight(Node<T> *parent);
-    void        rotate_lineXPG_angle(Node<T> *new_node, Node<T> *parent);
+    iterator        find_element( const T_node& key );
+    const_iterator  find_element( const T_node& key ) const;
+
+    Node<T_node> *   find_insert_place(const T_node& data);
+    Node<T_node> *   create_node(T_node data);
+    void        check_balance_1(Node<T_node> *check_node);
+    Node<T_node> *   check_balance_2(Node<T_node> *new_node, Node<T_node> *uncle, Node<T_node> *parent);
+    void        checkLineXPG(Node<T_node> *new_node, Node<T_node> *parent);
+    void        rotate_lineXPG_straight(Node<T_node> *parent);
+    void        rotate_lineXPG_angle(Node<T_node> *new_node, Node<T_node> *parent);
 
     public:
     //////////////////////
@@ -62,7 +65,7 @@ class RBTree {
     //////////////////////
 
     RBTree(allocator_type alloc = Allocator());
-    RBTree(T data, allocator_type alloc = Allocator());
+    RBTree(T_node data, allocator_type alloc = Allocator());
     allocator_type get_allocator() const;
 
     // Element access
@@ -86,10 +89,12 @@ class RBTree {
 
     // Modifiers
 
-    pair<iterator, bool>    insert(const T& value);
-    iterator                insert( iterator hint, const T& value );
+    pair<iterator, bool>    insert(const T_node& value);
+    iterator                insert( iterator hint, const T_node& value );
 
-    // Lookup
+    // Lookup in private find_element
+
+
     // Observers
 
 };
@@ -101,9 +106,9 @@ class RBTree {
     //////////////////////
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-RBTree<T, Allocator>::
+RBTree<T_node, Allocator>::
     RBTree(allocator_type alloc) : 
                 _empty_node(),
                 _root(NULL),
@@ -117,10 +122,10 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-RBTree<T, Allocator>::
-    RBTree(T data, allocator_type alloc) : 
+RBTree<T_node, Allocator>::
+    RBTree(T_node data, allocator_type alloc) : 
                 _empty_node(),
                 _end_node(),
                 _size(1),
@@ -137,10 +142,10 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename RBTree<T, Allocator>::allocator_type 
-    RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::allocator_type 
+    RBTree<T_node, Allocator>::
     get_allocator() const {
         return (_alloc);
 }
@@ -150,37 +155,37 @@ typename RBTree<T, Allocator>::allocator_type
     // Iterators
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::iterator                
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::iterator                
+RBTree<T_node, Allocator>::
     root() {
     return (iterator(_root));
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::iterator                
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::iterator                
+RBTree<T_node, Allocator>::
     begin() {
     return (iterator(_begin));
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::const_iterator                
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::const_iterator                
+RBTree<T_node, Allocator>::
     begin() const {
-        return (iterator(_begin));
+        return (const_iterator(_begin));
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::iterator                
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::iterator                
+RBTree<T_node, Allocator>::
     end() {
     if (_root == NULL) {
         return iterator(_root);
@@ -189,49 +194,49 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::const_iterator                
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::const_iterator                
+RBTree<T_node, Allocator>::
     end() const {
     if (_root == NULL) {
-        return iterator(_root);
+        return const_iterator(_root);
     }
-    return (iterator(&_end_node));
+    return (const_iterator(&_end_node));
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::reverse_iterator 
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::reverse_iterator 
+RBTree<T_node, Allocator>::
     rbegin() {
     return (reverse_iterator(end()));
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::const_reverse_iterator 
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::const_reverse_iterator 
+RBTree<T_node, Allocator>::
     rbegin() const {
     return (const_reverse_iterator(end()));
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::reverse_iterator 
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::reverse_iterator 
+RBTree<T_node, Allocator>::
     rend() {
     return (reverse_iterator(begin()));
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::const_reverse_iterator 
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::const_reverse_iterator 
+RBTree<T_node, Allocator>::
     rend() const {
     return (const_reverse_iterator(begin()));
 }
@@ -239,27 +244,28 @@ RBTree<T, Allocator>::
     // Capacity
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
 bool
-RBTree<T, Allocator>::
+RBTree<T_node, Allocator>::
     empty() const {
     return (_root == NULL);
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename RBTree<T, Allocator>::size_type   
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::size_type   
+RBTree<T_node, Allocator>::
     size() const {
     return (_size);
 }
+
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename RBTree<T, Allocator>::size_type   
-RBTree<T, Allocator>::
+typename RBTree<T_node, Allocator>::size_type   
+RBTree<T_node, Allocator>::
 max_size() const {
     return (_alloc.max_size());
 }
@@ -267,11 +273,11 @@ max_size() const {
     // Modifiers
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-pair<typename ft::RBTree<T, Allocator>::iterator, bool>
-RBTree<T, Allocator>::
-    insert(const T& value) {
+pair<typename RBTree<T_node, Allocator>::iterator, bool>
+RBTree<T_node, Allocator>::
+    insert(const T_node& value) {
     if (_root == NULL) {
         _root = create_node(value);
         if (_root == NIL) {
@@ -286,9 +292,9 @@ RBTree<T, Allocator>::
         _begin = _root;
         return pair<iterator, bool>(iterator(_root), true);
     }
-    Node<T> *insert_place = find_insert_place(value);
+    Node<T_node> *insert_place = find_insert_place(value);
     if (*insert_place == value) {
-        Node<T> *new_node = create_node(value);
+        Node<T_node> *new_node = create_node(value);
         if (new_node == NIL) {
             return pair<iterator, bool>(iterator(insert_place), false);
         }
@@ -314,7 +320,7 @@ RBTree<T, Allocator>::
         _alloc.deallocate(insert_place, 1);
         return pair<iterator, bool>(iterator(new_node), true);
     } else {
-        Node<T> *new_node = create_node(value);
+        Node<T_node> *new_node = create_node(value);
         if (new_node == NIL) {
             return pair<iterator, bool>(iterator(insert_place), false);
         }
@@ -340,23 +346,65 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-typename ft::RBTree<T, Allocator>::iterator                
-RBTree<T, Allocator>::
-insert( iterator hint, const T& value ) {
+typename RBTree<T_node, Allocator>::iterator                
+RBTree<T_node, Allocator>::
+insert( iterator hint, const T_node& value ) {
     return insert(value).first;
 }
+
+    // Lookup
+
+template< 
+    class T_node, 
+    class Allocator >
+typename RBTree<T_node, Allocator>::iterator                
+RBTree<T_node, Allocator>::
+    find_element( const T_node& key ) {
+    Node<T_node> *node = _root;
+    while (node != NIL && node != &_end_node) {
+        if (key < *node) {
+            node = node->left;
+        } else if (*node < key) {
+            node = node->right;
+        } else {
+            return (iterator(node));
+        }
+    }
+    return (end());
+}
+
+template< 
+    class T_node, 
+    class Allocator >
+typename RBTree<T_node, Allocator>::const_iterator                
+RBTree<T_node, Allocator>::    
+    find_element( const T_node& key ) const {
+    Node<T_node> *node = _root;
+    while (node != NIL && node != &_end_node) {
+        if (key < *node) {
+            node = node->left;
+        } else if (*node < key) {
+            node = node->right;
+        } else {
+            return (const_iterator(node));
+        }
+    }
+    return (end());
+}
+
+    // Observers
 
 // private
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-Node<T> *
-RBTree<T, Allocator>::
-    find_insert_place(const T& data) {
-    Node<T> *node = _root;
+Node<T_node> *
+RBTree<T_node, Allocator>::
+    find_insert_place(const T_node& data) {
+    Node<T_node> *node = _root;
     while (node != NIL && node != &_end_node) {
         if (data < *node && node->left != NIL) {
             node = node->left;
@@ -370,12 +418,12 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T,
+    class T_node,
     class Allocator >
-Node<T> *
-RBTree<T, Allocator>::create_node(T data) {
+Node<T_node> *
+RBTree<T_node, Allocator>::create_node(T_node data) {
     try {
-        Node<T> *new_node = _alloc.allocate(1);
+        Node<T_node> *new_node = _alloc.allocate(1);
         _alloc.construct(new_node, data); // data, RED, NULL, NULL, NULL
         return new_node;
     } catch (const std::bad_alloc& e) {
@@ -384,13 +432,13 @@ RBTree<T, Allocator>::create_node(T data) {
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
 void
-RBTree<T, Allocator>::
-    check_balance_1(Node<T> *check_node) {
-    Node<T> *uncle;
-    Node<T> *parent;
+RBTree<T_node, Allocator>::
+    check_balance_1(Node<T_node> *check_node) {
+    Node<T_node> *uncle;
+    Node<T_node> *parent;
     while (check_node != _root) {
         parent = check_node->parent;
         if (parent->color == BLACK) {
@@ -402,11 +450,11 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
-Node<T> *
-RBTree<T, Allocator>::
-    check_balance_2(Node<T> *new_node, Node<T> *uncle, Node<T> *parent) {
+Node<T_node> *
+RBTree<T_node, Allocator>::
+    check_balance_2(Node<T_node> *new_node, Node<T_node> *uncle, Node<T_node> *parent) {
     if (uncle->color == RED) {
         uncle->color = parent->color = BLACK;
         parent->parent->color = (parent->parent == _root ? BLACK : RED);
@@ -419,11 +467,11 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
 void
-RBTree<T, Allocator>::
-    checkLineXPG(Node<T> *new_node, Node<T> *parent) {
+RBTree<T_node, Allocator>::
+    checkLineXPG(Node<T_node> *new_node, Node<T_node> *parent) {
     if (new_node->parent->left == new_node &&
         (new_node->parent->parent == NIL ||
             new_node->parent->parent->left == new_node->parent)) {
@@ -445,11 +493,11 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
 void
-RBTree<T, Allocator>::
-    rotate_lineXPG_straight(Node<T> *parent) {
+RBTree<T_node, Allocator>::
+    rotate_lineXPG_straight(Node<T_node> *parent) {
     if (_isLine == lineLeft) {
         parent->parent->left = parent->right;
         if (parent->parent->left != NIL) {
@@ -490,11 +538,11 @@ RBTree<T, Allocator>::
 }
 
 template< 
-    class T, 
+    class T_node, 
     class Allocator >
 void
-RBTree<T, Allocator>::
-    rotate_lineXPG_angle(Node<T> *new_node, Node<T> *parent) {
+RBTree<T_node, Allocator>::
+    rotate_lineXPG_angle(Node<T_node> *new_node, Node<T_node> *parent) {
     if (_isLine != angleLeft && _isLine != angleRight) {
         return ;
     }

@@ -37,11 +37,6 @@ class map : public RBTree<pair<const Key, T> > {
     typedef typename RBTree<value_type>::reverse_iterator       reverse_iterator;
     typedef typename RBTree<value_type>::const_reverse_iterator const_reverse_iterator;
 
-    // typedef 
-    // typedef 
-    // typedef 
-    // typedef 
-
     private:
     key_compare _comp;
 
@@ -51,6 +46,56 @@ class map : public RBTree<pair<const Key, T> > {
                 const Allocator& alloc = Allocator() ) :
                     RBTree<pair<const Key, T> >(alloc),
                     _comp(comp) { }
+
+    allocator_type get_allocator();
+    
+    // Lookup
+
+    size_type count( const Key& key ) const {
+        return ( find(key) == this->end() ? 0 : 1 );
+    }
+
+    iterator        find( const Key& key ) {
+        T   second_type;
+        pair<const Key, T> pair_for_node(key, second_type);
+        iterator iter = this->find_element(pair_for_node);
+        return (iter);
+    }
+
+    const_iterator  find( const Key& key ) const {
+        T   second_type;
+        pair<const Key, T> pair_for_node(key, second_type);
+        const_iterator iter = this->find_element(pair_for_node);
+        return (iter);
+    }
+
+    iterator lower_bound( const Key& key ) {
+        return (find(key));
+    }
+
+    const_iterator lower_bound( const Key& key ) const {
+        return (find(key));
+    }
+
+    iterator upper_bound( const Key& key ) {
+        iterator iter(find(key));
+        return (iter == this->end() ? iter : ++iter);
+    }
+
+    const_iterator upper_bound( const Key& key ) const {
+        const_iterator iter(find(key));
+        return (iter == this->end() ? iter : ++iter);
+    }
+
+    ::ft::pair<iterator,iterator> equal_range( const Key& key ) {
+        ::ft::pair<iterator,iterator> pair_eq(lower_bound(key), upper_bound(key));
+        return pair_eq;
+    }
+
+    ::ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const {
+        ::ft::pair<iterator,iterator> pair_eq(lower_bound(key), upper_bound(key));
+        return pair_eq;
+    }
 
 };
 

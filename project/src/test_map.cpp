@@ -13,6 +13,8 @@ void    testMap_insert();
 void    testMap_iterator();
 void    testMap_iterator_reverse();
 void    testMap_capacity();
+void    testMap_lookup();
+void    fill_map(ft::map<int, std::string> &my_map, std::map<int, std::string>* std_map);
 
 // At the Mountains of Madness
 int main() {
@@ -21,9 +23,126 @@ int main() {
     // testMap_insert(); // 15
     // testMap_iterator(); // 7, 8
     // testMap_iterator_reverse(); // 9, 10
-    testMap_capacity(); // 11, 12, 13
+    // testMap_capacity(); // 11, 12, 13
+    testMap_lookup(); // 19
 
     return (0);
+}
+
+void    fill_map(ft::map<int, std::string> &my_tree, std::map<int, std::string>* std_tree) {
+    my_tree.insert(ft::make_pair(80, "At "));
+    my_tree.insert(ft::make_pair(40, "the "));
+    my_tree.insert(ft::make_pair(150, "Mountains "));
+    my_tree.insert(ft::make_pair(60, "of "));
+    my_tree.insert(ft::make_pair(20, "Madness "));
+    my_tree.insert(ft::make_pair(10, "... "));
+    my_tree.insert(ft::make_pair(170, "..170.. "));
+    my_tree.insert(ft::make_pair(140, "..140.. "));
+    my_tree.insert(ft::make_pair(120, "..120.. "));
+    my_tree.insert(ft::make_pair(0, "..0.. "));
+    my_tree.insert(ft::make_pair(-10, "..-10.. "));
+    my_tree.insert(ft::make_pair(130, "..130.. "));
+    my_tree.insert(ft::make_pair(110, "..110.. "));
+    my_tree.insert(ft::make_pair(122, "..122.. "));
+    my_tree.insert(ft::make_pair(100, "..100.. "));
+    my_tree.insert(ft::make_pair(90, "..90.. "));
+    my_tree.insert(ft::make_pair(85, "..85.. "));
+
+    if (std_tree != NULL) {
+        std_tree->insert(std::make_pair(80, "At "));
+        std_tree->insert(std::make_pair(40, "the "));
+        std_tree->insert(std::make_pair(150, "Mountains "));
+        std_tree->insert(std::make_pair(60, "of "));
+        std_tree->insert(std::make_pair(20, "Madness "));
+        std_tree->insert(std::make_pair(10, "... "));
+        std_tree->insert(std::make_pair(170, "..170.. "));
+        std_tree->insert(std::make_pair(140, "..140.. "));
+        std_tree->insert(std::make_pair(120, "..120.. "));
+        std_tree->insert(std::make_pair(0, "..0.. "));
+        std_tree->insert(std::make_pair(-10, "..-10.. "));
+        std_tree->insert(std::make_pair(130, "..130.. "));
+        std_tree->insert(std::make_pair(110, "..110.. "));
+        std_tree->insert(std::make_pair(122, "..122.. "));
+        std_tree->insert(std::make_pair(100, "..100.. "));
+        std_tree->insert(std::make_pair(90, "..90.. "));
+        std_tree->insert(std::make_pair(85, "..85.. "));
+    }
+}
+
+void    testMap_lookup() {
+    std::cout << std::endl << "\033[35m" << "CHECK testMap lookup " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____19_____" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t 19) iterator       find( const Key& key ); \n"
+                               "\t     const_iterator find( const Key& key ) const; \n\n"
+                               "\t     size_type      count( const Key& key ) const; "
+              << "\033[0m" << std::endl;
+
+    ft::map<int, std::string>   my_tree;
+    std::map<int, std::string>   std_tree;
+    fill_map(my_tree, &std_tree);
+    std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
+
+    ft::map<int, std::string>::iterator   iter_my_tree1;
+    std::map<int, std::string>::iterator  iter_std_tree1;
+
+    iter_my_tree1 = my_tree.find(80);
+    iter_std_tree1 = std_tree.find(80);
+
+    if (iter_std_tree1 == std_tree.end()) {
+        std::cout << "STD_MAP: Fix find() parametres for std::map. " << std::endl;
+    } else {
+        std::cout << "STD_MAP find: Very good: " << iter_std_tree1->first << " " << iter_std_tree1->second 
+                  << " | std_tree.count(80) = " << std_tree.count(80)
+                  << " | std_tree.lower_bound(80)->first = " << std_tree.lower_bound(80)->first
+                  << " | std_tree.upper_bound(80)->first = " << std_tree.upper_bound(80)->first
+                  << std::endl;
+    }
+
+    if (iter_my_tree1 == my_tree.end()) {
+        std::cout << " FT_MAP: Fix your find() in ft::map. " << std::endl;
+    } else {
+        std::cout << " FT_MAP find: Very good: " << iter_my_tree1->first << " " << iter_my_tree1->second 
+                  << " |  my_tree.count(80) = " << my_tree.count(80)
+                  << " |  my_tree.lower_bound(80)->first = " << my_tree.lower_bound(80)->first
+                  << " |  my_tree.upper_bound(80)->first = " << my_tree.upper_bound(80)->first
+                  << std::endl;
+    }
+    std::cout << std::endl;
+
+    iter_my_tree1 = my_tree.find(11280);
+    iter_std_tree1 = std_tree.find(11280);
+
+    if (iter_std_tree1 == std_tree.end() && 
+        std_tree.lower_bound(11280) == std_tree.end() &&
+        std_tree.upper_bound(11280) == std_tree.end()) {
+        std::cout << "STD_MAP find: Very good!!! "
+                  << "std_tree.count(11280) = " << std_tree.count(11280)
+                  << std::endl;
+
+    } else {
+        std::cout << "STD_MAP: Fix find() parametres for std::map. " << std::endl;
+    }
+
+    if (iter_my_tree1 == my_tree.end() && 
+        my_tree.lower_bound(11280) == my_tree.end() &&
+        my_tree.upper_bound(11280) == my_tree.end()) {
+        std::cout << " FT_MAP find: Very good!!! "
+                  << " my_tree.count(11280) = " << my_tree.count(11280)
+                  << std::endl;
+    } else {
+        std::cout << " FT_MAP: Fix your find() in ft::map. " << std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "std_tree.equal_range(80): "
+              << "   first = " << std_tree.equal_range(80).first->first
+              << " | second = " << std_tree.equal_range(80).second->first
+              << std::endl;
+
+    std::cout << " my_tree.equal_range(80): "
+              << "   first = " << my_tree.equal_range(80).first->first
+              << " | second = " << my_tree.equal_range(80).second->first
+              << std::endl;
 }
 
 void    testMap_capacity() {
@@ -64,44 +183,9 @@ void    testMap_iterator_reverse() {
                  "\t\t operator*  " << "\033[0m" << std::endl;
     std::cout << std::endl << "\033[33m" << "_____9-10_____     iterators map" << "\033[0m" << std::endl;
 
-    ft::map<int, std::string>   my_tree;
-
-    my_tree.insert(ft::make_pair(80, "At "));
-    my_tree.insert(ft::make_pair(40, "the "));
-    my_tree.insert(ft::make_pair(150, "Mountains "));
-    my_tree.insert(ft::make_pair(60, "of "));
-    my_tree.insert(ft::make_pair(20, "Madness "));
-    my_tree.insert(ft::make_pair(10, "... "));
-    my_tree.insert(ft::make_pair(170, "..170.. "));
-    my_tree.insert(ft::make_pair(140, "..140.. "));
-    my_tree.insert(ft::make_pair(120, "..120.. "));
-    my_tree.insert(ft::make_pair(0, "..0.. "));
-    my_tree.insert(ft::make_pair(-10, "..-10.. "));
-    my_tree.insert(ft::make_pair(130, "..130.. "));
-    my_tree.insert(ft::make_pair(110, "..110.. "));
-    my_tree.insert(ft::make_pair(122, "..122.. "));
-    my_tree.insert(ft::make_pair(100, "..100.. "));
-    my_tree.insert(ft::make_pair(90, "..90.. "));
-    my_tree.insert(ft::make_pair(85, "..85.. "));
-
+    ft::map<int, std::string>    my_tree;
     std::map<int, std::string>   std_tree;
-    std_tree.insert(std::make_pair(80, "At "));
-    std_tree.insert(std::make_pair(40, "the "));
-    std_tree.insert(std::make_pair(150, "Mountains "));
-    std_tree.insert(std::make_pair(60, "of "));
-    std_tree.insert(std::make_pair(20, "Madness "));
-    std_tree.insert(std::make_pair(10, "... "));
-    std_tree.insert(std::make_pair(170, "..170.. "));
-    std_tree.insert(std::make_pair(140, "..140.. "));
-    std_tree.insert(std::make_pair(120, "..120.. "));
-    std_tree.insert(std::make_pair(0, "..0.. "));
-    std_tree.insert(std::make_pair(-10, "..-10.. "));
-    std_tree.insert(std::make_pair(130, "..130.. "));
-    std_tree.insert(std::make_pair(110, "..110.. "));
-    std_tree.insert(std::make_pair(122, "..122.. "));
-    std_tree.insert(std::make_pair(100, "..100.. "));
-    std_tree.insert(std::make_pair(90, "..90.. "));
-    std_tree.insert(std::make_pair(85, "..85.. "));
+    fill_map(my_tree, &std_tree);
 
     // std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
 
@@ -208,25 +292,8 @@ void    testMap_iterator() {
     std::cout << std::endl << "\033[35m" << "check ITERATORS normal " << "\033[0m" << std::endl;
     std::cout << std::endl << "\033[33m" << "_____7-8_____     iterators" << "\033[0m" << std::endl;
     ft::map<int, std::string>   my_tree;
-
-    my_tree.insert(ft::make_pair(80, "At "));
-    my_tree.insert(ft::make_pair(40, "the "));
-    my_tree.insert(ft::make_pair(150, "Mountains "));
-    my_tree.insert(ft::make_pair(60, "of "));
-    my_tree.insert(ft::make_pair(20, "Madness "));
-    my_tree.insert(ft::make_pair(10, "... "));
-    my_tree.insert(ft::make_pair(170, "..170.. "));
-    my_tree.insert(ft::make_pair(140, "..140.. "));
-    my_tree.insert(ft::make_pair(120, "..120.. "));
-    my_tree.insert(ft::make_pair(0, "..0.. "));
-    my_tree.insert(ft::make_pair(-10, "..-10.. "));
-    my_tree.insert(ft::make_pair(130, "..130.. "));
-    my_tree.insert(ft::make_pair(110, "..110.. "));
-    my_tree.insert(ft::make_pair(122, "..122.. "));
-    my_tree.insert(ft::make_pair(100, "..100.. "));
-    my_tree.insert(ft::make_pair(90, "..90.. "));
-    my_tree.insert(ft::make_pair(85, "..85.. "));
-
+    std::map<int, std::string>   std_tree;
+    fill_map(my_tree, NULL);
 
     std::cout << "\033[34m" << "\t7) begin " << "\033[0m" << std::endl;
     std::cout << "my_tree.begin()->first = " << my_tree.begin()->first << std::endl;
