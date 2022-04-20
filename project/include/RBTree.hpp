@@ -69,6 +69,7 @@ class RBTree {
     allocator_type get_allocator() const;
 
     // Element access
+
     // Iterators
 
     iterator                root();

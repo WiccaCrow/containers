@@ -15,8 +15,10 @@ void    testMap_iterator_reverse();
 void    testMap_capacity();
 void    testMap_lookup();
 void    fill_map(ft::map<int, std::string> &my_map, std::map<int, std::string>* std_map);
+void    testMap_ElementAccess();
 
 // At the Mountains of Madness
+
 int main() {
     // testTree_insert();
     // testTree_iterator();
@@ -24,7 +26,8 @@ int main() {
     // testMap_iterator(); // 7, 8
     // testMap_iterator_reverse(); // 9, 10
     // testMap_capacity(); // 11, 12, 13
-    testMap_lookup(); // 19
+    // testMap_lookup(); // 19
+    testMap_ElementAccess(); // 5, 6
 
     return (0);
 }
@@ -67,6 +70,75 @@ void    fill_map(ft::map<int, std::string> &my_tree, std::map<int, std::string>*
         std_tree->insert(std::make_pair(90, "..90.. "));
         std_tree->insert(std::make_pair(85, "..85.. "));
     }
+}
+
+void    testMap_ElementAccess() {
+    std::cout << std::endl << "\033[35m" << "CHECK testMap Element Access " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____5-6_____" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t 5) iteT& operator[]( const Key& key ); \n"
+                               "\t 6)       T& at( const Key& key ); \n"
+                               "\t    const T& at( const Key& key ) const; "
+              << "\033[0m" << std::endl;
+
+    ft::map<int, std::string>   my_tree;
+    std::map<int, std::string>   std_tree;
+    fill_map(my_tree, &std_tree);
+    std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
+    std::cout << "\n\033[36m" << "\t\t op[]" << "\033[0m"  << std::endl;
+    std::cout << "std_tree[80] = " << std_tree[80] << std::endl;
+
+    try {
+        std_tree[80] = "At the Mountains of ";
+        std_tree[80] += "Madness ";
+        std::cout << "\033[36m" << "std_tree[80] = \"At the Mountains of \";" 
+                  << "std_tree[80] += \"Madness \";" << "\033[0m" << std::endl;
+        std::cout << "\033[36m" << "cout [80] = " << "\033[0m" <<  std_tree[80] << std::endl;
+
+        std::cout << "\n\033[36m" << "std_tree[200] = \"..200.. \";" << "\033[0m" << std::endl;
+        std_tree[200] = "..200.. ";
+        std::cout << "\033[36m" << "cout [200] = " << "\033[0m"  << std_tree[200] << std::endl;
+
+        std::cout << "\n\033[36m" << "\t\t at" << "\033[0m"  << std::endl;
+        std_tree.at(80) += "!!!!!! ";
+        std::cout << "\033[36m" << "std_tree.at(80) += \"!!!!!! \";" << std::endl
+                  << "\033[36m" << "cout std_tree.at(80) = " << "\033[0m" << std_tree.at(80) << std::endl;
+        std::cout << std::endl;
+        std::cout << "\033[36m" << "try to std_tree.at(280) = \"!!!!!! \";" << "\033[0m" << std::endl;
+        std_tree.at(280) = "!!!!!! ";
+        std::cout << "\033[36m" << "cout std_tree.at(280) = " << "\033[0m" << std_tree.at(280) << std::endl;
+        std::cout << "You will never see it... \n" << std::endl;
+    } catch (...) {
+        std::cout << "Attention: exception!!! \n" << std::endl;
+    }
+
+    std::cout << "\n\033[36m" << "--------------------------------" << "\033[0m"  << std::endl;
+    std::cout << "\n\033[36m" << "\t\t op[]" << "\033[0m"  << std::endl;
+    std::cout << "my_tree[80] = " << my_tree[80] << std::endl;
+    try {
+        my_tree[80] = "At the Mountains of ";
+        my_tree[80] += "Madness ";
+        std::cout << "\033[36m" << "my_tree[80] = \"At the Mountains of \";" 
+                  << "my_tree[80] += \"Madness \";" << "\033[0m" << std::endl;
+        std::cout << "\033[36m" << "cout [80] = " << "\033[0m" <<  my_tree[80] << std::endl;
+
+        std::cout << "\n\033[36m" << "my_tree[200] = \"..200.. \";" << "\033[0m" << std::endl;
+        my_tree[200] = "..200.. ";
+        std::cout << "\033[36m" << "cout [200] = " << "\033[0m"  << my_tree[200] << std::endl;
+
+        std::cout << "\n\033[36m" << "\t\t at" << "\033[0m"  << std::endl;
+        my_tree.at(80) += "!!!!!! ";
+        std::cout << "\033[36m" << "my_tree.at(80) += \"!!!!!! \";" << std::endl
+                  << "\033[36m" << "cout my_tree.at(80) = " << "\033[0m" << my_tree.at(80) << std::endl;
+        std::cout << std::endl;
+        std::cout << "\033[36m" << "try to my_tree.at(280) = \"!!!!!! \";" << "\033[0m" << std::endl;
+        my_tree.at(280) = "!!!!!! ";
+        std::cout << "\033[36m" << "cout my_tree.at(280) = " << "\033[0m" << my_tree.at(280) << std::endl;
+        std::cout << "You will never see it... \n" << std::endl;
+    } catch (...) {
+        std::cout << "Attention: exception!!! \n" << std::endl;
+    }
+
+
 }
 
 void    testMap_lookup() {

@@ -48,7 +48,33 @@ class map : public RBTree<pair<const Key, T> > {
                     _comp(comp) { }
 
     allocator_type get_allocator();
-    
+
+    // Element access
+
+    T&    operator[]( const Key& key ) {
+        iterator iter = find(key);
+        if ( iter == this->end() ) {
+            return this->insert(::ft::make_pair(key, T())).first->second;
+        }
+        return iter->second;
+    }    
+
+    T& at( const Key& key ) {
+        iterator iter = find(key);
+        if ( iter == this->end() ) {
+            throw std::out_of_range("out_of_range: Oops...exception. pos key out of range.\n");
+        }
+        return iter->second;
+    }
+
+    const T& at( const Key& key ) const {
+        iterator iter = find(key);
+        if ( iter == this->end() ) {
+            throw std::out_of_range("out_of_range: Oops...exception. pos key out of range.\n");
+        }
+        return iter->second;
+    }
+
     // Lookup
 
     size_type count( const Key& key ) const {
