@@ -81,6 +81,9 @@ class map : public RBTree<pair<const Key, T> > {
         RBTree<pair<const Key, T> >::erase(pos);
     }
 
+    void erase( iterator first, iterator last ) {
+        RBTree<pair<const Key, T> >::erase(first, last);
+    }
     size_type   erase( const Key& key ) {
         iterator pos = find(key);
         if ( pos == this->end() ) {

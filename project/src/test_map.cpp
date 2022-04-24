@@ -416,7 +416,7 @@ void    testMap_erase() {
 
     std::cout << "\033[34m" << "\t 16.2) size_type erase( const Key& key ); \n"
               << "\033[0m" << std::endl;
-              
+
     std::cout << "                \t std | my " << std::endl;
     std::cout << "tree.erase( 60 ) \t = " << std_tree.erase( 60 ) << " | " << my_tree.erase( 60 ) << std::endl;
     std::cout << "tree.erase( 122 ) \t = " << std_tree.erase( 122 ) << " | " << my_tree.erase( 122 ) << std::endl;
@@ -436,7 +436,20 @@ void    testMap_erase() {
 
     std::cout << "\033[34m" << "\t 16.3) void      erase( iterator first, iterator last ); \n"
               << "\033[0m" << std::endl;
-
+    std::cout << "tree.erase( find(40), find(90) ) " << std::endl;
+    std_tree.erase( std_tree.find(40), std_tree.find(90) );
+    my_tree.erase( my_tree.find(40), my_tree.find(90) );
+    std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
+    
+    std::cout << " std      | my " << std::endl;
+    iter_my_tree = my_tree.begin();
+    for (iter_std_tree = std_tree.begin(); iter_std_tree != std_tree.end(); ++iter_std_tree, ++iter_my_tree) {
+        std::cout << iter_std_tree->first << "\t\t"
+                  << iter_my_tree->first 
+                  << std::endl;
+    }
+    std::cout << std::endl;
+    
 }
 
 void    testMap_ElementAccess() {

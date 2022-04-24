@@ -106,7 +106,7 @@ class RBTree {
     iterator                insert( iterator hint, const T_node& value );
     iterator                erase( iterator pos );
     // size_type               erase( const Key& key );
-    iterator                erase( iterator first, iterator last );
+    void                    erase( iterator first, iterator last );
 
     // Lookup in private find_element
 
@@ -396,8 +396,18 @@ RBTree<T_node, Allocator>::
     return ( iter_prev );
 }
 
+template< 
+    class T_node, 
+    class Allocator >
+void              
+RBTree<T_node, Allocator>::
+    erase( iterator first, iterator last ) {
+    while ( first != last ) {
+        erase(first++);
+    }
+}
+
     // size_type               erase( const Key& key );
-    // iterator                erase( iterator first, iterator last );
 
     // Lookup
 
@@ -883,7 +893,6 @@ template<
 void
 RBTree<T_node, Allocator>::
     erase_with_both_childs(iterator pos, iterator iter_prev) {
-    std::cout << "erase_with_both_childs test \n";
     int iter_prev_color_start = iter_prev.base()->color;
     Node<T_node> *ch_prev = iter_prev.base()->left; // for color
     Node<T_node> *parent_prev = iter_prev.base()->parent; // for color
