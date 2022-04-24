@@ -379,6 +379,7 @@ RBTree<T_node, Allocator>::
     // if ( pos == this->end() ) {
     //     return ( this->end() );
     // }
+    --_size;
     iterator iter_prev = pos;
     --iter_prev;
     if ( pos.base()->left == NIL) {

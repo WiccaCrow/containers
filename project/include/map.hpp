@@ -75,6 +75,21 @@ class map : public RBTree<pair<const Key, T> > {
         return iter->second;
     }
 
+    // Modifiers
+
+    void    erase( iterator pos ) {
+        RBTree<pair<const Key, T> >::erase(pos);
+    }
+
+    size_type   erase( const Key& key ) {
+        iterator pos = find(key);
+        if ( pos == this->end() ) {
+            return (0);
+        }
+        RBTree<pair<const Key, T> >::erase(pos);
+        return (1);
+    }
+
     // Lookup
 
     size_type count( const Key& key ) const {

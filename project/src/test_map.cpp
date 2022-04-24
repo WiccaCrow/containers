@@ -405,7 +405,6 @@ void    testMap_erase() {
     std_tree.erase( std_tree.find(91) );
     my_tree.erase( my_tree.find(91) );
 
-    // std::cout << std_tree.erase( std_tree.find(85) ) << std::endl
     std::cout << " std      | my " << std::endl;
     iter_my_tree = my_tree.begin();
     for (iter_std_tree = std_tree.begin(); iter_std_tree != std_tree.end(); ++iter_std_tree, ++iter_my_tree) {
@@ -417,8 +416,23 @@ void    testMap_erase() {
 
     std::cout << "\033[34m" << "\t 16.2) size_type erase( const Key& key ); \n"
               << "\033[0m" << std::endl;
-    std::cout << std::endl;
+              
+    std::cout << "                \t std | my " << std::endl;
+    std::cout << "tree.erase( 60 ) \t = " << std_tree.erase( 60 ) << " | " << my_tree.erase( 60 ) << std::endl;
+    std::cout << "tree.erase( 122 ) \t = " << std_tree.erase( 122 ) << " | " << my_tree.erase( 122 ) << std::endl;
+    std::cout << "tree.erase( 61 ) \t = " << std_tree.erase( 61 ) << " | " << my_tree.erase( 61 ) << std::endl;
+    std::cout << "tree.erase( 6100 ) \t = " << std_tree.erase( 6100 ) << " | " << my_tree.erase( 6100 ) << std::endl;
+    std::cout << "tree.erase( 170 ) \t = " << std_tree.erase( 170 ) << " | " << my_tree.erase( 170 ) << std::endl;
 
+    std::cout << std::endl;
+    std::cout << " std      | my " << std::endl;
+    iter_my_tree = my_tree.begin();
+    for (iter_std_tree = std_tree.begin(); iter_std_tree != std_tree.end(); ++iter_std_tree, ++iter_my_tree) {
+        std::cout << iter_std_tree->first << "\t\t"
+                  << iter_my_tree->first 
+                  << std::endl;
+    }
+    std::cout << std::endl;
 
     std::cout << "\033[34m" << "\t 16.3) void      erase( iterator first, iterator last ); \n"
               << "\033[0m" << std::endl;
