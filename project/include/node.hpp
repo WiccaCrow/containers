@@ -56,7 +56,16 @@ class Node {
         T * operator->() {
             return (&data);
         }
+
 };
+
+template < 
+    class T, 
+    class Allocator >
+void    delete_node( Node<T> *node, Allocator alloc = Allocator() ) {
+    alloc.destroy(node);
+    alloc.deallocate(node, 1);
+}
 
 template< class T >
 bool operator==( const Node<T> & lhs,

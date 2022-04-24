@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <utility.hpp>
 // #include <vector.hpp>
 #include <RBTree.hpp>
@@ -16,8 +17,12 @@ void    testMap_capacity();
 void    testMap_lookup();
 void    fill_map(ft::map<int, std::string> &my_map, std::map<int, std::string>* std_map);
 void    testMap_ElementAccess();
+void    testMap_erase();
+void    erase_additional_little_test();
 
 // At the Mountains of Madness
+
+ /*------------------START-------------------*/
 
 int main() {
     // testTree_insert();
@@ -27,10 +32,13 @@ int main() {
     // testMap_iterator_reverse(); // 9, 10
     // testMap_capacity(); // 11, 12, 13
     // testMap_lookup(); // 19
-    testMap_ElementAccess(); // 5, 6
-
+    // testMap_ElementAccess(); // 5, 6
+    // erase_additional_little_test();
+    testMap_erase(); // 16
     return (0);
 }
+
+ /*------------------UTILITY-------------------*/
 
 void    fill_map(ft::map<int, std::string> &my_tree, std::map<int, std::string>* std_tree) {
     my_tree.insert(ft::make_pair(80, "At "));
@@ -70,6 +78,351 @@ void    fill_map(ft::map<int, std::string> &my_tree, std::map<int, std::string>*
         std_tree->insert(std::make_pair(90, "..90.. "));
         std_tree->insert(std::make_pair(85, "..85.. "));
     }
+}
+
+ /*------------------TESTS-------------------*/
+
+template <typename T>
+void print_int_key_node(ft::Node<ft::pair<const int, T> > *node) {
+    if ( node->_is_empty == false ) {
+        if ( node->color == 1 ) {
+            std::cout << "\033[30;41m" << std::setw(5) << node->data.first << "\033[0m";
+        } else {
+            std::cout << "\033[30;40m" << std::setw(5) << node->data.first << "\033[0m";
+        }
+    } else {
+        std::cout << "\033[30;40m" " NIL " "\033[0m" ;
+    }
+}
+
+void    erase_additional_little_test() {
+    std::cout << "\n\033[36m" << "\t\t erase_additional_little_test " << "\033[0m"  << std::endl;
+    std::cout << "\n\033[36m" << " tree for 5 lvls " << "\033[0m"  << std::endl;
+    ft::map<int, std::string>   my_tree;
+    ft::map<int, std::string>::iterator    iter_my_tree;
+    fill_map(my_tree, NULL);
+    iter_my_tree = my_tree.find(170);
+    my_tree.erase( iter_my_tree );
+    iter_my_tree = my_tree.find(122);
+    my_tree.erase( iter_my_tree );
+    iter_my_tree = my_tree.find(60);
+    my_tree.erase( iter_my_tree );
+
+    // 80
+    std::cout << "                                            ________";
+    print_int_key_node( my_tree.root().base() );
+    std::cout << "_________" << std::endl;
+
+    std::cout << "                           ________________/                      \\_______________" << std::endl;
+    // 10 120 // 2h
+    std::cout << "                        ";
+    print_int_key_node( my_tree.root().base()->left ); // 2h-1w pos
+    std::cout << "                                                   ";
+    print_int_key_node( my_tree.root().base()->right ); // 2h-2w pos
+    if ( my_tree.root().base()->left->_is_empty == false && my_tree.root().base()->right->_is_empty == false) {
+        std::cout << std::endl << "              _________/      \\_________                              _________/      \\_________" << std::endl;
+    } else if ( my_tree.root().base()->left->_is_empty == false && my_tree.root().base()->right->_is_empty == true ) {
+        std::cout << std::endl << "              _________/      \\_________" << std::endl;
+    } else if (my_tree.root().base()->left->_is_empty == true && my_tree.root().base()->right->_is_empty == false) {
+        std::cout << std::endl << "                                                                      _________/      \\_________" << std::endl;
+    } else {
+        return ;
+    }
+    // 0 40 100 140 // 3h
+    if ( my_tree.root().base()->left->_is_empty == false ) {
+        std::cout << "           ";
+        print_int_key_node( my_tree.root().base()->left->left ); // 3h-1w pos // 0
+        std::cout << "                      ";
+        print_int_key_node( my_tree.root().base()->left->right ); // 3h-2w pos // 40
+        std::cout << "                        ";
+    } else {
+        std::cout << "         "
+                     "     " // 3h-1w pos
+                     "                    "
+                     "     " // 3h-2w pos
+                     "                        ";
+    }
+    if ( my_tree.root().base()->right->_is_empty == false ) {
+        print_int_key_node( my_tree.root().base()->right->left ); // 3h-3w pos // 100
+        std::cout << "                      ";
+        print_int_key_node( my_tree.root().base()->right->right ); // 3h-4w pos // 140
+    }
+    
+    std::cout << std::endl;
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->left->_is_empty == false ) {
+        std::cout << "        __/     \\__"; // 4h-1,2w pos
+    } else {
+        std::cout << "                   "; // 4h-1,2w pos
+    }
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->right->_is_empty == false ) {
+        std::cout << "                __/      \\__"; // 4h-3,4w pos
+    } else {
+        std::cout << "                            "; // 4h-3,4w pos
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->left->_is_empty == false ) {
+        std::cout << "                __/      \\__"; // 4h-5,6w pos
+    } else {
+        std::cout << "                            "; // 4h-5,6w pos
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->right->_is_empty == false ) {
+        std::cout << "                __/      \\__"; // 4h-7,8w pos
+    }
+    std::cout << std::endl;
+    // -10 NIL 20 NIL 90 110 130 150
+    if ( ( my_tree.root().base()->left->_is_empty && 
+           my_tree.root().base()->right->_is_empty ) ||
+         ( my_tree.root().base()->left->_is_empty == false &&
+           my_tree.root().base()->left->left->_is_empty && 
+           my_tree.root().base()->left->right->_is_empty && 
+           my_tree.root().base()->right->_is_empty ) ||
+         ( my_tree.root().base()->right->_is_empty == false &&
+           my_tree.root().base()->right->left->_is_empty && 
+           my_tree.root().base()->right->right->_is_empty && 
+           my_tree.root().base()->left->_is_empty )
+       ) {
+           return ;
+    }
+
+    if ( my_tree.root().base()->left->_is_empty ) {
+        std::cout << "                         ";
+    } else {
+        if (my_tree.root().base()->left->left->_is_empty == false) {
+            std::cout << "     ";
+            print_int_key_node( my_tree.root().base()->left->left->left ); // 4h-1w pos // -10
+            std::cout << "       ";
+            print_int_key_node( my_tree.root().base()->left->left->right ); // 4h-2w pos // NIL
+            std::cout << "          ";
+        } else {
+            std::cout << "                       ";
+        }
+        if (my_tree.root().base()->left->right->_is_empty == false) {
+            print_int_key_node( my_tree.root().base()->left->right->left ); // 4h-3w pos // 20
+            std::cout << "        ";
+            print_int_key_node( my_tree.root().base()->left->right->right ); // 4h-4w pos // NIL
+            std::cout << "          ";
+        } else {
+            std::cout << "                            ";
+        }
+    }
+    if ( my_tree.root().base()->right->_is_empty == false ) {
+        if (my_tree.root().base()->right->left->_is_empty == false) {
+            print_int_key_node( my_tree.root().base()->right->left->left ); // 4h-5w pos // 90
+            std::cout << "        ";
+            print_int_key_node( my_tree.root().base()->right->left->right ); // 4h-6w pos // 110
+            std::cout << "          ";
+        } else {
+            std::cout << "                            ";
+        }
+        if (my_tree.root().base()->right->right->_is_empty == false) {
+            print_int_key_node( my_tree.root().base()->right->right->left ); // 4h-7w pos // 130
+            std::cout << "        ";
+            print_int_key_node( my_tree.root().base()->right->right->right ); // 4h-8w pos // 150
+        }
+    }
+    std::cout << std::endl;
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->left->_is_empty == false &&
+         my_tree.root().base()->left->left->left->_is_empty == false ) {
+        std::cout << "     /  \\    " ; // 5h-1,2w pos
+    } else {
+        std::cout << "             " ; // 5h-1w pos
+
+    }
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->left->_is_empty == false &&
+         my_tree.root().base()->left->left->right->_is_empty == false) {
+        std::cout << "     /  \\" ; // 5h-3,4w pos
+    } else {
+        std::cout << "         " ; // 5h-3,4w pos
+    }
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->right->_is_empty == false &&
+         my_tree.root().base()->left->right->left->_is_empty == false) {
+        std::cout << "          /  \\" ; // 5h-5,6w pos
+    } else {
+        std::cout << "              " ; // 5h-5,6w pos
+    }
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->right->_is_empty == false &&
+         my_tree.root().base()->left->right->right->_is_empty == false) {
+        std::cout << "          /  \\" ; // 5h-7,8w pos
+    } else {
+        std::cout << "              " ; // 5h-7,8w pos
+    }
+
+
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->left->_is_empty == false &&
+         my_tree.root().base()->right->left->left->_is_empty == false) {
+        std::cout << "          /  \\" ; // 5h-9,10w pos
+    } else {
+        std::cout << "              " ; // 5h-9,10w pos
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->left->_is_empty == false &&
+         my_tree.root().base()->right->left->right->_is_empty == false) {
+        std::cout << "          /  \\" ; // 5h-11,12w pos
+    } else {
+        std::cout << "              " ; // 5h-11,12w pos
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->right->_is_empty == false &&
+         my_tree.root().base()->right->right->left->_is_empty == false) {
+        std::cout << "          /  \\" ; // 5h-13,14w pos
+    } else {
+        std::cout << "              " ; // 5h-13,14w pos
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->right->_is_empty == false &&
+         my_tree.root().base()->right->right->right->_is_empty == false) {
+        std::cout << "          /  \\" ; // 5h-15,16w pos
+    } else {
+        std::cout << "              " ; // 5h-15,16w pos
+    }
+
+
+    std::cout << std::endl;
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->left->_is_empty == false &&
+         my_tree.root().base()->left->left->left->_is_empty == false) {
+        print_int_key_node( my_tree.root().base()->left->left->left->left ); // 5h-1w pos
+        std::cout << "  " ;
+        print_int_key_node( my_tree.root().base()->left->left->left->right ); // 5h-2w pos
+        std::cout << "  " ;
+    } else {
+        std::cout << "              " ;
+    }
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->left->_is_empty == false &&
+         my_tree.root().base()->left->left->right->_is_empty == false) {
+        print_int_key_node( my_tree.root().base()->left->left->right->left ); // 5h-3w pos
+        std::cout << "  " ;
+        print_int_key_node( my_tree.root().base()->left->left->right->right ); // 5h-4w pos
+        std::cout << "  " ;
+    } else {
+        std::cout << "              " ;
+    }
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->right->_is_empty == false &&
+         my_tree.root().base()->left->right->left->_is_empty == false) {
+        print_int_key_node( my_tree.root().base()->left->right->left->left ); // 5h-5w pos
+        std::cout << "  " ;
+        print_int_key_node( my_tree.root().base()->left->right->left->right ); // 5h-6w pos
+        std::cout << "  " ;
+    } else {
+        std::cout << "              " ;
+    }
+    if ( my_tree.root().base()->left->_is_empty == false &&
+         my_tree.root().base()->left->right->_is_empty == false &&
+         my_tree.root().base()->left->right->right->_is_empty == false) {
+        print_int_key_node( my_tree.root().base()->left->right->right->left ); // 5h-7w pos
+        std::cout << "  " ;
+        print_int_key_node( my_tree.root().base()->left->right->right->right ); // 5h-8w pos
+        std::cout << "  " ;
+    } else {
+        std::cout << "              " ;
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->left->_is_empty == false &&
+         my_tree.root().base()->right->left->left->_is_empty == false) {
+        print_int_key_node( my_tree.root().base()->right->left->left->left ); // 5h-9w pos
+        std::cout << "  " ;
+        print_int_key_node( my_tree.root().base()->right->left->left->right ); // 5h-10w pos
+        std::cout << "  " ;
+    } else {
+        std::cout << "              " ;
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->left->_is_empty == false &&
+         my_tree.root().base()->right->left->right->_is_empty == false) {
+        print_int_key_node( my_tree.root().base()->right->left->right->left ); // 5h-11w pos
+        std::cout << "  " ;
+        print_int_key_node( my_tree.root().base()->right->left->right->right ); // 5h-12w pos
+        std::cout << "  " ;
+    } else {
+        std::cout << "              " ;
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->right->_is_empty == false &&
+         my_tree.root().base()->right->right->left->_is_empty == false) {
+        print_int_key_node( my_tree.root().base()->right->right->left->left ); // 5h-13w pos
+        std::cout << "  " ;
+        print_int_key_node( my_tree.root().base()->right->right->left->right ); // 5h-14w pos
+        std::cout << "  " ;
+    } else {
+        std::cout << "              " ;
+    }
+    if ( my_tree.root().base()->right->_is_empty == false &&
+         my_tree.root().base()->right->right->_is_empty == false &&
+         my_tree.root().base()->right->right->right->_is_empty == false) {
+        print_int_key_node( my_tree.root().base()->right->right->right->left ); // 5h-15w pos
+        std::cout << "  " ;
+        print_int_key_node( my_tree.root().base()->right->right->right->right ); // 5h-16w pos
+        std::cout << "  " ;
+    }
+    std::cout << std::endl;
+    std::cout << "\n\033[36m" << " only for 5 lvls " << "\033[0m"  << std::endl;
+
+}
+
+/////////////////////////////////
+
+void    testMap_erase() {
+    std::cout << std::endl << "\033[35m" << "CHECK testMap Modifiers " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____16_____" << "\033[0m" << std::endl;
+    ft::map<int, std::string>   my_tree;
+    std::map<int, std::string>   std_tree;
+    ft::map<int, std::string>::iterator    iter_my_tree;
+    std::map<int, std::string>::iterator   iter_std_tree;
+    fill_map(my_tree, &std_tree);
+    std_tree.insert( std::make_pair(112, "..112.. ") );
+    my_tree.insert( ft::make_pair(112, "..112.. ") );
+    std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
+    
+    std::cout << "\033[34m" << "\t 16.1) void      erase( iterator pos ); \n"
+              << "\033[0m" << std::endl;
+    std::cout << "\n\033[36m" << "\t\t 1st case. Delete (D) without childs (begin, 110): " << "\033[0m"  << std::endl;
+    std_tree.erase( std_tree.begin() );
+    std_tree.erase( std_tree.find(110) );
+    my_tree.erase( my_tree.begin() );
+    my_tree.erase( my_tree.find(110) );
+
+    std::cout << "\n\033[36m" << "\t\t 2st case. Delete (D) with one child (0 with child -10): " << "\033[0m"  << std::endl;
+    std_tree.insert( std::make_pair(-10, "..-10.. ") );
+    my_tree.insert( ft::make_pair(-10, "..-10.. ") );
+    std_tree.erase( std_tree.find(0) );
+    my_tree.erase( my_tree.find(0) );
+
+    std::cout << "\n\033[36m" << "\t\t 1st case. Delete (D) with both childs: " << "\033[0m"  << std::endl;
+    std_tree.insert( std::make_pair(91, "..91.. ") );
+    my_tree.insert( ft::make_pair(91, "..91.. ") );
+    std_tree.erase( std_tree.find(120) );
+    my_tree.erase( my_tree.find(120) );
+    std_tree.erase( std_tree.find(91) );
+    my_tree.erase( my_tree.find(91) );
+
+    // std::cout << std_tree.erase( std_tree.find(85) ) << std::endl
+    std::cout << " std      | my " << std::endl;
+    iter_my_tree = my_tree.begin();
+    for (iter_std_tree = std_tree.begin(); iter_std_tree != std_tree.end(); ++iter_std_tree, ++iter_my_tree) {
+        std::cout << iter_std_tree->first << "\t\t"
+                  << iter_my_tree->first 
+                  << std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "\033[34m" << "\t 16.2) size_type erase( const Key& key ); \n"
+              << "\033[0m" << std::endl;
+    std::cout << std::endl;
+
+
+    std::cout << "\033[34m" << "\t 16.3) void      erase( iterator first, iterator last ); \n"
+              << "\033[0m" << std::endl;
+
 }
 
 void    testMap_ElementAccess() {
