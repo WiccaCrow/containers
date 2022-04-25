@@ -230,10 +230,10 @@ RBTree<T_node, Allocator>::
     }
     this->clear();
     // iterator iter_other = other.begin();
-    // const_iterator iter_other( other._begin);
+    // const_iterator iter_other( other.begin() );
 
     // for ( iterator iter_other = other.begin(); iter_other != other.end() ; ++iter_other ) {
-        this->insert( other.begin(), other.end() );
+        // this->insert( other.begin(), other.end() );
     // }
 
     _alloc = other.get_allocator();
