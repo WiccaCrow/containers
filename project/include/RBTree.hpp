@@ -30,8 +30,10 @@ class RBTree {
     typedef typename Allocator::template
             rebind<Node<T_node> >::other    allocator_type;
 
-    typedef binTree_iterator<Node<T_node>, RBTree<T_node> >           iterator;
-    typedef binTree_iterator<const Node<T_node>, RBTree<T_node> >     const_iterator;
+    typedef binTree_iterator<T_node, RBTree<T_node> >           iterator;
+    typedef binTree_iterator<const T_node, RBTree<const T_node> >     const_iterator;
+    // typedef binTree_iterator<const Node<T_node>, RBTree<T_node> >     const_iterator;
+
     typedef binTree_iterator_reverse<iterator >                       reverse_iterator;
     typedef binTree_iterator_reverse<const_iterator >                 const_reverse_iterator;
 
@@ -78,6 +80,12 @@ class RBTree {
 
     RBTree(allocator_type alloc = Allocator());
     RBTree(T_node data, allocator_type alloc = Allocator());
+    RBTree(RBTree & other);
+    template< class InputIt >
+        RBTree( InputIt first, InputIt last,
+            const Allocator& alloc = Allocator() );
+    ~RBTree();
+    RBTree &   operator=(const RBTree & other);
     allocator_type get_allocator() const;
 
     // Element access
@@ -102,14 +110,23 @@ class RBTree {
 
     // Modifiers
 
+    void                    clear();
     pair<iterator, bool>    insert(const T_node& value);
     iterator                insert( iterator hint, const T_node& value );
     iterator                erase( iterator pos );
     // size_type               erase( const Key& key );
     void                    erase( iterator first, iterator last );
+    void                    swap( RBTree& other );
+
+    template< class InputIt >
+        void    insert( InputIt first, InputIt last, char (*)[sizeof(*first)] = NULL ) {
+        while (first != last) {
+            insert(*first);
+            ++first;
+        }
+    }
 
     // Lookup in private find_element
-
 
     // Observers
 
@@ -160,10 +177,76 @@ RBTree<T_node, Allocator>::
 template< 
     class T_node, 
     class Allocator >
+RBTree<T_node, Allocator>::
+    RBTree(RBTree & other) : 
+                _empty_node(),
+                _root(NULL),
+                _begin(_root),
+                _end_node(),
+                _size(0) {
+    _empty_node._is_empty = true;
+    _end_node._is_empty = true;
+    _end_node.right = _end_node.left = &_end_node;
+    operator=(other);
+}
+
+template< 
+    class T_node, 
+    class Allocator >
+template< class InputIt >
+RBTree<T_node, Allocator>::
+    RBTree( InputIt first, InputIt last,
+        const Allocator& alloc ) : 
+            _empty_node(),
+            _root(NULL),
+            _begin(_root),
+            _end_node(),
+            _size(0),
+            _alloc(alloc) {
+    _empty_node._is_empty = true;
+    _end_node._is_empty = true;
+    _end_node.right = _end_node.left = &_end_node;
+    for ( ; first != last; ++first ) {
+        this->insert( *first );
+    }
+}
+
+template< 
+    class T_node, 
+    class Allocator >
+RBTree<T_node, Allocator>::
+    ~RBTree() {
+    this->clear();
+}
+
+template< 
+    class T_node, 
+    class Allocator >
+RBTree<T_node, Allocator> &   
+RBTree<T_node, Allocator>::
+    operator=(const RBTree & other) {
+    if ( this == &other) {
+        return (*this);
+    }
+    this->clear();
+    // iterator iter_other = other.begin();
+    // const_iterator iter_other( other._begin);
+
+    // for ( iterator iter_other = other.begin(); iter_other != other.end() ; ++iter_other ) {
+        // this->insert( other.begin(), other.end() );
+    // }
+
+    _alloc = other.get_allocator();
+    return (*this);
+}
+
+template< 
+    class T_node, 
+    class Allocator >
 typename RBTree<T_node, Allocator>::allocator_type 
     RBTree<T_node, Allocator>::
     get_allocator(  ) const {
-        return ( _alloc );
+    return ( _alloc );
 }
 
     // Element access
@@ -291,6 +374,22 @@ max_size(  ) const {
 template< 
     class T_node, 
     class Allocator >
+void
+RBTree<T_node, Allocator>::
+    clear() {
+    
+    for ( iterator iter_start = this->begin(); iter_start != this->end(); ++iter_start ) {
+        _alloc.destroy( iter_start.base() );
+        _alloc.deallocate( iter_start.base(), 1 );
+        --_size;
+    }
+    _begin = _root = NULL;
+    _end_node.parent = NULL;
+}
+
+template< 
+    class T_node, 
+    class Allocator >
 pair<typename RBTree<T_node, Allocator>::iterator, bool>
 RBTree<T_node, Allocator>::
     insert( const T_node& value ) {
@@ -408,6 +507,17 @@ RBTree<T_node, Allocator>::
 }
 
     // size_type               erase( const Key& key );
+
+template< 
+    class T_node, 
+    class Allocator >
+void              
+RBTree<T_node, Allocator>::
+    swap( RBTree& other ) {
+    RBTree tmp(other);
+    other = *this;
+    *this = tmp;
+}
 
     // Lookup
 

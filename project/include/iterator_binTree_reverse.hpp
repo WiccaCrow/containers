@@ -173,18 +173,18 @@ binTree_iterator_reverse<Iter>::
         _M_current.base()->left->is_empty() == false) ||
         (_M_current.base()->is_empty() == false && // check root
         _M_current.base()->parent->is_empty() == true)) {
-        _M_current = _M_current.base()->left;
+        _M_current = static_cast<Iter>(_M_current.base()->left);
         while (_M_current.base()->right != NULL && 
                 _M_current.base()->right->is_empty() == false) {
-            _M_current = _M_current.base()->right;
+            _M_current = static_cast<Iter>(_M_current.base()->right);
         }
     // not end, not root, without right child
     } else {
         while (_M_current.base()->parent->left == _M_current.base()) {
-            _M_current = _M_current.base()->parent;
+            _M_current = static_cast<Iter>(_M_current.base()->parent);
         }
         if (_M_current.base()->parent->right == _M_current.base()) {
-            _M_current = _M_current.base()->parent;
+            _M_current = static_cast<Iter>(_M_current.base()->parent);
         }
     }
     return *this;

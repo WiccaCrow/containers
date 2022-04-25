@@ -47,7 +47,24 @@ class map : public RBTree<pair<const Key, T> > {
                     RBTree<pair<const Key, T> >(alloc),
                     _comp(comp) { }
 
+    // map( const map& other ) {
+    //     operator=(other);
+    // }
+
+    template< class InputIt >
+    map( InputIt first, InputIt last,
+        const Compare& comp = Compare(),
+        const Allocator& alloc = Allocator() ) :
+                    RBTree<pair<const Key, T> >(first, last, alloc),
+                    _comp(comp) { }
+
     allocator_type get_allocator();
+
+    // map &   operator=(const map & other) {
+    //     _comp = other._comp;
+    //     RBTree<pair<const Key, T> >::operator=(other);
+    //     return ( *this );
+    // }
 
     // Element access
 
@@ -95,7 +112,7 @@ class map : public RBTree<pair<const Key, T> > {
 
     // Lookup
 
-    size_type count( const Key& key ) const {
+    size_type count( const Key& key ) {
         return ( find(key) == this->end() ? 0 : 1 );
     }
 

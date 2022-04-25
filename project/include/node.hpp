@@ -45,7 +45,7 @@ class Node {
 
         ~Node() {}
 
-        bool is_empty() {
+        bool is_empty() const {
             return (_is_empty);
         }
 
@@ -53,10 +53,17 @@ class Node {
             return (data);
         }
 
+        // const T & operator*() const {
+        //     return (data);
+        // }
+
         T * operator->() {
             return (&data);
         }
 
+        // const T * operator->() const {
+        //     return (&data);
+        // }
 };
 
 template < 

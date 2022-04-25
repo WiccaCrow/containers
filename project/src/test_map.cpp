@@ -17,8 +17,10 @@ void    testMap_capacity();
 void    testMap_lookup();
 void    fill_map(ft::map<int, std::string> &my_map, std::map<int, std::string>* std_map);
 void    testMap_ElementAccess();
-void    testMap_erase();
 void    erase_additional_little_test();
+void    testMap_erase();
+void    testMap_clear();
+void    testMap_swap();
 
 // At the Mountains of Madness
 
@@ -33,8 +35,10 @@ int main() {
     // testMap_capacity(); // 11, 12, 13
     // testMap_lookup(); // 19
     // testMap_ElementAccess(); // 5, 6
-    // erase_additional_little_test();
-    testMap_erase(); // 16
+    // erase_additional_little_test(); // 16
+    // testMap_erase(); // 16
+    // testMap_clear(); // 14
+    testMap_swap(); // 17
     return (0);
 }
 
@@ -80,7 +84,6 @@ void    fill_map(ft::map<int, std::string> &my_tree, std::map<int, std::string>*
     }
 }
 
- /*------------------TESTS-------------------*/
 
 template <typename T>
 void print_int_key_node(ft::Node<ft::pair<const int, T> > *node) {
@@ -88,11 +91,134 @@ void print_int_key_node(ft::Node<ft::pair<const int, T> > *node) {
         if ( node->color == 1 ) {
             std::cout << "\033[30;41m" << std::setw(5) << node->data.first << "\033[0m";
         } else {
-            std::cout << "\033[30;40m" << std::setw(5) << node->data.first << "\033[0m";
+            std::cout << "\033[37;40m" << std::setw(5) << node->data.first << "\033[0m";
         }
     } else {
-        std::cout << "\033[30;40m" " NIL " "\033[0m" ;
+        std::cout << "\033[37;40m" " NIL " "\033[0m" ;
     }
+}
+
+//  /*------------------TESTS-------------------*/
+
+void    testMap_swap() {
+    std::cout << std::endl << "\033[35m" << "CHECK testMap Modifiers " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____17_____" << "\033[0m" << std::endl;
+    
+    ft::map<int, std::string>   my_tree1;
+    my_tree1.insert(ft::make_pair(25, "..25.. "));
+    my_tree1.insert(ft::make_pair(15, "..15.. "));
+    ft::map<int, std::string>::iterator    iter_my_tree1 = my_tree1.begin();
+
+    std::map<int, std::string>   std_tree1;
+    std_tree1.insert(std::make_pair(25, "..25.. "));
+    std_tree1.insert(std::make_pair(15, "..15.. "));
+    std::map<int, std::string>::iterator   iter_std_tree1 = std_tree1.begin();
+
+    ft::map<int, std::string>   my_tree2;
+    my_tree2.insert(ft::make_pair(5, "..5.. "));
+    ft::map<int, std::string>::iterator    iter_my_tree2 = my_tree2.begin();
+
+    std::map<int, std::string>   std_tree2;
+    std_tree2.insert(std::make_pair(5, "..5.. "));
+    std::map<int, std::string>::iterator   iter_std_tree2 = std_tree2.begin();
+
+    // ft::map<int, std::string>   my_tree3;
+    // my_tree3 = my_tree1;
+
+    std::cout << "\n\033[36m" << "\t\t befor swap: " << "\033[0m"  << std::endl;
+
+    std::cout << "my_tree1 \t  std_tree1 \t  my_tree2 \t  std_tree2 " << std::endl;
+    while ( iter_my_tree1 != my_tree1.end() ||
+            iter_std_tree1 != std_tree1.end() ||
+            iter_my_tree2 != my_tree2.end() ||
+            iter_std_tree2 != std_tree2.end() ) {
+        if ( iter_my_tree1 != my_tree1.end() ) {
+            std::cout << iter_my_tree1->first << " " << iter_my_tree1->second << "\t  ";
+            ++iter_my_tree1;
+        } else {
+            std::cout << "         \t  ";
+        }
+        if ( iter_std_tree1 != std_tree1.end() ) {
+            std::cout << iter_std_tree1->first << " " << iter_std_tree1->second << "\t  ";
+            ++iter_std_tree1;
+        } else {
+            std::cout << "          \t  ";
+        }
+        if ( iter_my_tree2 != my_tree2.end() ) {
+            std::cout << iter_my_tree2->first << " " << iter_my_tree2->second << "\t  ";
+            ++iter_my_tree2;
+        } else {
+            std::cout << "         \t  ";
+        }
+        if ( iter_std_tree2 != std_tree2.end() ) {
+            std::cout << iter_std_tree2->first << " " << iter_std_tree2->second;
+            ++iter_std_tree2;
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+    
+    my_tree1.swap(my_tree2);
+    std_tree1.swap(std_tree2);
+    iter_my_tree1 = my_tree1.begin();
+    iter_std_tree1 = std_tree1.begin();
+    iter_my_tree2 = my_tree2.begin();
+    iter_std_tree2 = std_tree2.begin();
+
+    std::cout << "\n\033[36m" << "\t\t after swap: " << "\033[0m"  << std::endl;
+    std::cout << "my_tree1 \t  std_tree1 \t  my_tree2 \t  std_tree2 " << std::endl;
+    while ( iter_my_tree1 != my_tree1.end() ||
+            iter_std_tree1 != std_tree1.end() ||
+            iter_my_tree2 != my_tree2.end() ||
+            iter_std_tree2 != std_tree2.end() ) {
+        if ( iter_my_tree1 != my_tree1.end() ) {
+            std::cout << iter_my_tree1->first << " " << iter_my_tree1->second << "\t  ";
+            ++iter_my_tree1;
+        } else {
+            std::cout << "         \t  ";
+        }
+        if ( iter_std_tree1 != std_tree1.end() ) {
+            std::cout << iter_std_tree1->first << " " << iter_std_tree1->second << "\t  ";
+            ++iter_std_tree1;
+        } else {
+            std::cout << "          \t  ";
+        }
+        if ( iter_my_tree2 != my_tree2.end() ) {
+            std::cout << iter_my_tree2->first << " " << iter_my_tree2->second << "\t  ";
+            ++iter_my_tree2;
+        } else {
+            std::cout << "         \t  ";
+        }
+        if ( iter_std_tree2 != std_tree2.end() ) {
+            std::cout << iter_std_tree2->first << " " << iter_std_tree2->second;
+            ++iter_std_tree2;
+        }
+        std::cout << std::endl;
+    }
+
+}
+
+void    testMap_clear() {
+    std::cout << std::endl << "\033[35m" << "CHECK testMap Modifiers " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____14_____" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t 14) void clear(); "
+              << "\033[0m" << std::endl;
+    ft::map<int, std::string>   my_tree;
+    std::map<int, std::string>   std_tree;
+    ft::map<int, std::string>::iterator    iter_my_tree;
+    std::map<int, std::string>::iterator   iter_std_tree;
+    fill_map(my_tree, &std_tree);
+    std::cout << "\n\033[36m" << "\t\t befor clear: " << "\033[0m"  << std::endl;
+    std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
+    std::cout << "\n\033[36m" << "\t\t after clear: " << "\033[0m"  << std::endl;
+    my_tree.clear();
+    std_tree.clear();
+    std::cout << "my_tree.size() = " << my_tree.size() << "; std_tree.size() = " << std_tree.size() << std::endl;
+    if ( my_tree.begin() == my_tree.end() &&
+         std_tree.begin() == std_tree.end() ) {
+        std::cout << "begin and end - good!!! " << std::endl;
+    }
+
 }
 
 void    erase_additional_little_test() {
@@ -369,7 +495,7 @@ void    erase_additional_little_test() {
 
 }
 
-/////////////////////////////////
+// /////////////////////////////////
 
 void    testMap_erase() {
     std::cout << std::endl << "\033[35m" << "CHECK testMap Modifiers " << "\033[0m" << std::endl;
@@ -449,7 +575,7 @@ void    testMap_erase() {
                   << std::endl;
     }
     std::cout << std::endl;
-    
+
 }
 
 void    testMap_ElementAccess() {
