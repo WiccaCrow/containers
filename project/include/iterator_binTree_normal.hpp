@@ -30,9 +30,6 @@ class binTree_iterator {
     explicit binTree_iterator(Node<T> * TPtr);
     binTree_iterator(const binTree_iterator & obj);
     binTree_iterator & operator=(const binTree_iterator & obj);
-    // binTree_iterator & operator=(Node<T>* obj);
-    // template < class Key, class Value >
-    //     binTree_iterator<Node<T>, Tree>&  operator=(Node<pair<Key, Value> >* obj);
 
     // getters
     Node<T> * base() const;
@@ -99,27 +96,6 @@ binTree_iterator<T, Tree>::
     }
     return (*this);
 }
-
-// template <
-//     class T, 
-//     class Tree >
-// binTree_iterator<T, Tree>&
-// binTree_iterator<T, Tree>::
-//     operator=(Node<T>* obj) {
-//     _M_current = obj;
-//     return (*this);
-// }
-
-// template <
-//     class T, 
-//     class Tree >
-// template < class Key, class Value >
-// binTree_iterator<T, Tree>&
-// binTree_iterator<T, Tree>::
-//     operator=(Node<pair<Key, Value> >* obj) {
-//     _M_current = obj;
-//     return (*this);
-// }
 
 // getters
 template <

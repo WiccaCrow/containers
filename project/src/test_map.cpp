@@ -804,7 +804,7 @@ void    testMap_iterator_reverse() {
     {
         std::cout << "\033[36m" << "\t\tcout iter_reverse operator++" << "\033[0m"  << std::endl;
         std::cout << "\033[36m" << "\t\tfrom rbegin to root (80)" << "\033[0m"  << std::endl;
-        iter_my_tree2  =  my_tree.root().base();
+        iter_my_tree2  =  my_tree.root();
         std::map<int, std::string>::reverse_iterator   iter_std_tree3(std_tree.find(my_tree.root()->first));
         while (iter_my_tree1 != iter_my_tree2) {
             std::cout << "iter_my_tree1->first = " << iter_my_tree1->first ;
@@ -835,7 +835,7 @@ void    testMap_iterator_reverse() {
         std::cout << "\033[36m" << "\t\tfrom rend to root" << "\033[0m"  << std::endl;
         iter_my_tree1  =  my_tree.rend();
         --iter_my_tree1;
-        iter_my_tree2  =  my_tree.root().base();
+        iter_my_tree2  =  my_tree.root();
         std::map<int, std::string>::reverse_iterator   iter_std_tree3(std_tree.find(my_tree.root()->first));
         while (iter_my_tree1 != iter_my_tree2) {
             std::cout << "iter_my_tree1->first = " << iter_my_tree1->first ;
@@ -883,7 +883,7 @@ void    testMap_iterator() {
     ft::map<int, std::string>::iterator iter2;
     std::cout << "\033[34m" << "\t test iter1 = iter2 " << "\033[0m" << std::endl;
     iter1 = my_tree.root();
-    iter2 = my_tree.root().base()->left;
+    iter2 = static_cast<ft::map<int, std::string>::iterator >(my_tree.root().base()->left);
     std::cout << "(*iter1).first = " << (*iter1).first << std::endl;
     std::cout << "(*iter2).first = " << (*iter2).first << std::endl;
     std::cout << "(*(iter1 = iter2)).first = " << (*(iter1 = iter2)).first << std::endl;
@@ -891,7 +891,7 @@ void    testMap_iterator() {
     std::cout << "\033[34m" << "\t test ++iter " << "\033[0m" << std::endl;
     iter1 = my_tree.begin();
     std::cout << "iter1 = my_tree.begin() = " << (*iter1).first << std::endl;
-    iter2 = my_tree.end().base()->parent;
+    iter2 = static_cast<ft::map<int, std::string>::iterator >(my_tree.end().base()->parent);
     std::cout << "iter2 = my_tree.end().base()->parent " << std::endl;
     while (iter1 != iter2) {
         std::cout << "\t (*++iter1).first: " << (*++iter1).first << std::endl;
@@ -1012,7 +1012,7 @@ void    testTree_iterator() {
     iter1 = my_tree.root();
     std::cout << "(*iter1).data.first = " << (*iter1).first << std::endl;
     ft::RBTree<ft::pair<int, std::string> >::iterator iter2;
-    iter2 = my_tree.root().base()->left;
+    iter2 = static_cast<ft::RBTree<ft::pair<int, std::string> >::iterator >(my_tree.root().base()->left);
     std::cout << "(*iter2).data.first = " << (*iter2).first << std::endl;
     std::cout << "(*(iter1 = iter2)).data.first = " << (*(iter1 = iter2)).first << std::endl;
 

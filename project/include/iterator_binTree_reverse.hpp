@@ -29,8 +29,9 @@ class binTree_iterator_reverse {
         binTree_iterator_reverse(const binTree_iterator_reverse<U>& other) :
             _M_current(other.base()) {}
     binTree_iterator_reverse & operator=(const binTree_iterator_reverse & obj);
-    template < class Key, class Value >
-        binTree_iterator_reverse<Iter>&  operator=(Node<pair<Key, Value> >* obj);
+    // template < class Key, class Value >
+    //     binTree_iterator_reverse<Iter>&  operator=(Node<pair<Key, Value> >* obj);
+    binTree_iterator_reverse & operator=(const Iter & obj);
 
     // getters
     Iter base() const;
@@ -80,13 +81,22 @@ binTree_iterator_reverse<Iter>::
 
 template <
     class Iter >
-template < class Key, class Value >
 binTree_iterator_reverse<Iter>&
 binTree_iterator_reverse<Iter>::
-    operator=(Node<pair<Key, Value> >* obj) {
+    operator=(const Iter & obj) {
     _M_current = obj;
     return (*this);
 }
+
+// template <
+//     class Iter >
+// template < class Key, class Value >
+// binTree_iterator_reverse<Iter>&
+// binTree_iterator_reverse<Iter>::
+//     operator=(Node<pair<Key, Value> >* obj) {
+//     _M_current = obj;
+//     return (*this);
+// }
 
 // getters
 template <
@@ -125,24 +135,24 @@ binTree_iterator_reverse<Iter>::
     operator--() {
     // check end
     if (_M_current.base()->right->right == _M_current.base()->right) {
-        _M_current =  _M_current.base()->right;
+        _M_current =  static_cast<Iter>(_M_current.base()->right);
     // check right child/root
     } else if ((_M_current.base()->right != NULL && 
         _M_current.base()->right->is_empty() == false) ||
         (_M_current.base()->is_empty() == false && 
         _M_current.base()->parent->is_empty() == true)) {
-        _M_current = _M_current.base()->right;
+        _M_current = static_cast<Iter>(_M_current.base()->right);
         while (_M_current.base()->left != NULL && 
                 _M_current.base()->left->is_empty() == false) {
-            _M_current = _M_current.base()->left;
+            _M_current = static_cast<Iter>(_M_current.base()->left);
         }
     // not end, not root, without right child
     } else {
         while (_M_current.base()->parent->right == _M_current.base()) {
-            _M_current = _M_current.base()->parent;
+            _M_current = static_cast<Iter>(_M_current.base()->parent);
         }
         if (_M_current.base()->parent->left == _M_current.base()) {
-            _M_current = _M_current.base()->parent;
+            _M_current = static_cast<Iter>(_M_current.base()->parent);
         }
     }
     return (*this);
@@ -167,7 +177,7 @@ binTree_iterator_reverse<Iter>::
     operator++() {
     // check end
     if (_M_current.base()->right == _M_current.base()) {
-        _M_current =  _M_current.base()->parent;
+        _M_current =  static_cast<Iter>(_M_current.base()->parent);
     // check right child/root
     } else if ((_M_current.base()->left != NULL && 
         _M_current.base()->left->is_empty() == false) ||
