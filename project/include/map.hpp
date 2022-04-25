@@ -5,6 +5,7 @@
 #include <memory>
 #include <utility.hpp>
 #include <iterator_binTree_normal.hpp>
+#include <iterator_binTree_normal_const.hpp>
 #include <iterator_binTree_reverse.hpp>
 #include <RBTree.hpp>
 
@@ -26,8 +27,8 @@ class map : public RBTree<pair<const Key, T> > {
     typedef std::ptrdiff_t          difference_type;
     typedef Compare                 key_compare;
     typedef Allocator               allocator_type;
-    typedef value_type&             reference;
-    typedef const value_type&       const_reference;
+    typedef Node<value_type>&             reference;
+    typedef const Node<value_type>&       const_reference;
 
     typedef typename Allocator::pointer          pointer;
     typedef typename Allocator::const_pointer    const_pointer;
@@ -47,9 +48,9 @@ class map : public RBTree<pair<const Key, T> > {
                     RBTree<pair<const Key, T> >(alloc),
                     _comp(comp) { }
 
-    // map( const map& other ) {
-    //     operator=(other);
-    // }
+    map( const map& other ) {
+        operator=(other);
+    }
 
     template< class InputIt >
     map( InputIt first, InputIt last,
@@ -60,11 +61,11 @@ class map : public RBTree<pair<const Key, T> > {
 
     allocator_type get_allocator();
 
-    // map &   operator=(const map & other) {
-    //     _comp = other._comp;
-    //     RBTree<pair<const Key, T> >::operator=(other);
-    //     return ( *this );
-    // }
+    map &   operator=(const map & other) {
+        _comp = other._comp;
+        RBTree<pair<const Key, T> >::operator=(other);
+        return ( *this );
+    }
 
     // Element access
 

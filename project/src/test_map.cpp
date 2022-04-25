@@ -31,14 +31,14 @@ int main() {
     // testTree_iterator();
     // testMap_insert(); // 15
     // testMap_iterator(); // 7, 8
-    testMap_iterator_reverse(); // 9, 10
+    // testMap_iterator_reverse(); // 9, 10
     // testMap_capacity(); // 11, 12, 13
     // testMap_lookup(); // 19
     // testMap_ElementAccess(); // 5, 6
     // erase_additional_little_test(); // 16
     // testMap_erase(); // 16
     // testMap_clear(); // 14
-    // testMap_swap(); // 17
+    testMap_swap(); // 17
     return (0);
 }
 
@@ -122,9 +122,6 @@ void    testMap_swap() {
     std_tree2.insert(std::make_pair(5, "..5.. "));
     std::map<int, std::string>::iterator   iter_std_tree2 = std_tree2.begin();
 
-    // ft::map<int, std::string>   my_tree3;
-    // my_tree3 = my_tree1;
-
     std::cout << "\n\033[36m" << "\t\t befor swap: " << "\033[0m"  << std::endl;
 
     std::cout << "my_tree1 \t  std_tree1 \t  my_tree2 \t  std_tree2 " << std::endl;
@@ -196,6 +193,17 @@ void    testMap_swap() {
         std::cout << std::endl;
     }
 
+    std::cout << std::endl << "\033[33m" << "__1.3)___3_____" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t 3) operator=; "
+              << "\033[0m" << std::endl;
+
+    ft::map<int, std::string>   my_tree3(my_tree1);
+    std::cout << "ft::map<int, std::string>   my_tree3(my_tree1);" << std::endl;
+    std::cout << "\n\033[36m" << "\t\t cout: " << "\033[0m"  << std::endl;
+    for ( iter_my_tree1 = my_tree3.begin() ; iter_my_tree1 != my_tree3.end(); ++iter_my_tree1 ) {
+        std::cout << iter_my_tree1->first << " " << iter_my_tree1->second;
+        std::cout << std::endl;
+    }
 }
 
 void    testMap_clear() {
@@ -944,6 +952,18 @@ void    testMap_iterator() {
     while (iter1 != iter2) {
         std::cout << "\t (*iter2--).first: " << (*iter2--).first << std::endl;
     }
+
+
+    // test const
+    std::map<int, std::string>::const_iterator iter3;
+    iter3 = (std_tree.begin() );
+
+    ft::map<int, std::string>::const_iterator iter4;
+    iter4 = (my_tree.begin() );
+    std::cout << "\033[34m" "\n\t test const_iterator: \n" "\033[0m"
+                 "    ft::map<int, std::string>::const_iterator iter4;\n"
+                 "    iter4 = (my_tree.begin() ); " "\033[34m" "  (*iter4).first = " << "\033[0m"
+              << (*iter4).first << std::endl;
 }
 
 void    testMap_insert() {

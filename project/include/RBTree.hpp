@@ -13,6 +13,11 @@ template <
 class binTree_iterator;
 
 template <
+    typename T,
+    typename Tree >
+class binTree_iterator_const;
+
+template <
     typename Iter >
 class binTree_iterator_reverse;
 
@@ -30,8 +35,8 @@ class RBTree {
     typedef typename Allocator::template
             rebind<Node<T_node> >::other    allocator_type;
 
-    typedef binTree_iterator<T_node, RBTree<T_node> >           iterator;
-    typedef binTree_iterator<const T_node, RBTree<const T_node> >     const_iterator;
+    typedef binTree_iterator<T_node, RBTree<T_node> >               iterator;
+    typedef binTree_iterator_const<T_node, RBTree<T_node> >         const_iterator;
     // typedef binTree_iterator<const Node<T_node>, RBTree<T_node> >     const_iterator;
 
     typedef binTree_iterator_reverse<iterator >                       reverse_iterator;
@@ -119,7 +124,7 @@ class RBTree {
     void                    swap( RBTree& other );
 
     template< class InputIt >
-        void    insert( InputIt first, InputIt last, char (*)[sizeof(*first)] = NULL ) {
+        void    insert( InputIt first, InputIt last ) {
         while (first != last) {
             insert(*first);
             ++first;
@@ -229,13 +234,7 @@ RBTree<T_node, Allocator>::
         return (*this);
     }
     this->clear();
-    // iterator iter_other = other.begin();
-    // const_iterator iter_other( other.begin() );
-
-    // for ( iterator iter_other = other.begin(); iter_other != other.end() ; ++iter_other ) {
-        // this->insert( other.begin(), other.end() );
-    // }
-
+    this->insert( other.begin(), other.end() );
     _alloc = other.get_allocator();
     return (*this);
 }

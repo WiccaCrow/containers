@@ -11,13 +11,16 @@ typedef enum { BLACK, RED } nodeColor;
 template <class T>
 class Node {
     public:
-        typedef T   data_type;
-        T data;
-        nodeColor color;
-        Node *parent;
-        Node *left;
-        Node *right;
-        bool _is_empty;
+        typedef T           data_type;
+        typedef Node*       _Node_ptr;
+        typedef const Node* _Const_Node_ptr;
+
+        data_type   data;
+        nodeColor   color;
+        _Node_ptr   parent;
+        _Node_ptr   left;
+        _Node_ptr   right;
+        bool        _is_empty;
 
         Node() : 
             data(),
@@ -27,7 +30,7 @@ class Node {
             right(0),
             _is_empty(true) { }
         
-        Node(T d, nodeColor clr, Node * prnt, Node * lft, Node * rht) : 
+        Node(data_type d, nodeColor clr, _Node_ptr prnt, _Node_ptr lft, _Node_ptr rht) : 
             data(d),
             color(clr),
             parent(prnt),
@@ -35,7 +38,7 @@ class Node {
             right(rht),
             _is_empty(false) { }
         
-        Node(T d) : 
+        Node(data_type d) : 
             data(d),
             color(RED),
             parent(NULL),
@@ -49,7 +52,7 @@ class Node {
             return (_is_empty);
         }
 
-        T & operator*() {
+        data_type & operator*() {
             return (data);
         }
 
@@ -57,7 +60,7 @@ class Node {
         //     return (data);
         // }
 
-        T * operator->() {
+        data_type * operator->() {
             return (&data);
         }
 
