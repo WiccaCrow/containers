@@ -10,7 +10,6 @@ ifeq ($(MAKE_ENABLE_IF),0)
 SRC_CPP     	=	test_enable_if_11.cpp
 FLAGS 			+=	-std=c++11
 else
-# FLAGS       	+=   -Wall -Wextra -Werror -g
 FLAGS 			+=	 -std=c++98
 endif
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cassert>
 #include <utility.hpp>
 // #include <vector.hpp>
 #include <RBTree.hpp>
@@ -21,24 +22,25 @@ void    erase_additional_little_test();
 void    testMap_erase();
 void    testMap_clear();
 void    testMap_swap();
-
+void    testMap_observers();
 // At the Mountains of Madness
 
  /*------------------START-------------------*/
 
 int main() {
-    // testTree_insert();
-    // testTree_iterator();
-    // testMap_insert(); // 15
-    // testMap_iterator(); // 7, 8
-    // testMap_iterator_reverse(); // 9, 10
-    // testMap_capacity(); // 11, 12, 13
-    // testMap_lookup(); // 19
-    // testMap_ElementAccess(); // 5, 6
-    // erase_additional_little_test(); // 16
-    // testMap_erase(); // 16
-    // testMap_clear(); // 14
+    testTree_insert();
+    testTree_iterator();
+    testMap_insert(); // 15
+    testMap_iterator(); // 7, 8
+    testMap_iterator_reverse(); // 9, 10
+    testMap_capacity(); // 11, 12, 13
+    testMap_lookup(); // 19
+    testMap_ElementAccess(); // 5, 6
+    erase_additional_little_test(); // 16
+    testMap_erase(); // 16
+    testMap_clear(); // 14
     testMap_swap(); // 17
+    testMap_observers(); // 23, 24
     return (0);
 }
 
@@ -98,7 +100,74 @@ void print_int_key_node(ft::Node<ft::pair<const int, T> > *node) {
     }
 }
 
-//  /*------------------TESTS-------------------*/
+struct ModCmp {
+    bool operator()(const int lhs, const int rhs) const
+    {
+        return (lhs % 97) < (rhs % 97);
+    }
+};
+
+ /*------------------TESTS-------------------*/
+
+ 
+void testMap_observers() {
+    std::cout << std::endl << "\033[35m" << "CHECK testMap Observers " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____23-24_____" << "\033[0m" << std::endl;
+    
+    std::cout << "\n\033[36m" << "\t\t std: " << "\033[0m"  << std::endl;
+    std::map<int, char, ModCmp> cont;
+	cont.insert( std::make_pair(1, 'a') );
+	cont.insert( std::make_pair(2, 'b') );
+	cont.insert( std::make_pair(3, 'c') );
+	cont.insert( std::make_pair(4, 'd') );
+	cont.insert( std::make_pair(5, 'e') );
+
+    std::map<int, char, ModCmp>::value_compare comp_func = cont.value_comp();
+    const std::pair<int, char> val( 2, 'b' );
+    for (  std::map<int, char, ModCmp>::iterator iter = cont.begin(); iter != cont.end(); ++iter) {
+		std::pair<const int, char> it(*iter); 
+
+        bool before = comp_func(it, val);
+        bool after = comp_func(val, it);
+ 
+        std::cout << '(' << it.first << ',' << it.second;
+        if (!before && !after)
+            std::cout << ") equivalent to key " << val.first << '\n';
+        else if (before)
+            std::cout << ") goes before key " << val.first << '\n';
+        else if (after)
+            std::cout << ") goes after key " << val.first << '\n';
+        else
+            assert(0); // Cannot happen
+    }
+    std::cout << std::endl;
+
+    std::cout << "\n\033[36m" << "\t\t ft: " << "\033[0m"  << std::endl;
+	ft::map<int, char, ModCmp> cont_ft;
+	cont_ft.insert( ft::make_pair(1, 'a') );
+	cont_ft.insert( ft::make_pair(2, 'b') );
+	cont_ft.insert( ft::make_pair(3, 'c') );
+	cont_ft.insert( ft::make_pair(4, 'd') );
+	cont_ft.insert( ft::make_pair(5, 'e') );
+
+    ft::map<int, char, ModCmp>::value_compare comp_func_ft = cont_ft.value_comp();
+    const ft::pair<int, char> val_ft( 2, 'b' );
+    for (  ft::map<int, char, ModCmp>::iterator iter = cont_ft.begin(); iter != cont_ft.end(); ++iter) {
+		ft::pair<const int, char> it(*iter); 
+        bool before = comp_func_ft(it, val_ft);
+        bool after = comp_func_ft(val_ft, it);
+ 
+        std::cout << '(' << it.first << ',' << it.second;
+        if (!before && !after)
+            std::cout << ") equivalent to key " << val.first << '\n';
+        else if (before)
+            std::cout << ") goes before key " << val.first << '\n';
+        else if (after)
+            std::cout << ") goes after key " << val.first << '\n';
+        else
+            assert(0); // Cannot happen
+    }
+}
 
 void    testMap_swap() {
     std::cout << std::endl << "\033[35m" << "CHECK testMap Modifiers " << "\033[0m" << std::endl;
@@ -199,6 +268,17 @@ void    testMap_swap() {
 
     ft::map<int, std::string>   my_tree3(my_tree1);
     std::cout << "ft::map<int, std::string>   my_tree3(my_tree1);" << std::endl;
+    std::cout << "\n\033[36m" << "\t\t cout: " << "\033[0m"  << std::endl;
+    for ( iter_my_tree1 = my_tree3.begin() ; iter_my_tree1 != my_tree3.end(); ++iter_my_tree1 ) {
+        std::cout << iter_my_tree1->first << " " << iter_my_tree1->second;
+        std::cout << std::endl;
+    }
+
+    std::cout << std::endl << "\033[33m" << "_____15.3_____" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t 15.3) insert(InIter first, InIter last); "
+              << "\033[0m" << std::endl;
+    my_tree3.insert(my_tree2.begin(), my_tree2.end());
+    std::cout << "my_tree3.insert(my_tree2.begin(), my_tree2.end());" << std::endl;
     std::cout << "\n\033[36m" << "\t\t cout: " << "\033[0m"  << std::endl;
     for ( iter_my_tree1 = my_tree3.begin() ; iter_my_tree1 != my_tree3.end(); ++iter_my_tree1 ) {
         std::cout << iter_my_tree1->first << " " << iter_my_tree1->second;

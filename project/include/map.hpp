@@ -8,15 +8,16 @@
 #include <iterator_binTree_normal_const.hpp>
 #include <iterator_binTree_reverse.hpp>
 #include <RBTree.hpp>
+#include <less.hpp>
 
 namespace ft {
 
 template<
     class Key,
     class T,
-    class Compare = std::less<Key>,
-    class Allocator = std::allocator<std::pair<const Key, T> > > 
-class map : public RBTree<pair<const Key, T> > {
+    class Compare = ::ft::less<Key>,
+    class Allocator = std::allocator< ::ft::pair<const Key, T> > > 
+class map : public RBTree< ::ft::pair<const Key, T> > {
     public:
 
     typedef Key                     key_type;
@@ -159,6 +160,30 @@ class map : public RBTree<pair<const Key, T> > {
         return pair_eq;
     }
 
+    // Observers
+
+    key_compare key_comp() const {
+        return ( this->_comp );
+    }
+
+    class value_compare : public ::ft::binary_function<value_type, value_type, bool> {
+        friend class ::ft::map<Key, T, Compare, Allocator>;
+        protected:
+        Compare comp;
+
+        value_compare(Compare c) : 
+                comp(c) { }
+
+        public:
+
+        bool operator()(const value_type& x, const value_type& y) const
+        { return comp(x.first, y.first); }
+    };
+
+    value_compare   value_comp() const {
+        Compare less_obj;
+        return value_compare(less_obj);
+    }
 };
 
 } // namespace ft
