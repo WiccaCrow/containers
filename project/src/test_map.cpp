@@ -23,6 +23,8 @@ void    testMap_erase();
 void    testMap_clear();
 void    testMap_swap();
 void    testMap_observers();
+void    testMap_non_members();
+
 // At the Mountains of Madness
 
  /*------------------START-------------------*/
@@ -41,6 +43,7 @@ int main() {
     testMap_clear(); // 14
     testMap_swap(); // 17
     testMap_observers(); // 23, 24
+    testMap_non_members(); // 25-31
     return (0);
 }
 
@@ -100,6 +103,10 @@ void print_int_key_node(ft::Node<ft::pair<const int, T> > *node) {
     }
 }
 
+void    print_pair(ft::pair<const int, char>& n) { 
+    std::cout << " " << n.first << '(' << n.second << ')'; 
+}
+
 struct ModCmp {
     bool operator()(const int lhs, const int rhs) const
     {
@@ -107,9 +114,89 @@ struct ModCmp {
     }
 };
 
+template<class Iter >
+void
+for_each_ft(Iter begin, Iter end, void(*op)(ft::pair<const int, char>& )) {
+    for ( ; begin != end ; ++begin ) {
+        op(*begin);
+    }
+}
+
  /*------------------TESTS-------------------*/
 
+void testMap_non_members() {
+
+    std::cout << std::endl << "\033[35m" << "CHECK testMap NON-MEMBER FUNCTIONS " << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "_____31_____" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "\t 31) template< class Key, class T, class Compare, class Alloc > \n"
+                               "\t\t void swap( std::map<Key,T,Compare,Alloc>& lhs, \n"
+                               "\t\t std::map<Key,T,Compare,Alloc>& rhs ); "
+              << "\033[0m" << std::endl;
+
+    ft::map<int, char> alice;
+    alice.insert( ft::make_pair(1, 'a') );
+    alice.insert( ft::make_pair(2, 'b') );
+    alice.insert( ft::make_pair(3, 'c') );
+
+    ft::map<int, char> bob;
+    bob.insert( ft::make_pair(7, 'Z') );
+    bob.insert( ft::make_pair(8, 'Y') );
+    bob.insert( ft::make_pair(9, 'X') );
+    bob.insert( ft::make_pair(10, 'W') );
  
+    // Print state before swap
+    std::cout << "alice:";
+    for_each_ft(alice.begin(), alice.end(), print_pair);
+    std::cout << "\n" "bob  :";
+    for_each_ft(bob.begin(), bob.end(), print_pair);
+    std::cout << '\n';
+ 
+    std::cout << "-- SWAP\n";
+    ft::swap(alice, bob);
+ 
+    // Print state after swap
+    std::cout << "alice:";
+    for_each_ft(alice.begin(), alice.end(), print_pair);
+    std::cout << "\n" "bob  :";
+    for_each_ft(bob.begin(), bob.end(), print_pair);
+    std::cout << std::endl;
+
+    std::cout << std::endl << "\033[33m" << "_____25-30_____" << "\033[0m" << std::endl;
+    std::cout << "\033[35m" << 
+                 "\t operator== \n"
+                 "\t operator!= \n" 
+                 "\t operator< \n" 
+                 "\t operator<= \n"
+                 "\t operator> \n"
+                 "\t operator>= "
+                 "\033[0m" << std::endl;
+
+    ft::map<int, char> eve(alice);
+ 
+    std::cout << std::boolalpha;
+ 
+    // Compare non equal containers
+    std::cout << "\n\033[36m" << "\t\t alice > bob " << "\033[0m"  << std::endl;
+    std::cout << "alice == bob returns " << (alice == bob) << std::endl;
+    std::cout << "alice != bob returns " << (alice != bob) << std::endl;
+    std::cout << "alice <  bob returns " << (alice < bob) <<  std::endl;
+    std::cout << "alice <= bob returns " << (alice <= bob) << std::endl;
+    std::cout << "alice >  bob returns " << (alice > bob) <<  std::endl;
+    std::cout << "alice >= bob returns " << (alice >= bob) << std::endl;
+
+ 
+    // Compare equal containers
+    std::cout << "\n\033[36m" << "\t\t alice == eve " << "\033[0m"  << std::endl;
+    std::cout << "alice == eve returns " << (alice == eve) << std::endl;
+    std::cout << "alice != eve returns " << (alice != eve) << std::endl;
+    std::cout << "alice <  eve returns " << (alice < eve) <<  std::endl;
+    std::cout << "alice <= eve returns " << (alice <= eve) << std::endl;
+    std::cout << "alice >  eve returns " << (alice > eve) <<  std::endl;
+    std::cout << "alice >= eve returns " << (alice >= eve) << std::endl;
+
+    std::cout << std::endl;
+}
+
 void testMap_observers() {
     std::cout << std::endl << "\033[35m" << "CHECK testMap Observers " << "\033[0m" << std::endl;
     std::cout << std::endl << "\033[33m" << "_____23-24_____" << "\033[0m" << std::endl;

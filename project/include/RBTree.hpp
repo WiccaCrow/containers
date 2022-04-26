@@ -64,7 +64,7 @@ class RBTree {
     Node<T_node> *   create_node(T_node data);
     void             check_balance_1(Node<T_node> *check_node);
     Node<T_node> *   check_balance_2(Node<T_node> *new_node, Node<T_node> *uncle, Node<T_node> *parent);
-    void             checkLineXPG(Node<T_node> *new_node, Node<T_node> *parent);
+    void             checkLineXPG(Node<T_node> *new_node);
     void             rotate_lineXPG_straight(Node<T_node> *parent);
     void             rotate_lineXPG_angle(Node<T_node> *new_node, Node<T_node> *parent);
 
@@ -148,9 +148,9 @@ template<
     class Allocator >
 RBTree<T_node, Allocator>::
     RBTree( allocator_type alloc ) : 
-                _empty_node(),
                 _root(NULL),
                 _begin(_root),
+                _empty_node(),
                 _end_node(),
                 _size(0),
                 _alloc(alloc) {
@@ -184,9 +184,9 @@ template<
     class Allocator >
 RBTree<T_node, Allocator>::
     RBTree(RBTree & other) : 
-                _empty_node(),
                 _root(NULL),
                 _begin(_root),
+                _empty_node(),
                 _end_node(),
                 _size(0) {
     _empty_node._is_empty = true;
@@ -202,9 +202,9 @@ template< class InputIt >
 RBTree<T_node, Allocator>::
     RBTree( InputIt first, InputIt last,
         const Allocator& alloc ) : 
-            _empty_node(),
             _root(NULL),
             _begin(_root),
+            _empty_node(),
             _end_node(),
             _size(0),
             _alloc(alloc) {
@@ -465,6 +465,10 @@ template<
 typename RBTree<T_node, Allocator>::iterator                
 RBTree<T_node, Allocator>::
 insert( iterator hint, const T_node& value ) {
+    iterator addr_hint = hint;
+    if ( addr_hint == hint ) {
+        ;
+    }
     return ( insert(value).first );
 }
 
@@ -624,7 +628,7 @@ RBTree<T_node, Allocator>::
         parent->parent->color = (parent->parent == _root ? BLACK : RED);
         return (parent->parent);
     }
-    checkLineXPG(new_node, parent);
+    checkLineXPG(new_node);
     rotate_lineXPG_straight(parent);
     rotate_lineXPG_angle(new_node, parent);
     return (_root);
@@ -635,7 +639,7 @@ template<
     class Allocator >
 void
 RBTree<T_node, Allocator>::
-    checkLineXPG(Node<T_node> *new_node, Node<T_node> *parent) {
+    checkLineXPG(Node<T_node> *new_node) {
     if (new_node->parent->left == new_node &&
         (new_node->parent->parent == NIL ||
             new_node->parent->parent->left == new_node->parent)) {
@@ -723,7 +727,7 @@ RBTree<T_node, Allocator>::
         parent->left = NIL;
         new_node->right = parent;
     }
-    checkLineXPG(parent, new_node);
+    checkLineXPG(parent);
     rotate_lineXPG_straight(new_node);
 }
 

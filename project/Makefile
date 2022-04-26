@@ -4,6 +4,7 @@ NAME			=   mySTL
 CPP         	=   g++
 FLAGS       	=   -g
 FLAGS       	+=  -Wpedantic
+FLAGS     	    +=  -Wall -Wextra -Werror -g
 # FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
 
 ifeq ($(MAKE_ENABLE_IF),0)
