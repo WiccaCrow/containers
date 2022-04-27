@@ -37,7 +37,6 @@ class RBTree {
 
     typedef binTree_iterator<T_node, RBTree<T_node> >               iterator;
     typedef binTree_iterator_const<T_node, RBTree<T_node> >         const_iterator;
-    // typedef binTree_iterator<const Node<T_node>, RBTree<T_node> >     const_iterator;
 
     typedef binTree_iterator_reverse<iterator >                       reverse_iterator;
     typedef binTree_iterator_reverse<const_iterator >                 const_reverse_iterator;

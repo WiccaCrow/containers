@@ -34,6 +34,10 @@ ifeq ($(MAKE_MAP),0)
 SRC_CPP     	=	test_map.cpp
 endif
 
+ifeq ($(MAKE_STACK),0)
+SRC_CPP     	=	test_stack.cpp
+endif
+
 SRC_FOLDER  	=   src/
 OBJ_FOLDER  	=   .obj/
 HEAD_FOLDER 	=   include/
@@ -70,6 +74,11 @@ map: ; $(MAKE) MAKE_MAP=0 all
 clean_map: ; $(MAKE) MAKE_MAP=0 clean
 fclean_map: ; $(MAKE) MAKE_MAP=0 clean ; rm -rf $(NAME)
 re_map: ; $(MAKE) MAKE_MAP=0 fclean map
+
+stack: ; $(MAKE) MAKE_STACK=0 all
+clean_stack: ; $(MAKE) MAKE_STACK=0 clean
+fclean_stack: ; $(MAKE) MAKE_STACK=0 clean ; rm -rf $(NAME)
+re_stack: ; $(MAKE) MAKE_STACK=0 fclean map
 
 all: objdir $(NAME)
 
