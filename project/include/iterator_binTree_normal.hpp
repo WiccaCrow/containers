@@ -134,8 +134,11 @@ template <
 binTree_iterator<T, Tree>& 
 binTree_iterator<T, Tree>::
     operator++() {
+    // check befor begin
+    if ( _M_current->right == _M_current ) {
+        _M_current = _M_current->left;
     // check end
-    if (_M_current->right->right == _M_current->right) {
+    } else if (_M_current->right->right == _M_current->right) {
         _M_current =  _M_current->right;
     // check right child/root
     } else if ((_M_current->right != NULL && 
@@ -178,9 +181,12 @@ template <
 binTree_iterator<T, Tree>& 
 binTree_iterator<T, Tree>::
     operator--() {
+    // check begin : not list && does end_node (befor begin)
+    if ( _M_current->left != NULL && _M_current->left->right == _M_current->left ) {
+        _M_current = _M_current->left;
     // check end
-    if (_M_current->right == _M_current) {
-        _M_current =  _M_current->parent;
+    } else if (_M_current->right == _M_current) {
+        _M_current = _M_current->parent;
     // check right child/root
     } else if ((_M_current->left != NULL && 
         _M_current->left->is_empty() == false) ||
@@ -193,10 +199,10 @@ binTree_iterator<T, Tree>::
         }
     // not end, not root, without right child
     } else {
-        while (_M_current->parent->left == _M_current) {
+        while ( (_M_current->parent != NULL && _M_current->parent->is_empty() == false) && _M_current->parent->left == _M_current) {
             _M_current = _M_current->parent;
         }
-        if (_M_current->parent->right == _M_current) {
+        if ( (_M_current->parent != NULL && _M_current->parent->is_empty() == false) && _M_current->parent->right == _M_current ) {
             _M_current = _M_current->parent;
         }
     }

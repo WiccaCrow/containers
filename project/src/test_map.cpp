@@ -34,16 +34,16 @@ int main() {
     testTree_iterator();
     testMap_insert(); // 15
     testMap_iterator(); // 7, 8
-    testMap_iterator_reverse(); // 9, 10
-    testMap_capacity(); // 11, 12, 13
-    testMap_lookup(); // 19
-    testMap_ElementAccess(); // 5, 6
-    erase_additional_little_test(); // 16
-    testMap_erase(); // 16
-    testMap_clear(); // 14
-    testMap_swap(); // 17
-    testMap_observers(); // 23, 24
-    testMap_non_members(); // 25-31
+    // testMap_iterator_reverse(); // 9, 10
+    // testMap_capacity(); // 11, 12, 13
+    // testMap_lookup(); // 19
+    // testMap_ElementAccess(); // 5, 6
+    // erase_additional_little_test(); // 16
+    // testMap_erase(); // 16
+    // testMap_clear(); // 14
+    // testMap_swap(); // 17
+    // testMap_observers(); // 23, 24
+    // testMap_non_members(); // 25-31
     return (0);
 }
 
