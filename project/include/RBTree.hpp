@@ -379,7 +379,7 @@ RBTree<T_node, Allocator>::
     clear() {
     this->erase( this->begin(), this->end() );
     _begin = _root = NULL;
-    _end_node.parent = NULL;
+    _end_node.parent = _end_node.left = NULL;
 }
 
 template< 
@@ -457,7 +457,7 @@ RBTree<T_node, Allocator>::
     erase( iterator pos ) {
     --_size;
     if ( 0 == _size ) {
-        _root = _begin = _end_node.parent = NULL;
+        _root = _begin = _end_node.parent = _end_node.left = NULL;
         _alloc.destroy(pos.base());
         _alloc.deallocate(pos.base(), 1);
         return this->end();
@@ -819,13 +819,18 @@ RBTree<T_node, Allocator>::
     if ( Parent->right == ch_prev  &&
          Parent->left->color == BLACK &&
          Parent->left->left->color == RED ) {
+        if ( _root == Parent) { // check root
+            _root = Parent->left;
+        }
         // родителем ч.брата станет родитель родителя: B(p) = P(p) 
         Parent->left->parent = Parent->parent;
         // ребенком деда вместо родителя станет брат: G(l or r) = B
-        if ( Parent->parent->left == Parent ) {
-            Parent->parent->left = Parent->left;
-        } else {
-            Parent->parent->right = Parent->left;
+        if (Parent->parent != NULL && Parent->parent != NIL) {
+            if ( Parent->parent->left == Parent ) {
+                Parent->parent->left = Parent->left;
+            } else {
+                Parent->parent->right = Parent->left;
+            }
         }
         // родителем родителя становится брат: P(p) = B
         Parent->parent = Parent->left;
@@ -849,11 +854,16 @@ RBTree<T_node, Allocator>::
     } else if ( Parent->left == ch_prev  &&
          Parent->right->color == BLACK && // sibling
          Parent->right->right->color == RED ) { // nephew line
+        if ( _root == Parent) { // check root
+            _root = Parent->right;
+        }
         Parent->right->parent = Parent->parent;
-        if ( Parent->parent->left == Parent ) {
-            Parent->parent->left = Parent->right;
-        } else {
-            Parent->parent->right = Parent->right;
+        if (Parent->parent != NULL && Parent->parent != NIL) {
+            if ( Parent->parent->left == Parent ) {
+                Parent->parent->left = Parent->right;
+            } else {
+                Parent->parent->right = Parent->right;
+            }
         }
         Parent->parent = Parent->right;
         Parent->right = Parent->parent->left;
@@ -923,8 +933,8 @@ RBTree<T_node, Allocator>::
             ch_prev->color = BLACK;
         } else {
             // rotate
-            balance_red_sibling(ch_prev, Parent);
             for ( int i = 1 ; i ; ) {
+                balance_red_sibling(ch_prev, Parent);
                 i = balance_black_sibling_and_nephews(&ch_prev, &Parent);
                 if ( i == 2 ) {
                     return ;
@@ -1001,6 +1011,7 @@ void
 RBTree<T_node, Allocator>::
     erase_with_left_child(iterator pos) {
     if ( pos.base() == _root ) {
+        _root = pos.base()->left;
         pos.base()->left->right = &_end_node;
         pos.base()->left->color = BLACK;
         pos.base()->left->parent = pos.base()->parent;
@@ -1023,6 +1034,9 @@ template<
 void
 RBTree<T_node, Allocator>::
     erase_with_both_childs(iterator pos, iterator iter_prev) {
+    if ( _root == pos.base() ) {
+        _root = iter_prev.base(); // check root
+    }
     int iter_prev_color_start = iter_prev.base()->color;
     Node<T_node> *ch_prev = iter_prev.base()->left; // for color
     Node<T_node> *parent_prev = iter_prev.base()->parent; // for color
@@ -1032,17 +1046,21 @@ RBTree<T_node, Allocator>::
     // 2 , 6.1, 6.2
     if ( iter_prev.base()->parent != pos.base() ) {
         iter_prev.base()->parent->right = iter_prev.base()->left;
-        if ( iter_prev.base()->left != NIL ) {
+        if ( iter_prev.base()->left != NIL && 
+             iter_prev.base()->left != &_end_node ) {
             iter_prev.base()->left->parent = iter_prev.base()->parent;
         }
     }
     // 3
     iter_prev.base()->parent = pos.base()->parent;
     // 4
-    if ( pos.base()->parent->left == pos.base() ) {
-        pos.base()->parent->left = iter_prev.base();
-    } else {
-        pos.base()->parent->right = iter_prev.base();
+    if ( pos.base()->parent != NULL &&
+         pos.base()->parent != NIL ) {
+        if ( pos.base()->parent->left == pos.base() ) {
+            pos.base()->parent->left = iter_prev.base();
+        } else {
+            pos.base()->parent->right = iter_prev.base();
+        }
     }
     // 5
     iter_prev.base()->right = pos.base()->right;
@@ -1052,6 +1070,8 @@ RBTree<T_node, Allocator>::
         // 7
         iter_prev.base()->left = pos.base()->left;
         iter_prev.base()->left->parent = iter_prev.base();
+    } else {
+        parent_prev = iter_prev.base();
     }
     erase_check_balance(iter_prev_color_start, ch_prev, parent_prev);
     delete_node(pos.base(), _alloc);

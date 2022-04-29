@@ -152,10 +152,14 @@ binTree_iterator<T, Tree>::
         }
     // not end, not root, without right child
     } else {
-        while (_M_current->parent->right == _M_current) {
+        while ( (_M_current->parent != NULL && 
+                 _M_current->parent->is_empty() == false) &&
+                _M_current->parent->right == _M_current) {
             _M_current = _M_current->parent;
         }
-        if (_M_current->parent->left == _M_current) {
+        if ( (_M_current->parent != NULL && 
+              _M_current->parent->is_empty() == false) &&
+             _M_current->parent->left == _M_current) {
             _M_current = _M_current->parent;
         }
     }
@@ -199,10 +203,14 @@ binTree_iterator<T, Tree>::
         }
     // not end, not root, without right child
     } else {
-        while ( (_M_current->parent != NULL && _M_current->parent->is_empty() == false) && _M_current->parent->left == _M_current) {
+        while ( (_M_current->parent != NULL && 
+                 _M_current->parent->is_empty() == false) &&
+                _M_current->parent->left == _M_current) {
             _M_current = _M_current->parent;
         }
-        if ( (_M_current->parent != NULL && _M_current->parent->is_empty() == false) && _M_current->parent->right == _M_current ) {
+        if ( (_M_current->parent != NULL && 
+              _M_current->parent->is_empty() == false) && 
+             _M_current->parent->right == _M_current ) {
             _M_current = _M_current->parent;
         }
     }
