@@ -30,5 +30,7 @@ int main() {
     std::cout << "container2 <  contaiter: " << ( container2 < container ) << std::endl;
     std::cout << "container2 <= contaiter: " << ( container2 <= container ) << std::endl;
 
+	ft::stack<int> stack_int;
+
     return (0);
 }

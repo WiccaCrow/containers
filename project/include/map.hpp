@@ -51,11 +51,12 @@ class map : public RBTree< ::ft::pair<const Key, T> > {
 
     explicit map( const Compare& comp = key_compare(),
                 const Allocator& alloc = Allocator() );
-    explicit map( const map& other );
+    map( const map& other );
     template< class InputIt >
         map( InputIt first, InputIt last,
             const Compare& comp = Compare(),
             const Allocator& alloc = Allocator() );
+    ~map();
 
     allocator_type  get_allocator();
     map &           operator=(const map & other);
@@ -172,6 +173,16 @@ map<Key, T, Compare, Allocator>::
         const Allocator& alloc ) :
                     RBTree<pair<const Key, T> >(first, last, alloc),
                     _comp(comp) { }
+
+template<
+    class Key,
+    class T,
+    class Compare,
+    class Allocator > 
+map<Key, T, Compare, Allocator>::
+    ~map() {
+    RBTree<pair<const Key, T> >::clear();
+}
 
 template<
     class Key,

@@ -10,9 +10,11 @@
 #include <map>
 
 // TESTS
+void    testMap_copy();
 void    testTree_insert();
 void    testTree_iterator();
 void    testMap_insert();
+void    testMap_insert_2();
 void    testMap_iterator();
 void    testMap_iterator_reverse();
 void    testMap_capacity();
@@ -42,22 +44,24 @@ template<class Iter >
  /*------------------START-------------------*/
 
 int main() {
-    testTree_insert();
-    testTree_iterator();
-    testMap_insert(); // 15
-    testMap_iterator(); // 7, 8
-    testMap_iterator_reverse(); // 9, 10
-    testMap_capacity(); // 11, 12, 13
-    testMap_lookup(); // 19
-    testMap_ElementAccess(); // 5, 6
-    erase_additional_little_test(); // 16
-    testMap_erase(); // 16
-    testMap_clear(); // 14
-    testMap_erase_for_destructor();
-    testMap_swap(); // 17
-    testMap_observers(); // 23, 24
-    testMap_non_members(); // 25-31
-    testMap_erase_root(); // 16
+    // testMap_copy();
+    // testTree_insert();
+    // testTree_iterator();
+    // testMap_insert(); // 15
+    testMap_insert_2(); // other tests
+    // testMap_iterator(); // 7, 8
+    // testMap_iterator_reverse(); // 9, 10
+    // testMap_capacity(); // 11, 12, 13
+    // testMap_lookup(); // 19
+    // testMap_ElementAccess(); // 5, 6
+    // erase_additional_little_test(); // 16
+    // testMap_erase(); // 16
+    // testMap_clear(); // 14
+    // testMap_erase_for_destructor();
+    // testMap_swap(); // 17
+    // testMap_observers(); // 23, 24
+    // testMap_non_members(); // 25-31
+    // testMap_erase_root(); // 16
     return (0);
 }
 
@@ -431,9 +435,12 @@ void    testMap_erase_root() {
     tree_picture( my_tree );
     // left black, right black
     my_tree.erase( my_tree.root() );
-    my_tree.erase( my_tree.root() );
-    my_tree.erase( my_tree.root() );
     tree_picture( my_tree );
+
+    my_tree.erase( my_tree.find(-10) );
+
+    // my_tree.erase( my_tree.root() );
+    // my_tree.erase( my_tree.root() );
 
 }
 
@@ -1228,6 +1235,61 @@ void    testMap_iterator() {
               << (*iter4).first << std::endl;
 }
 
+void    testMap_insert_2() {
+    std::cout << std::endl << "\033[35m" << "CHECK Map: modifiers" << "\033[0m" << std::endl;
+    std::cout << std::endl << "\033[33m" << "some other tests" << "\033[0m" << std::endl;
+
+    ft::map<int, std::string>   my_tree;
+    my_tree.insert(ft::make_pair(84, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(171, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(42, "At "));
+    tree_picture(my_tree);
+    
+    my_tree.insert(ft::make_pair(164, "At "));
+    tree_picture(my_tree);    
+    
+    my_tree.insert(ft::make_pair(118, "At "));
+    tree_picture(my_tree);    
+    
+    my_tree.insert(ft::make_pair(135, "At "));
+    tree_picture(my_tree);    
+    
+    my_tree.insert(ft::make_pair(110, "At "));
+    tree_picture(my_tree);    
+    
+    my_tree.insert(ft::make_pair(196, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(154, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(130, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(52, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(172, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(86, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(23, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(46, "At "));
+    tree_picture(my_tree);
+
+    my_tree.insert(ft::make_pair(180, "At "));
+    tree_picture(my_tree);
+
+}
+
 void    testMap_insert() {
     std::cout << std::endl << "\033[35m" << "CHECK Map: modifiers" << "\033[0m" << std::endl;
     std::cout << std::endl << "\033[33m" << "_____15_____" << "\033[0m" << std::endl;
@@ -1429,4 +1491,14 @@ void    testTree_insert() {
         std::cout << std::endl;
 
     }
+}
+
+void    testMap_copy() {
+    std::cout << std::endl << "\033[35m" << "CHECK MAP copy " << "\033[0m" << std::endl;
+
+    ft::map<int, std::string> my_tree;
+    fill_map(my_tree, NULL);
+
+    ft::map<int, std::string> my_tree_copy = my_tree;
+
 }

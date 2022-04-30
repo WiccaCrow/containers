@@ -1,81 +1,118 @@
-// #include <cassert>
-// #include <iostream>
-// #include "../include/map.hpp"
-// #include <map>
-
 #include <iostream>
-#include <iomanip>
-#include <utility.hpp>
-// #include <vector.hpp>
-#include <RBTree.hpp>
-#include <iterator_binTree_normal.hpp>
-// #include <iterator_binTree_reverse.hpp>
-#include <map.hpp>
-#include <map>
+#include <string>
+#include <deque>
+#if 1 //CREATE A REAL STL EXAMPLE
+	#include <map>
+	#include <stack>
+	#include <vector>
+	// namespace ft = std;
+// #else
+	#include <map.hpp>
+	#include <stack.hpp>
+	#include <vector.hpp>
+#endif
 
-// Example module 97 key compare function
-struct ModCmp {
-    bool operator()(const int lhs, const int rhs) const
-    {
-        return (lhs % 97) < (rhs % 97);
-    }
-};
- 
-int main()
+#include <stdlib.h>
+
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
 {
-    std::map<int, char, ModCmp> cont;
-	cont.insert( std::make_pair(1, 'a') );
-	cont.insert( std::make_pair(2, 'b') );
-	cont.insert( std::make_pair(3, 'c') );
-	cont.insert( std::make_pair(4, 'd') );
-	cont.insert( std::make_pair(5, 'e') );
-    std::map<int, char, ModCmp>::value_compare comp_func = cont.value_comp();
- 
-    const std::pair<int, char> val( 2, 'b' );
- 
-    for (  std::map<int, char, ModCmp>::iterator iter = cont.begin(); iter != cont.end(); ++iter) {
-		std::pair<const int, char> it(*iter); 
+	int idx;
+	char buff[BUFFER_SIZE];
+};
 
-        bool before = comp_func(it, val);
-        bool after = comp_func(val, it);
- 
-        std::cout << '(' << it.first << ',' << it.second;
-        if (!before && !after)
-            std::cout << ") equivalent to key " << val.first << '\n';
-        else if (before)
-            std::cout << ") goes before key " << val.first << '\n';
-        else if (after)
-            std::cout << ") goes after key " << val.first << '\n';
-        else
-            assert(0); // Cannot happen
-    }
 
-std::cout << std::endl;
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
-	ft::map<int, char, ModCmp> cont_ft;
+template<typename T>
+class MutantStack : public ft::stack<T>
+{
+public:
+	MutantStack() {}
+	MutantStack(const MutantStack<T>& src) { *this = src; }
+	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
+	{
+		this->c = rhs.c;
+		return *this;
+	}
+	~MutantStack() {}
 
-	cont_ft.insert( ft::make_pair(1, 'a') );
-	cont_ft.insert( ft::make_pair(2, 'b') );
-	cont_ft.insert( ft::make_pair(3, 'c') );
-	cont_ft.insert( ft::make_pair(4, 'd') );
-	cont_ft.insert( ft::make_pair(5, 'e') );
+	typedef typename ft::stack<T>::container_type::iterator iterator;
 
-    ft::map<int, char, ModCmp>::value_compare comp_func_ft = cont_ft.value_comp();
- 
-    const ft::pair<int, char> val_ft( 2, 'b' );
-    for (  ft::map<int, char, ModCmp>::iterator iter = cont_ft.begin(); iter != cont_ft.end(); ++iter) {
-		ft::pair<const int, char> it(*iter); 
-        bool before = comp_func_ft(it, val_ft);
-        bool after = comp_func_ft(val_ft, it);
- 
-        std::cout << '(' << it.first << ',' << it.second;
-        if (!before && !after)
-            std::cout << ") equivalent to key " << val.first << '\n';
-        else if (before)
-            std::cout << ") goes before key " << val.first << '\n';
-        else if (after)
-            std::cout << ") goes after key " << val.first << '\n';
-        else
-            assert(0); // Cannot happen
-    }
+	iterator begin() { return this->c.begin(); }
+	iterator end() { return this->c.end(); }
+};
+
+int main(int argc, char** argv) {
+	if (argc != 2)
+	{
+		std::cerr << "Usage: ./test seed" << std::endl;
+		std::cerr << "Provide a seed please" << std::endl;
+		std::cerr << "Count value:" << COUNT << std::endl;
+		return 1;
+	}
+	const int seed = atoi(argv[1]);
+	srand(seed);
+
+	ft::vector<std::string> vector_str;
+	ft::vector<int> vector_int;
+	ft::stack<int> stack_int;
+	ft::vector<Buffer> vector_buffer;
+	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
+	ft::map<int, int> map_int;
+
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_buffer.push_back(Buffer());
+	}
+
+	for (int i = 0; i < COUNT; i++)
+	{
+		const int idx = rand() % COUNT;
+		vector_buffer[idx].idx = 5;
+	}
+	ft::vector<Buffer>().swap(vector_buffer);
+
+	try
+	{
+		for (int i = 0; i < COUNT; i++)
+		{
+			const int idx = rand() % COUNT;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
+		}
+	}
+	catch(const std::exception& e)
+	{
+		//NORMAL ! :P
+	}
+	
+	for (int i = 0; i < COUNT; ++i)
+	{
+	std::cout << i << " = i test 6 size: " << map_int.size()  << std::endl;
+
+		map_int.insert(ft::make_pair(rand(), rand()));
+	}
+
+	int sum = 0;
+	for (int i = 0; i < 10000; i++)
+	{
+		int access = rand();
+		sum += map_int[access];
+	}
+	std::cout << "should be constant with the same seed: " << sum << std::endl;
+
+	{
+		ft::map<int, int> copy = map_int;
+	}
+	MutantStack<char> iterable_stack;
+	for (char letter = 'a'; letter <= 'z'; letter++)
+		iterable_stack.push(letter);
+	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+	{
+		std::cout << *it;
+	}
+	std::cout << std::endl;
+	return (0);
 }

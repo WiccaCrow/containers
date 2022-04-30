@@ -251,7 +251,9 @@ vector<T, Allocator>&
     _size = other.size();
     _capacity = other.capacity();
     ::ft::_Vector_base<T, Allocator>::_alloc = other._alloc;
-    _arr = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(_capacity);
+    if (_capacity) {
+        _arr = ::ft::_Vector_base<T, Allocator>::_alloc.allocate(_capacity);
+    }
     for (int i = 0; static_cast<size_type>(i) < _size; ++i) {
         ::ft::_Vector_base<T, Allocator>::_alloc.construct(&_arr[i], other._arr[i]);
     }
@@ -552,9 +554,27 @@ template <class T, class Allocator>
 void
     vector<T, Allocator>::
     swap( vector& other ) {
-        vector tmp = *this;
-        *this = other;
-        other = tmp;
+
+        // vector tmp = *this;
+    size_t          copy_size       = this->_size;
+    size_t          copy_capacity   = this->_capacity;
+    pointer         copy_arr        = this->_arr;
+    pointer         copy_arr_end    = this->_arr_end;
+    allocator_type	copy_alloc      = this->_alloc;
+
+        // *this = other;
+    this->_size     = other._size;
+    this->_capacity = other._capacity;
+    this->_arr      = other._arr;
+    this->_arr_end  = other._arr_end;
+    this->_alloc    = other._alloc;
+
+        // other = tmp;
+    other._size = copy_size;
+    other._capacity = copy_capacity;
+    other._arr = copy_arr;
+    other._arr_end = copy_arr_end;
+    other._alloc = copy_alloc;
 }
 
     // private

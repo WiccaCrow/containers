@@ -392,6 +392,8 @@ RBTree<T_node, Allocator>::
         _root = create_node(value);
         if ( _root == NIL ) {
             _root = NULL;
+        std::cout << "test insert 2 root==NULL NIL " << std::endl;
+
             return ( pair<iterator, bool>(iterator(_root), false) );
         }
         _size = 1;
@@ -402,14 +404,20 @@ RBTree<T_node, Allocator>::
         _end_node.parent = _root;
         _begin = _root;
         _end_node.left = _begin;
+        std::cout << "test insert 2 root==NULL " << std::endl;
         return ( pair<iterator, bool>(iterator(_root), true) );
     }
+        std::cout << "test insert find_insert_place 1 " << std::endl;
     Node<T_node> *insert_place = find_insert_place(value);
+        std::cout << "test insert find_insert_place 2 " << std::endl;
+        std::cout << "test insert 1 " << std::endl;
     if ( *insert_place == value ) {
+        std::cout << "test insert 2 insert==value " << std::endl;
         return ( pair<iterator, bool>(iterator(insert_place), false) );
     } else {
         Node<T_node> *new_node = create_node(value);
         if (new_node == NIL) {
+        std::cout << "test insert 2 NIL " << std::endl;
             return ( pair<iterator, bool>(iterator(insert_place), false) );
         }
         ++_size;
@@ -426,12 +434,14 @@ RBTree<T_node, Allocator>::
             insert_place->left = new_node;
         } else if ( *insert_place < value ) {
             if ( insert_place->right == &_end_node ) {
+        std::cout << "test insert to end " << std::endl;
                 new_node->right = &_end_node;
                 _end_node.parent = new_node;
             }
             insert_place->right = new_node;
         }
         check_balance_1(new_node);
+        std::cout << "test insert 2 " << std::endl;
         return ( pair<iterator, bool>(iterator(new_node), true) );
     }
 }
@@ -464,8 +474,8 @@ RBTree<T_node, Allocator>::
     }
     iterator iter_prev = pos;
     --iter_prev;
-    if ( pos.base()->left == NIL || pos.base()->left == this->end().base() ) {
-        if ( pos.base()->right == NIL || pos.base()->right == this->end().base() ) {
+    if ( pos.base()->left == NIL || pos.base()->left == &_end_node ) {
+        if ( pos.base()->right == NIL || pos.base()->right == &_end_node ) {
             erase_without_childs(pos);
         } else {
             erase_with_right_child(pos);
@@ -490,6 +500,7 @@ RBTree<T_node, Allocator>::
         ++first;
         erase(iter_for_erase);
     }
+
 }
 
     // size_type               erase( const Key& key );
@@ -557,13 +568,28 @@ RBTree<T_node, Allocator>::
     find_insert_place(const T_node& data) {
     Node<T_node> *node = _root;
     while (node != NIL && node != &_end_node) {
-        if (data < *node && node->left != NIL && node->left != &_end_node) {
+        if ( data < *node && node->left != NIL && node->left != &_end_node ) {
             node = node->left;
-        } else if ( *node < data && node->right != NIL && node->right != &_end_node) {
+            // std::cout << "node if : case 1" << std::endl;
+        } else if ( *node < data && node->right != NIL && node->right != &_end_node ) {
             node = node->right;
+            // std::cout << "node if : case 2" << std::endl;
+        } else if ( *node < data && (node->right == NIL || node->right == &_end_node) ) {
+            std::cout << "node if : case    3 " << std::endl;
+            break ;
+    // // return (node);
+        } else if (data < *node && (node->left == NIL || node->left == &_end_node) ) {
+            std::cout << "node if : case    4 " << std::endl;
+            break ;
+        } else if (node == NIL || node == &_end_node) {
+            std::cout << "node if : case    5 " << std::endl;
+            break ;
+    // // return (node);
         } else {
+            std::cout << "node if : break " << std::endl;
             break ;
         }
+        std::cout << "node if " << node->data.first << " data " << data.first << std::endl;
     }
     return (node);
 }
@@ -701,13 +727,13 @@ RBTree<T_node, Allocator>::
         new_node->parent = parent->parent;
         parent->parent->left = new_node;
         parent->parent = new_node;
-        parent->right = NIL;
+        parent->right = new_node->left;
         new_node->left = parent;
     } else if (_isLine == angleRight) {
         new_node->parent = parent->parent;
         parent->parent->right = new_node;
         parent->parent = new_node;
-        parent->left = NIL;
+        parent->left = new_node->right;
         new_node->right = parent;
     }
     checkLineXPG(parent);
