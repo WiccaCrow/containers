@@ -4,6 +4,8 @@
 #include <memory>
 #include <node.hpp>
 #include <utility.hpp>
+#include <cstddef>
+#include <iostream> // for test
 
 namespace ft {
 
@@ -388,11 +390,12 @@ template<
 pair<typename RBTree<T_node, Allocator>::iterator, bool>
 RBTree<T_node, Allocator>::
     insert( const T_node& value ) {
+    // std::cout << value.first << ", " << value.first; // test
     if ( _root == NULL ) {
         _root = create_node(value);
         if ( _root == NIL ) {
             _root = NULL;
-        std::cout << "test insert 2 root==NULL NIL " << std::endl;
+        // std::cout << "test insert 2 root==NULL NIL " << std::endl;
 
             return ( pair<iterator, bool>(iterator(_root), false) );
         }
@@ -404,20 +407,20 @@ RBTree<T_node, Allocator>::
         _end_node.parent = _root;
         _begin = _root;
         _end_node.left = _begin;
-        std::cout << "test insert 2 root==NULL " << std::endl;
+        // std::cout << "test insert 2 root==NULL " << std::endl;
         return ( pair<iterator, bool>(iterator(_root), true) );
     }
-        std::cout << "test insert find_insert_place 1 " << std::endl;
+        // std::cout << "test insert find_insert_place 1 " << std::endl;
     Node<T_node> *insert_place = find_insert_place(value);
-        std::cout << "test insert find_insert_place 2 " << std::endl;
-        std::cout << "test insert 1 " << std::endl;
+        // std::cout << "test insert find_insert_place 2 " << std::endl;
+        // std::cout << "test insert 1 " << std::endl;
     if ( *insert_place == value ) {
-        std::cout << "test insert 2 insert==value " << std::endl;
+        // std::cout << "test insert 2 insert==value " << std::endl;
         return ( pair<iterator, bool>(iterator(insert_place), false) );
     } else {
         Node<T_node> *new_node = create_node(value);
         if (new_node == NIL) {
-        std::cout << "test insert 2 NIL " << std::endl;
+        // std::cout << "test insert 2 NIL " << std::endl;
             return ( pair<iterator, bool>(iterator(insert_place), false) );
         }
         ++_size;
@@ -434,14 +437,18 @@ RBTree<T_node, Allocator>::
             insert_place->left = new_node;
         } else if ( *insert_place < value ) {
             if ( insert_place->right == &_end_node ) {
-        std::cout << "test insert to end " << std::endl;
+        // std::cout << "test insert to end " << std::endl;
                 new_node->right = &_end_node;
                 _end_node.parent = new_node;
             }
             insert_place->right = new_node;
         }
         check_balance_1(new_node);
-        std::cout << "test insert 2 " << std::endl;
+        // std::cout << "test insert 2 " << std::endl;
+
+    // if (new_node->left == new_node->parent)
+    // std::cout << "\033[33m" "new_node pum pum puuuuuuuuuuuuuuuuum " "\033[0m" << new_node->data.first << std :: endl;
+
         return ( pair<iterator, bool>(iterator(new_node), true) );
     }
 }
@@ -567,29 +574,31 @@ Node<T_node> *
 RBTree<T_node, Allocator>::
     find_insert_place(const T_node& data) {
     Node<T_node> *node = _root;
+        // std::cout << "node if data " << data.first << std::endl;
     while (node != NIL && node != &_end_node) {
+        // std::cout << "node if " << node->data.first << " data " << data.first << std::endl;
         if ( data < *node && node->left != NIL && node->left != &_end_node ) {
             node = node->left;
             // std::cout << "node if : case 1" << std::endl;
         } else if ( *node < data && node->right != NIL && node->right != &_end_node ) {
             node = node->right;
             // std::cout << "node if : case 2" << std::endl;
-        } else if ( *node < data && (node->right == NIL || node->right == &_end_node) ) {
-            std::cout << "node if : case    3 " << std::endl;
-            break ;
-    // // return (node);
-        } else if (data < *node && (node->left == NIL || node->left == &_end_node) ) {
-            std::cout << "node if : case    4 " << std::endl;
-            break ;
-        } else if (node == NIL || node == &_end_node) {
-            std::cout << "node if : case    5 " << std::endl;
-            break ;
+    //     } else if ( *node < data && (node->right == NIL || node->right == &_end_node) ) {
+    //         std::cout << "node if : case    3 " << std::endl;
+    //         break ;
+    // // // return (node);
+    //     } else if (data < *node && (node->left == NIL || node->left == &_end_node) ) {
+    //         std::cout << "node if : case    4 " << std::endl;
+    //         break ;
+    //     } else if (node == NIL || node == &_end_node) {
+    //         std::cout << "node if : case    5 " << std::endl;
+    //         break ;
     // // return (node);
         } else {
-            std::cout << "node if : break " << std::endl;
+            // std::cout << "node if : break " << std::endl;
             break ;
         }
-        std::cout << "node if " << node->data.first << " data " << data.first << std::endl;
+        // std::cout << "node if " << node->data.first << " data " << data.first << std::endl;
     }
     return (node);
 }

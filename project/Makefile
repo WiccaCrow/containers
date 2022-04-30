@@ -31,7 +31,7 @@ SRC_CPP     	=	test_pair.cpp
 endif
 
 ifeq ($(MAKE_MAP),0)
-SRC_CPP     	=	test_map.cpp
+SRC_CPP     	=	test_map.cpp 
 endif
 
 ifeq ($(MAKE_STACK),0)

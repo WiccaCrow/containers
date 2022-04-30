@@ -8,6 +8,8 @@
 // #include <iterator_binTree_reverse.hpp>
 #include <map.hpp>
 #include <map>
+#include <1_test.hpp>
+
 
 // TESTS
 void    testMap_copy();
@@ -29,6 +31,10 @@ void    testMap_observers();
 void    testMap_non_members();
 void    testMap_erase_root();
 
+template <typename T>
+    void    fill_map_insert_loop(ft::map<int, T> &map);
+void    testMap_insert_loop();
+
  // UTILITY
 void    fill_map(ft::map<int, std::string> &my_map, std::map<int, std::string>* std_map);
 void    tree_picture(ft::map<int, std::string> &my_tree);
@@ -48,7 +54,8 @@ int main() {
     // testTree_insert();
     // testTree_iterator();
     // testMap_insert(); // 15
-    testMap_insert_2(); // other tests
+    // testMap_insert_2(); // other tests
+    testMap_insert_loop();
     // testMap_iterator(); // 7, 8
     // testMap_iterator_reverse(); // 9, 10
     // testMap_capacity(); // 11, 12, 13
@@ -1500,5 +1507,17 @@ void    testMap_copy() {
     fill_map(my_tree, NULL);
 
     ft::map<int, std::string> my_tree_copy = my_tree;
+
+}
+
+void    testMap_insert_loop() {
+    ft::map<int, int> map_int;
+    fill_map_insert_loop(map_int);
+    
+    ft::map<int, int>::iterator iter_map_int = map_int.begin();
+    for (; map_int.end() != iter_map_int; ++iter_map_int) {
+        std::cout << iter_map_int->first << std::endl;
+    }
+        std::cout << " testMap_insert_loop: end" << std::endl;
 
 }
