@@ -143,9 +143,9 @@ binTree_iterator<T, Tree>::
         _M_current =  _M_current->right;
     // check right child/root
     } else if ((_M_current->right != NULL && 
-        _M_current->right->is_empty() == false) ||
+        _M_current->right->is_empty() == false) || // right node is not list and not end node
         (_M_current->is_empty() == false && 
-        _M_current->parent->is_empty() == true)) {
+        _M_current->parent->is_empty() == true)) { // is root
         _M_current = _M_current->right;
         while (_M_current->left != NULL && 
                 _M_current->left->is_empty() == false) {
@@ -153,14 +153,29 @@ binTree_iterator<T, Tree>::
         }
     // not end, not root, without right child
     } else {
+        // Find the parent to the right of the source node
         while ( (_M_current->parent != NULL && 
                  _M_current->parent->is_empty() == false) &&
                 _M_current->parent->right == _M_current) {
+                    // std::cout << " test 1 " << _M_current->data.first << std::endl; // test
             _M_current = _M_current->parent;
+                    // std::cout << " test 2 " << _M_current->data.first << std::endl; // test
+                    // std::cout << " test 2 " << _M_current->parent->data.first << std::endl; // test
+
         }
+
+        // if (_M_current->data.first == 1350490027) {
+            // if (_M_current->parent != NULL && _M_current->parent->is_empty() == false)
+                // std::cout << " test 3 " << _M_current->parent->data.first << std::endl; // test
+            // else
+                // std::cout << " test 4 NIL________________ " << std::endl; // test
+        // }
+
         if ( (_M_current->parent != NULL && 
               _M_current->parent->is_empty() == false) &&
              _M_current->parent->left == _M_current) {
+                // std::cout << " test 5________________ " << std::endl; // test
+
             _M_current = _M_current->parent;
         }
     }

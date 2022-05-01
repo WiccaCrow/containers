@@ -1515,9 +1515,10 @@ void    testMap_insert_loop() {
     fill_map_insert_loop(map_int);
     
     ft::map<int, int>::iterator iter_map_int = map_int.begin();
-    for (; map_int.end() != iter_map_int; ++iter_map_int) {
-        std::cout << iter_map_int->first << std::endl;
+    // for (int i = 0 ; map_int.end() != iter_map_int && i < 11 ; ++iter_map_int, ++i) {
+    for (; map_int.end() != iter_map_int ; ++iter_map_int) {
+        // std::cout << iter_map_int->first << std::endl;
     }
-        std::cout << " testMap_insert_loop: end" << std::endl;
+        // std::cout << " testMap_insert_loop: end" << std::endl;
 
 }
