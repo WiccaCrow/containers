@@ -8,7 +8,7 @@
 // #include <iterator_binTree_reverse.hpp>
 #include <map.hpp>
 #include <map>
-#include <1_test.hpp>
+#include <map_test.hpp>
 
 
 // TESTS
@@ -1519,6 +1519,6 @@ void    testMap_insert_loop() {
     for (; map_int.end() != iter_map_int ; ++iter_map_int) {
         // std::cout << iter_map_int->first << std::endl;
     }
-        // std::cout << " testMap_insert_loop: end" << std::endl;
+        std::cout << " testMap_insert_loop: end" << std::endl;
 
 }

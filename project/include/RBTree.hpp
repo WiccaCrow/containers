@@ -720,6 +720,7 @@ RBTree<T_node, Allocator>::
         parent->parent->left = new_node;
         parent->parent = new_node;
         parent->right = new_node->left;
+        parent->right->parent = parent;
         new_node->left = parent;
     } else if (_isLine == angleRight) {
         // std::cout << new_node->data.first << " parent " << parent->data.first << " test dfghjksdlfjsd]0000000000000000000000000 \n";

@@ -181,6 +181,7 @@ template<
     class Allocator > 
 map<Key, T, Compare, Allocator>::
     ~map() {
+        std::cout << std::endl << "ft" << std::endl;
     RBTree<pair<const Key, T> >::clear();
 }
 
