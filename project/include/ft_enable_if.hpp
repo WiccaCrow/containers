@@ -1,7 +1,7 @@
 #ifndef FT_ENABLE_IF_HPP
 # define FT_ENABLE_IF_HPP
 
-// #include <type_traits>
+#include  <true_false_type.hpp>
 
 //////////////  enable_if
 
@@ -16,10 +16,10 @@ struct enable_if<true, T> { typedef T type; };
 // https://runebook.dev/ru/docs/cpp/types/is_same
 
 template<class T, class U>
-struct is_same : std::false_type {};
+struct is_same : false_type {};
  
 template<class T>
-struct is_same<T, T> : std::true_type {};
+struct is_same<T, T> : true_type {};
 
 } // namespace ft
 

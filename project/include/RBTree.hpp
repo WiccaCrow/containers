@@ -5,7 +5,7 @@
 #include <node.hpp>
 #include <utility.hpp>
 #include <cstddef>
-#include <iostream> // for test
+// #include <iostream> // for test
 
 namespace ft {
 
@@ -390,13 +390,10 @@ template<
 pair<typename RBTree<T_node, Allocator>::iterator, bool>
 RBTree<T_node, Allocator>::
     insert( const T_node& value ) {
-    // std::cout << value.first << ", " << value.first; // test
     if ( _root == NULL ) {
         _root = create_node(value);
         if ( _root == NIL ) {
             _root = NULL;
-        // std::cout << "test insert 2 root==NULL NIL " << std::endl;
-
             return ( pair<iterator, bool>(iterator(_root), false) );
         }
         _size = 1;
@@ -436,13 +433,7 @@ RBTree<T_node, Allocator>::
             }
             insert_place->right = new_node;
         }
-        // if (1540383426 == new_node->data.first) {
-        //         std::cout << "new_node->parent->parent->data.first "  << new_node->parent->parent->data.first << std::endl;
-        // }
         check_balance_1(new_node);
-        // if (1540383426 == new_node->data.first) {
-        //         std::cout << "new_node->parent->parent->data.first "  << new_node->parent->parent->data.first << std::endl;
-        // }
         return ( pair<iterator, bool>(iterator(new_node), true) );
     }
 }
@@ -588,7 +579,6 @@ RBTree<T_node, Allocator>::create_node(T_node data) {
     try {
         Node<T_node> *new_node = _alloc.allocate(1);
         _alloc.construct(new_node, data); // data, RED, NULL, NULL, NULL
-        // new_node->left = new_node->right = new_node->parent = NULL; // test
         return new_node;
     } catch (const std::bad_alloc& e) {
         return NIL;
@@ -603,11 +593,7 @@ RBTree<T_node, Allocator>::
     check_balance_1(Node<T_node> *check_node) {
     Node<T_node> *uncle;
     Node<T_node> *parent;
-    // T_node test_copy_value = check_node->data; // test
     while (check_node != _root) {
-        // if (1540383426 == test_copy_value.first && 1189641421 == check_node->data.first) { // test
-            // return ; // test
-        // } // test
         parent = check_node->parent;
         if (parent->color == BLACK) {
             return ;
@@ -711,7 +697,6 @@ template<
 void
 RBTree<T_node, Allocator>::
     rotate_lineXPG_angle(Node<T_node> *new_node, Node<T_node> *parent) {
-        // std::cout << "test dfghjksdlfjsd]jvbxjvnxndv \n";
     if (_isLine != angleLeft && _isLine != angleRight) {
         return ;
     }
@@ -723,15 +708,11 @@ RBTree<T_node, Allocator>::
         parent->right->parent = parent;
         new_node->left = parent;
     } else if (_isLine == angleRight) {
-        // std::cout << new_node->data.first << " parent " << parent->data.first << " test dfghjksdlfjsd]0000000000000000000000000 \n";
         new_node->parent = parent->parent;
         parent->parent->right = new_node;
         parent->parent = new_node;
         parent->left = new_node->right;
         parent->left->parent = parent;
-        // if (new_node->data.first == 1540383426) { // test
-        // std::cout << "test dfghjksdlfjsd]jvbxjvnxndv 1540383426 MY ERROR\n"; //test
-        // } // test
         new_node->right = parent;
     }
     checkLineXPG(parent);

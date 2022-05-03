@@ -8,10 +8,8 @@ FLAGS     	    +=  -Wall -Wextra -Werror -g
 # FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
 
 ifeq ($(MAKE_ENABLE_IF),0)
-SRC_CPP     	=	test_enable_if_11.cpp
-FLAGS 			+=	-std=c++11
-else
-FLAGS 			+=	 -std=c++98
+SRC_CPP     	=	test_enable_if.cpp
+FLAGS 			+=	-std=c++98
 endif
 
 ifeq ($(MAKE_ITERATOR),0)
@@ -36,6 +34,10 @@ endif
 
 ifeq ($(MAKE_STACK),0)
 SRC_CPP     	=	test_stack.cpp
+endif
+
+ifeq ($(MAKE_INTEGRAL),0)
+SRC_CPP     	=	test_is_integral.cpp
 endif
 
 SRC_FOLDER  	=   src/
@@ -79,6 +81,11 @@ stack: ; $(MAKE) MAKE_STACK=0 all
 clean_stack: ; $(MAKE) MAKE_STACK=0 clean
 fclean_stack: ; $(MAKE) MAKE_STACK=0 clean ; rm -rf $(NAME)
 re_stack: ; $(MAKE) MAKE_STACK=0 fclean map
+
+integral: ; $(MAKE) MAKE_INTEGRAL=0 all
+clean_integral: ; $(MAKE) MAKE_INTEGRAL=0 clean
+fclean_integral: ; $(MAKE) MAKE_INTEGRAL=0 clean ; rm -rf $(NAME)
+re_integral: ; $(MAKE) MAKE_INTEGRAL=0 fclean map
 
 all: objdir $(NAME)
 

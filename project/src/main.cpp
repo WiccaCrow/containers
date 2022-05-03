@@ -1,12 +1,14 @@
 #include <iostream>
 #include <string>
 #include <deque>
+# include<sys/time.h> // for gettime
+
 #if 1 //CREATE A REAL STL EXAMPLE
-	#include <map>
-	#include <stack>
-	#include <vector>
-	namespace ft = std;
-#else
+// 	#include <map>
+// 	#include <stack>
+// 	#include <vector>
+// 	namespace ft = std;
+// #else
 	#include <map.hpp>
 	#include <stack.hpp>
 	#include <vector.hpp>
@@ -54,6 +56,16 @@ int main(int argc, char** argv) {
 	}
 	const int seed = atoi(argv[1]);
 	srand(seed);
+
+	long int		timestap_in_mcs;
+	struct timeval	tv;
+	if (!gettimeofday(&tv, NULL))
+	{
+		timestap_in_mcs = tv.tv_sec * 1000000 + tv.tv_usec;
+	} else {
+		std::cerr << "Error: gettimeofday error " << std::endl;
+		return (1);
+	}
 
 	ft::vector<std::string> vector_str;
 	ft::vector<int> vector_int;
@@ -113,6 +125,16 @@ int main(int argc, char** argv) {
 	}
 
 	std::cout << std::endl;
+
+	if (!gettimeofday(&tv, NULL))
+	{
+		std::cout << "The program was completed for: " 
+			      << ( (tv.tv_sec * 1000000 + tv.tv_usec) - timestap_in_mcs ) 
+				  << " milliseconds " << std::endl;
+	} else {
+		std::cerr << "Error: gettimeofday error " << std::endl;
+		return (1);
+	}
 
 	return (0);
 }
