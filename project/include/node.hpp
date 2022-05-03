@@ -57,17 +57,10 @@ class Node {
             return (data);
         }
 
-        // const T & operator*() const {
-        //     return (data);
-        // }
-
         data_type * operator->() {
             return (&data);
         }
 
-        // const T * operator->() const {
-        //     return (&data);
-        // }
 };
 
 template < 

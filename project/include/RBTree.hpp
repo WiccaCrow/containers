@@ -205,12 +205,12 @@ template< class InputIt >
 RBTree<T_node, Allocator>::
     RBTree( InputIt first, InputIt last,
         const Allocator& alloc ) : 
-            _root(NULL),
-            _begin(_root),
-            _empty_node(),
-            _end_node(),
-            _size(0),
-            _alloc(alloc) {
+                _root(NULL),
+                _begin(_root),
+                _empty_node(),
+                _end_node(),
+                _size(0),
+                _alloc(alloc) {
     _empty_node._is_empty = true;
     _end_node._is_empty = true;
     _end_node.right = _end_node.left = &_end_node;
@@ -503,9 +503,71 @@ template<
 void              
 RBTree<T_node, Allocator>::
     swap( RBTree& other ) {
-    RBTree tmp(other);
-    other = *this;
-    *this = tmp;
+    // RBTree tmp(other);
+    // other = *this;
+    // *this = tmp;
+
+        // tree tmp = *this;
+    Node<T_node> * copy_root        = this->_root;
+    Node<T_node> * copy_begin       = this->_begin;
+    Node<T_node> * copy_end_parent  = this->_end_node.parent;
+    Node<T_node> * copy_end_left    = this->_end_node.left;
+    size_type      copy_size        = this->_size;
+    allocator_type copy_alloc       = this->_alloc;
+    // isLineXPG            _isLine;
+
+        // *this = other;
+    this->_root        = other._root;
+    this->_begin       = other._begin;
+    this->_begin->left = &(this->_end_node);
+    // this->_end_node      = other._end_node;
+    this->_end_node.parent  = other._end_node.parent;
+    this->_end_node.left    = other._end_node.left;
+    // this->_end_node.left    = _begin;
+    this->_end_node.parent->right = &(this->_end_node);
+    this->_size        = other._size;
+    this->_alloc       = other._alloc;
+    // this->_isLine      = other._isLine;
+    // change NIL
+    for (iterator iter = this->begin(); iter != this->end(); ) {
+        iterator iter_copy = iter;
+        ++iter;
+        if ( iter_copy.base()->left == &(other._empty_node) ) {
+            iter_copy.base()->left = &(this->_empty_node);
+        }
+        if ( iter_copy.base()->right == &(other._empty_node) ) {
+            iter_copy.base()->right = &(this->_empty_node);
+        }
+        if ( iter_copy.base()->parent == &(other._empty_node) ) {
+            iter_copy.base()->parent = &(this->_empty_node);
+        } 
+    }
+
+        // other = tmp;
+    other._root        = copy_root;
+    other._begin       = copy_begin;
+    other._begin->left = &(other._end_node);
+    // other._end_node     = copy_end_node;
+    other._end_node.parent  = copy_end_parent;
+    other._end_node.left    = copy_end_left;
+    other._end_node.parent->right = &(other._end_node);
+    other._size        = copy_size;
+    other._alloc       = copy_alloc;
+    // other._isLine      = copy_isLine;
+    // change NIL
+    for (iterator iter = other.begin(); iter != other.end(); ) {
+        iterator iter_copy = iter;
+        ++iter;
+        if (iter_copy.base()->left == &(this->_empty_node) ) {
+            iter_copy.base()->left = &(other._empty_node);
+        }
+        if (iter_copy.base()->right == &(this->_empty_node)) {
+            iter_copy.base()->right = &(other._empty_node);
+        }
+        if (iter_copy.base()->parent == &(this->_empty_node)) {
+            iter_copy.base()->parent = &(other._empty_node);
+        } 
+    }
 }
 
     // Lookup

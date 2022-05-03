@@ -459,7 +459,6 @@ void testMap_non_members() {
                                "\t\t void swap( std::map<Key,T,Compare,Alloc>& lhs, \n"
                                "\t\t std::map<Key,T,Compare,Alloc>& rhs ); "
               << "\033[0m" << std::endl;
-
     ft::map<int, char> alice;
     alice.insert( ft::make_pair(1, 'a') );
     alice.insert( ft::make_pair(2, 'b') );
@@ -522,6 +521,7 @@ void testMap_non_members() {
     std::cout << "alice >= eve returns " << (alice >= eve) << std::endl;
 
     std::cout << std::endl;
+
 }
 
 void testMap_observers() {
@@ -645,8 +645,17 @@ void    testMap_swap() {
     iter_my_tree2 = my_tree2.begin();
     iter_std_tree2 = std_tree2.begin();
 
+    // std::cout << "\n\033[36m" << "\t\t after swap: " << "\033[0m"  << std::endl;
+    // std::cout << iter_my_tree1->first << " " << iter_my_tree1->second << "\t  ";
+    // std::cout << iter_std_tree1->first << " " << iter_std_tree1->second << "\t  ";
+    // std::cout << iter_my_tree2->first << " " << iter_my_tree2->second << "\t  ";
+    // std::cout << iter_std_tree2->first << " " << iter_std_tree2->second << '\n';
+
+
     std::cout << "\n\033[36m" << "\t\t after swap: " << "\033[0m"  << std::endl;
     std::cout << "my_tree1 \t  std_tree1 \t  my_tree2 \t  std_tree2 " << std::endl;
+
+
     while ( iter_my_tree1 != my_tree1.end() ||
             iter_std_tree1 != std_tree1.end() ||
             iter_my_tree2 != my_tree2.end() ||
