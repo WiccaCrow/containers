@@ -1,15 +1,15 @@
 NAME			=   mySTL
 
-CPP         	=   clang++
-# CPP         	=   g++
+# CPP         	=   clang++
+CPP         	=   g++
 FLAGS       	=   -g
 FLAGS       	+=  -Wpedantic
 FLAGS     	    +=  -Wall -Wextra -Werror -g
+FLAGS 			+=	-std=c++98
 # FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
 
 ifeq ($(MAKE_ENABLE_IF),0)
 SRC_CPP     	=	test_enable_if.cpp
-FLAGS 			+=	-std=c++98
 endif
 
 ifeq ($(MAKE_ITERATOR),0)
@@ -30,6 +30,10 @@ endif
 
 ifeq ($(MAKE_MAP),0)
 SRC_CPP     	=	test_map.cpp
+endif
+
+ifeq ($(MAKE_SET),0)
+SRC_CPP     	=	test_set.cpp
 endif
 
 ifeq ($(MAKE_STACK),0)
@@ -76,6 +80,11 @@ map: ; $(MAKE) MAKE_MAP=0 all
 clean_map: ; $(MAKE) MAKE_MAP=0 clean
 fclean_map: ; $(MAKE) MAKE_MAP=0 clean ; rm -rf $(NAME)
 re_map: ; $(MAKE) MAKE_MAP=0 fclean map
+
+set: ; $(MAKE) MAKE_SET=0 all
+clean_set: ; $(MAKE) MAKE_SET=0 clean
+fclean_set: ; $(MAKE) MAKE_SET=0 clean ; rm -rf $(NAME)
+re_set: ; $(MAKE) MAKE_SET=0 fclean map
 
 stack: ; $(MAKE) MAKE_STACK=0 all
 clean_stack: ; $(MAKE) MAKE_STACK=0 clean

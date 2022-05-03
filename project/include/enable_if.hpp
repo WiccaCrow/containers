@@ -1,5 +1,5 @@
-#ifndef FT_ENABLE_IF_HPP
-# define FT_ENABLE_IF_HPP
+#ifndef ENABLE_IF_HPP
+# define ENABLE_IF_HPP
 
 #include  <true_false_type.hpp>
 

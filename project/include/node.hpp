@@ -111,7 +111,7 @@ bool operator<( const Node<T> & lhs,
 template< class T >
 bool operator<( const T & data,
                  const Node<T> & rhs ) {
-    return (rhs < data);
+    return (data < rhs.data);
 }
 
 template< class T >
@@ -129,7 +129,7 @@ bool operator<=( const Node<T> & lhs,
 template< class T >
 bool operator<=( const T & data,
                  const Node<T> & rhs ) {
-    return (rhs <= data);
+    return (data <= rhs.data);
 }
 
 template< class T >
@@ -147,7 +147,7 @@ bool operator>( const Node<T> & lhs,
 template< class T >
 bool operator>( const T & data,
                  const Node<T> & rhs ) {
-    return (rhs > data);
+    return (rhs.data > data);
 }
 
 template< class T >
@@ -165,7 +165,7 @@ bool operator>=( const Node<T> & lhs,
 template< class T >
 bool operator>=( const T & data,
                  const Node<T> & rhs ) {
-    return (rhs >= data);
+    return (rhs.data >= data);
 }
 
 /////////////////////// pair

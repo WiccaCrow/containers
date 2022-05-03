@@ -50,25 +50,25 @@ template<class Iter >
  /*------------------START-------------------*/
 
 int main() {
-    // testMap_copy();
-    // testTree_insert();
-    // testTree_iterator();
-    // testMap_insert(); // 15
-    // testMap_insert_2(); // other tests
+    testMap_copy();
+    testTree_insert();
+    testTree_iterator();
+    testMap_insert(); // 15
+    testMap_insert_2(); // other tests
     testMap_insert_loop();
-    // testMap_iterator(); // 7, 8
-    // testMap_iterator_reverse(); // 9, 10
-    // testMap_capacity(); // 11, 12, 13
-    // testMap_lookup(); // 19
-    // testMap_ElementAccess(); // 5, 6
-    // erase_additional_little_test(); // 16
-    // testMap_erase(); // 16
-    // testMap_clear(); // 14
-    // testMap_erase_for_destructor();
-    // testMap_swap(); // 17
-    // testMap_observers(); // 23, 24
-    // testMap_non_members(); // 25-31
-    // testMap_erase_root(); // 16
+    testMap_iterator(); // 7, 8
+    testMap_iterator_reverse(); // 9, 10
+    testMap_capacity(); // 11, 12, 13
+    testMap_lookup(); // 19
+    testMap_ElementAccess(); // 5, 6
+    erase_additional_little_test(); // 16
+    testMap_erase(); // 16
+    testMap_clear(); // 14
+    testMap_erase_for_destructor();
+    testMap_swap(); // 17
+    testMap_observers(); // 23, 24
+    testMap_non_members(); // 25-31
+    testMap_erase_root(); // 16
     return (0);
 }
 
@@ -573,11 +573,11 @@ void testMap_observers() {
  
         std::cout << '(' << it.first << ',' << it.second;
         if (!before && !after)
-            std::cout << ") equivalent to key " << val.first << '\n';
+            std::cout << ") equivalent to key " << val_ft.first << '\n';
         else if (before)
-            std::cout << ") goes before key " << val.first << '\n';
+            std::cout << ") goes before key " << val_ft.first << '\n';
         else if (after)
-            std::cout << ") goes after key " << val.first << '\n';
+            std::cout << ") goes after key " << val_ft.first << '\n';
         else
             assert(0); // Cannot happen
     }

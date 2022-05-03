@@ -112,6 +112,10 @@ class map : public RBTree< ::ft::pair<const Key, T> > {
     //////////////////////////
 
 template< class Key, class T, class Compare, class Alloc >
+void swap( map<Key,T,Compare,Alloc>& lhs,
+           map<Key,T,Compare,Alloc>& rhs );
+
+template< class Key, class T, class Compare, class Alloc >
 bool operator==( const map<Key,T,Compare,Alloc>& lhs,
                  const map<Key,T,Compare,Alloc>& rhs );
 
