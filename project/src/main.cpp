@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <deque>
-# include<sys/time.h> // for gettime
+#include <sys/time.h> // for gettime
 
 #if 1 //CREATE A REAL STL EXAMPLE
 	#include <map>

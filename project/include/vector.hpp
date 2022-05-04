@@ -223,6 +223,7 @@ vector<T, Allocator>::vector( const vector<T, Allocator> & other ) :
 
 template <class T, class Allocator>
 vector<T, Allocator>::~vector() {
+    // std::cout << "test ft\n";
     if (_size != 0) {
         for (; _arr_end-- != _arr;) {
             this->_alloc.destroy(_arr_end);

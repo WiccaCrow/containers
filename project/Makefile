@@ -1,4 +1,6 @@
 NAME			=   mySTL
+NAME_STL 		=	testSTL
+NAME_FT			=	testFT
 
 CPP         	=   clang++
 # CPP         	=   g++
@@ -7,6 +9,11 @@ FLAGS       	+=  -Wpedantic
 FLAGS     	    +=  -Wall -Wextra -Werror -g
 FLAGS 			+=	-std=c++98
 # FLAGS     	  =   -Wall -Wextra -Werror -g -Wpedantic -std=c++98
+
+ifeq ($(MAKE_TEST),0)
+SRC_CPP_STL         =	testSTL.cpp
+SRC_CPP_FT         =	testFT.cpp
+endif
 
 ifeq ($(MAKE_ENABLE_IF),0)
 SRC_CPP     	=	test_enable_if.cpp
@@ -51,10 +58,26 @@ HEAD_FOLDER 	=   include/
 SRC         	=   $(addprefix $(SRC_FOLDER), $(SRC_CPP))
 OBJ         	=   $(addprefix $(OBJ_FOLDER), $(SRC_CPP:.cpp=.o))
 
-test: ; $(MAKE) MAKE_MAIN=0 all
-clean_test: ; $(MAKE) MAKE_MAIN=0 clean
-fclean_test: ; $(MAKE) MAKE_MAIN=0 clean ; rm -rf $(NAME)
-re_test: ; $(MAKE) MAKE_MAIN=0 fclean test
+test: ; $(MAKE) MAKE_TEST=0 test_stl_ft
+clean_test: ; $(MAKE) MAKE_TEST=0 clean
+fclean_test: ; $(MAKE) MAKE_TEST=0 clean ; rm -rf $(NAME_STL) $(NAME_FT)
+re_test: ; $(MAKE) MAKE_TEST=0 fclean test
+
+OBJ_STL       	=   $(addprefix $(OBJ_FOLDER), $(SRC_CPP_STL:.cpp=.o))
+OBJ_FT         	=   $(addprefix $(OBJ_FOLDER), $(SRC_CPP_FT:.cpp=.o))
+
+test_stl_ft: objdir $(NAME_STL)
+
+$(NAME_STL): $(OBJ_STL) $(OBJ_FT)
+	         $(CPP) $(FLAGS) $(OBJ_STL) -o $(NAME_STL)
+	         $(CPP) $(FLAGS) $(OBJ_FT)  -o $(NAME_FT)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+main: ; $(MAKE) MAKE_MAIN=0 all
+clean_main: ; $(MAKE) MAKE_MAIN=0 clean
+fclean_main: ; $(MAKE) MAKE_MAIN=0 clean ; rm -rf $(NAME)
+re_main: ; $(MAKE) MAKE_MAIN=0 fclean main
 
 iterator: ; $(MAKE) MAKE_ITERATOR=0 all
 clean_iterator: ; $(MAKE) MAKE_ITERATOR=0 clean
@@ -109,6 +132,6 @@ $(NAME): $(OBJ)
 
 clean: ; rm -rf $(OBJ_FOLDER)
 
-fclean: clean ; rm -rf $(NAME)
+fclean: clean ; rm -rf $(NAME) $(NAME_STL) $(NAME_FT)
 
 re: fclean all
