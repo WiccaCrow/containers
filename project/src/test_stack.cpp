@@ -1,13 +1,13 @@
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <stack.hpp>
 #include <stack>
 
 int main() {
     std::cout << std::boolalpha;
- 
+
     ft::stack<int> container;
- 
+
     std::cout << "Initially, container.empty(): " << container.empty() << std::endl;
     std::cout << "Initially, container.size(): " << container.size() << std::endl;
 
@@ -23,14 +23,14 @@ int main() {
     ft::stack<int> container2;
     container2.push(20);
     std::cout << "container2 with int 20: " << container2.top() << std::endl;
-    std::cout << "container2 == contaiter: " << ( container2 == container ) << std::endl;
-    std::cout << "container2 != contaiter: " << ( container2 != container ) << std::endl;
-    std::cout << "container2 >  contaiter: " << ( container2 > container ) << std::endl;
-    std::cout << "container2 >= contaiter: " << ( container2 >= container ) << std::endl;
-    std::cout << "container2 <  contaiter: " << ( container2 < container ) << std::endl;
-    std::cout << "container2 <= contaiter: " << ( container2 <= container ) << std::endl;
+    std::cout << "container2 == contaiter: " << (container2 == container) << std::endl;
+    std::cout << "container2 != contaiter: " << (container2 != container) << std::endl;
+    std::cout << "container2 >  contaiter: " << (container2 > container) << std::endl;
+    std::cout << "container2 >= contaiter: " << (container2 >= container) << std::endl;
+    std::cout << "container2 <  contaiter: " << (container2 < container) << std::endl;
+    std::cout << "container2 <= contaiter: " << (container2 <= container) << std::endl;
 
-	ft::stack<int> stack_int;
+    ft::stack<int> stack_int;
 
     return (0);
 }
