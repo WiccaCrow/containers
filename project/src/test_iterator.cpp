@@ -124,13 +124,15 @@ void check_iterators_reverse() {
         << "*x_std == " << *x << "    |  " << *x_ft << " == *x_ft" << '\n' // 3
         << "*y_std == " << *y << "    |  " << *y_ft << " == *x_ft" << '\n' // 3
         << "*z_std == " << *z << "    |  " << *z_ft << " == *x_ft" << '\n' // 2
-        << "x == y ? " << (x == y) << "  | " << (x_ft == y_ft) << '\n'     // true
+        << "x == z ? " << (x == z) << " | " << (x_ft == z_ft) << '\n'      // false
         << "x != y ? " << (x != y) << " | " << (x_ft != y_ft) << '\n'      // false
         << "x <  y ? " << (x < y) << " | " << (x_ft < y_ft) << '\n'        // false
+        << "x == y ? " << (x == y) << "  | " << (x_ft == y_ft) << '\n'     // true
         << "x <= y ? " << (x <= y) << "  | " << (x_ft <= y_ft) << '\n'     // true
-        << "x == z ? " << (x == z) << " | " << (x_ft == z_ft) << '\n'      // false
         << "x != z ? " << (x != z) << "  | " << (x_ft != z_ft) << '\n'     // true
-        << "x <  z ? " << (x < z) << "  | " << (x_ft < z_ft) << '\n'       // true!
+        << "x <  z ? " << (x < z) << "  | " << (x_ft < z_ft) << '\n'       // true
         << "x <= z ? " << (x <= z) << "  | " << (x_ft <= z_ft) << '\n'     // true
+        << "z >  x ? " << (z > x) << "  | " << (z_ft > x_ft) << '\n'       // true
+        << "z >= x ? " << (z >= x) << "  | " << (z_ft >= x_ft) << '\n'     // true
         ;
 }

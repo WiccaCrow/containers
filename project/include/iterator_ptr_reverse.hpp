@@ -236,21 +236,21 @@ template <class Iter>
 bool 
 reverse_iterator<Iter>::
     operator<(const reverse_iterator<Iter> & itSecond) const {
-    return (*this > itSecond);
+    return (itSecond > *this);
 }
 
 template <class Iter>
 bool 
 reverse_iterator<Iter>::
     operator>=(const reverse_iterator<Iter> & itSecond) const {
-    return (!(*this > itSecond));
+    return (!(itSecond > *this));
 }
 
 template <class Iter>
 bool 
 reverse_iterator<Iter>::
     operator<=(const reverse_iterator<Iter> & itSecond) const {
-    return (!(itSecond > *this));
+    return (!(*this > itSecond));
 }
 
 } // namespace ft
