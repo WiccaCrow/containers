@@ -35,22 +35,22 @@ std::string str(const char *t) {
 
 int main()
 {
-    {
-        std::cout << std::endl << "\033[35m" << "check ft::is_same_f " << "\033[0m" << std::endl;
+    // {
+    //     std::cout << std::endl << "\033[35m" << "check ft::is_same_f " << "\033[0m" << std::endl;
 
-        std::cout << std::boolalpha;
-        std::cout << "int, char str: " << ft::is_same_f(2, "Hello") << std::endl;
-        std::cout << "int, int: " << ft::is_same_f(2, 2) << std::endl;
-        std::cout << "int, char: " << ft::is_same_f(2, '2') << std::endl;
-        int a = 2;
-        int *ap = &a;
-        std::cout << "int, int *: " << ft::is_same_f(a, ap) << std::endl;
-        std::string str_cpp("Hello ");
-        std::string str_cpp_2("Hello2 ");
-        std::cout << "std::string, std::string: " << ft::is_same_f(str_cpp, str_cpp_2) << std::endl;
-        std::cout << "std::string, std::string: " << ft::is_same_f(str_cpp, str_cpp) << std::endl;
-        std::cout << "std::string, char[]: " << ft::is_same_f(str_cpp, "Hello") << std::endl;
-    }
+    //     std::cout << std::boolalpha;
+    //     std::cout << "int, char str: " << ft::is_same_f(2, "Hello") << std::endl;
+    //     std::cout << "int, int: " << ft::is_same_f(2, 2) << std::endl;
+    //     std::cout << "int, char: " << ft::is_same_f(2, '2') << std::endl;
+    //     int a = 2;
+    //     int *ap = &a;
+    //     std::cout << "int, int *: " << ft::is_same_f(a, ap) << std::endl;
+    //     std::string str_cpp("Hello ");
+    //     std::string str_cpp_2("Hello2 ");
+    //     std::cout << "std::string, std::string: " << ft::is_same_f(str_cpp, str_cpp_2) << std::endl;
+    //     std::cout << "std::string, std::string: " << ft::is_same_f(str_cpp, str_cpp) << std::endl;
+    //     std::cout << "std::string, char[]: " << ft::is_same_f(str_cpp, "Hello") << std::endl;
+    // }
 
     {
         std::cout << std::endl << "\033[35m" << "check ft::enable_if " << "\033[0m" << std::endl;

@@ -27,17 +27,17 @@ struct is_same<T, T> : true_type {};
 
 namespace ft {
 
-template <class T1, class T2>
-bool
-    is_same_f(T1 , T2 ) {
-        return (false);
-    }
+// template <class T1, class T2>
+// bool
+//     is_same_f(T1 , T2 ) {
+//         return (false);
+//     }
 
-template <class T1>
-bool
-    is_same_f(T1 , T1 ) {
-        return (true);
-    }
+// template <class T1>
+// bool
+//     is_same_f(T1 , T1 ) {
+//         return (true);
+//     }
 } // namespace ft
 
 #endif

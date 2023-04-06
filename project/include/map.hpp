@@ -239,7 +239,7 @@ template<
 const T&
 map<Key, T, Compare, Allocator>::
     at( const Key& key ) const {
-    iterator iter = find(key);
+    const_iterator iter = find(key);
     if ( iter == this->end() ) {
         throw std::out_of_range("out_of_range: Oops...exception. pos key out of range.\n");
     }

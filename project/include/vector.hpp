@@ -36,7 +36,7 @@ class vector : public _Vector_base<T, Allocator> {
     typedef typename ::std::allocator<T>::const_pointer const_pointer;
 
     typedef ft::normal_iterator< ::std::random_access_iterator_tag, T>       iterator;
-    typedef ft::normal_iterator< ::std::random_access_iterator_tag, const T> const_iterator;
+    typedef ft::const_normal_iterator< ::std::random_access_iterator_tag, T> const_iterator;
     typedef ft::reverse_iterator<iterator>                           reverse_iterator;
     typedef ft::reverse_iterator<const_iterator>                     const_reverse_iterator;
 
@@ -102,6 +102,7 @@ class vector : public _Vector_base<T, Allocator> {
     reference       back();
     const_reference back() const;
     T*              data();
+    const T*        data() const;
 
     // Iterators
     iterator       begin();
@@ -351,6 +352,13 @@ template <class T, class Allocator>
 T* 
     vector<T, Allocator>::
     data() {
+        return (_arr);
+}
+
+template <class T, class Allocator>
+const T* 
+    vector<T, Allocator>::
+    data() const {
         return (_arr);
 }
 

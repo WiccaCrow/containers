@@ -32,6 +32,22 @@ int main() {
     check_resize(); // 25
     check_swap(); // 26
     check_non_member_functions(); // 27-33
+
+    ft::vector<int> vec;
+    vec.push_back(5);
+    vec.push_back(6);
+    vec.push_back(7);
+    // ft::vector<int>::iterator it = vec.begin();
+    // ft::vector<int>::const_iterator it_const = it;
+    // ft::vector<int, ::std::allocator<int> >::const_iterator it = vec.begin();
+    // std::cout << *it << std::endl;
+    // std::cout << *(it++) << std::endl;
+    // std::cout << *(++it) << std::endl;
+    // *it = 8;
+    // std::cout << *(it) << std::endl;
+
+    // (void)it;
+
 }
 
 template < class T>

@@ -2,8 +2,8 @@ NAME			=   mySTL
 NAME_STL 		=	testSTL
 NAME_FT			=	testFT
 
-CPP         	=   clang++
-# CPP         	=   g++
+# CPP         	=   clang++
+CPP         	=   g++
 FLAGS       	=   -g
 FLAGS       	+=  -Wpedantic
 FLAGS     	    +=  -Wall -Wextra -Werror -g

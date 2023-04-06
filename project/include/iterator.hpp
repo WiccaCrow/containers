@@ -7,6 +7,7 @@
 #include <iterator_traits.hpp>
 #include <iterator_cat.hpp>
 #include <iterator_ptr_normal.hpp>
+#include <iterator_ptr_normal_const.hpp>
 #include <iterator_ptr_reverse.hpp>
 #include <iterator_ptr_reverse_non_class.hpp>
 #include <iterator_distance.hpp>
