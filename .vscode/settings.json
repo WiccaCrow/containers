@@ -71,6 +71,10 @@
         "concepts": "cpp",
         "random": "cpp",
         "iomanip": "cpp",
-        "map": "cpp"
-    }
+        "map": "cpp",
+        "set": "cpp",
+        "fstream": "cpp",
+        "numbers": "cpp"
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }
