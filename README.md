@@ -1,13 +1,11 @@
 # containers
 ft_containers
 
-В соответствии с заданием [en.subject.pdf](./en.subject.pdf).
+Учебный проект по изучению STL.
 
-Коротко:
-
-Воспроизвести несколько библиотечных контейнеров на С++98:
+Воспроизведено несколько библиотечных контейнеров на С++98 в соответствии с заданием [en.subject.pdf](./en.subject.pdf):
 * vector
-кроме vector<bool> .
+кроме `vector<bool>` .
 * map (красно-черное дерево)
 * stack
 
@@ -16,6 +14,6 @@ ft_containers
 * reverse_iterator
 * enable_if
 * is_integral
-* equal and/or lexicographical_compare
+* lexicographical_compare
 * std::pair
 * std::make_pair
